@@ -61,7 +61,7 @@ function colorRNA()
 
 
     //把一个数 inNumber 归一化；inMax,inMin 为原最大最小区间，newMax 为新最大值；如果只有一个参数将按[0,255] 归一化到 [0,1]
-   colorRNA.prototype._normaliz = function (inNumber,inMax,inMin,newMax)
+   colorRNA.prototype._normaliz = function (inNumber,inMin,inMax,newMax)
     {
         var newNumber = 0;
 
@@ -78,6 +78,12 @@ function colorRNA()
         return newNumber;
     }
 
+    //对已经归一化的 RGB 值进行 Gamma 变换
+    function enGamma22(rgb)
+    {
+        math
+    }
+
 
 
 
@@ -86,10 +92,6 @@ function colorRNA()
         var x, y,z;
         var nucleotids= [[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]];
 
-        function enGamma22(rgb)
-        {
-
-        }
 
 
 
