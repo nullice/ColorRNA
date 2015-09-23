@@ -33,10 +33,13 @@ function colorRNA()
             this.b = arguments[2];
         }
     }
-//---XYZ
+//---私有
+
+    var _gamma = -2.2;// _gamma < 0 表示 sRGB 模式
 
 
 //---原型函数-----------------------
+
 
     //取 RGB 值，如：#ffffff
     colorRNA.prototype.RGBstring = function ()
@@ -76,60 +79,122 @@ function colorRNA()
     }
 
     //对已经归一化的 RGB 值进行  Gamma 2.2 的变换，
-    colorRNA.prototype._enGamma22 = function (rgb)
+    colorRNA.prototype._enGamma = function (rgb)
     {
         var newRGB = 0;
+        var sign = 1;
 
-        if (rgb <= 0.0031306684425005883)
+        if (rgb < 0)//处理负数情况
         {
-            newRGB = rgb * 12.92;
+            sign = -1;
+            rgb = -rgb;
         }
-        else
+
+
+        if (_gamma < 0)//----sRGB-----------
         {
-            newRGB = 1.055 * Math.pow(rgb, 0.416666666666666667) - 0.055 //0.416666666666666667 = 1/2.4;
+
+            if (rgb <= 0.0031306684425005883)
+            {
+                newRGB = sign * rgb * 12.92;
+            }
+            else
+            {
+                newRGB = sign * 1.055 * Math.pow(rgb, 0.416666666666666667) - 0.055 //0.416666666666666667 = 1/2.4;
+            }
         }
+        if (_gamma == 0)//-----L*-----------
+        {
+
+            if (rgb <= (216.0 / 24389.0))
+            {
+                newRGB = sign *  (rgb * 24389.0 / 2700.0) ;
+            }
+            else
+            {
+                newRGB = sign *  (1.16 * Math.pow(rgb, 1.0 / 3.0) - 0.16);
+            }
+        }
+        if (_gamma > 0)//-----普通 Gamma-----------
+        {
+
+            newRGB = sign * Math.pow(rgb, 1/_gamma);
+        }
+
+
         return newRGB;
 
     }
 
-    //让经过 Gamma 2.2 的变换 RGB 归一化值还原
-    colorRNA.prototype._deGamma22 = function (rgb)
+    //让经过 Gamma  的变换 RGB 归一化值还原
+    colorRNA.prototype._deGamma = function (rgb)
     {
         var newRGB = 0;
+        var sign = 1;
 
-        if (rgb <= 0.0404482362771076)
+        if (rgb < 0)//处理负数情况
         {
-            newRGB = rgb / 12.92
+            sign = -1;
+            rgb = -rgb;
         }
-        else
+
+
+        if (_gamma < 0)//----sRGB-----------
         {
-            newRGB = Math.pow((rgb + 0.055) / 1.055, 2.4)
+
+            if (rgb <= 0.0404482362771076)
+            {
+                newRGB =sign * rgb / 12.92;
+            }
+            else
+            {
+                newRGB = sign * Math.pow((rgb + 0.055) / 1.055, 2.4);
+            }
         }
+        if (_gamma == 0)//-----L*-----------
+        {
+
+            if (rgb <= 0.08)
+            {
+                newRGB = sign * 2700.0 * rgb / 24389.0;
+            }
+            else
+            {
+                newRGB = sign * ((((1000000.0 * rgb + 480000.0) * rgb + 76800.0) * rgb + 4096.0) / 1560896.0);
+            }
+        }
+        if (_gamma > 0)//-----普通 Gamma-----------
+        {
+
+            newRGB = sign * Math.pow(rgb, _gamma);
+        }
+
         return newRGB;
-
     }
 
 
     colorRNA.prototype.sRGB_to_XYZ = function ()
     {
         var x, y, z;
+        this._gamma = -2.2222;
+
         var rgbs =
             [
-                this._enGamma22(this._normaliz(this.r)),
-                this._enGamma22(this._normaliz(this.g)),
-                this._enGamma22(this._normaliz(this.b))
+                this._deGamma(this._normaliz(this.r)),
+                this._deGamma(this._normaliz(this.g)),
+                this._deGamma(this._normaliz(this.b))
             ];
 
 
         var nucleotids = [[0.4124564, 0.3575761, 0.1804375], [0.2126729, 0.7151522, 0.0721750], [0.0193339, 0.1191920, 0.9503041]];
-        //低精度： [[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]];
+        //低精度： nucleotids =[[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]];
 
         x = this._arrayProduct(rgbs, nucleotids[0]);
         y = this._arrayProduct(rgbs, nucleotids[1]);
         z = this._arrayProduct(rgbs, nucleotids[2]);
 
 
-        console.log([x,y,z]);
+        console.log([x, y, z]);
     }
 
 
