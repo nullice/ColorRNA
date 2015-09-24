@@ -13,6 +13,13 @@ function ColorRNA()
     this._gamma = -2.2; //gamma 变换值； _gamma < 0 表示 sRGB 模式
     this._dLV = 1; //计算精度 2：16位, 1：7位, 0：4位;
 
+    this._doAdapta = false;
+    this._refWhite = {X: 0, Y: 0, Z: 0};// 参考白
+
+    this._adt_mtxAdaptMa = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+    this._adt_mtxAdaptMaI = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+
+
     console.log(typeof arguments[0])
 
 //---in RGB-----------------------
@@ -56,6 +63,13 @@ function ColorRNA()
         }
 
         return sum;
+    }
+
+
+    ColorRNA.prototype._adt_adaptation = function (XYZs, algName)
+    {
+
+
     }
 
 
@@ -124,6 +138,123 @@ function ColorRNA()
         return newRGB;
 
     }
+
+    ColorRNA.prototype._adt_setRefWhite = function (lightname)
+    {
+        this._refWhite.Y = 1.0;
+        switch (lightname)
+        {
+            case "A" ://(ASTM E308-01)
+            {
+                this._refWhite.X = 1.09850;
+                this._refWhite.Z = 0.35585;
+                break;
+            }
+            case "B" ://(Wyszecki & Stiles, p. 769)
+            {
+                this._refWhite.X = 0.99072;
+                this._refWhite.Z = 0.85223;
+                break;
+            }
+            case "C" :// (ASTM E308-01)
+            {
+                this._refWhite.X = 0.98074;
+                this._refWhite.Z = 1.18232;
+                break;
+            }
+            case "D50" :
+            {
+                this._refWhite.X = 0.96422;
+                this._refWhite.Z = 0.82521;
+                break;
+            }
+            case "D55" :
+            {
+                this._refWhite.X = 0.95682;
+                this._refWhite.Z = 0.92149;
+                break;
+            }
+            case "D65" :
+            {
+                this._refWhite.X = 0.95047;
+                this._refWhite.Z = 1.08883;
+                break;
+            }
+            case "D75" :
+            {
+                this._refWhite.X = 0.94972;
+                this._refWhite.Z = 1.22638;
+                break;
+            }
+            case "D75" :
+            {
+                this._refWhite.X = 0.94972;
+                this._refWhite.Z = 1.22638;
+                break;
+            }
+            case "E" :
+            {
+                this._refWhite.X = 1.00000;
+                this._refWhite.Z = 1.00000;
+                break;
+            }
+            case "F2" :
+            {
+                this._refWhite.X = 0.99186;
+                this._refWhite.Z = 0.67393;
+                break;
+            }
+            case "F7" :
+            {
+                this._refWhite.X = 0.95041;
+                this._refWhite.Z = 1.08747;
+                break;
+            }
+            case "F11" :
+            {
+                this._refWhite.X = 1.00962;
+                this._refWhite.Z = 0.64350;
+                break;
+            }
+        }
+    }
+
+    ColorRNA.prototype._adt_setAdaptMa = function (aglName)
+    {
+        switch (aglName)
+        {
+            case "Bradford" :
+            {
+                this._adt_mtxAdaptMa = [
+                    [0.8951, -0.7502, 0.0389],
+                    [0.2664, 1.7135, -0.0685],
+                    [-0.1614, 0.0367, 1.0296]];
+
+                this._adt_mtxAdaptMaI = [
+                    [0.9869929054667123, 0.43230526972339456, -0.008528664575177328],
+                    [-0.14705425642099013, 0.5183602715367776, 0.04004282165408487],
+                    [0.15996265166373125, 0.0492912282128556, 0.9684866957875502]];
+                break;
+            }
+            case "vonKries" : //von Kries
+            {
+                this._adt_mtxAdaptMa = [
+                    [0.40024, -0.2263, 0],
+                    [0.7076, 1.16532, 0],
+                    [-0.08081, 0.0457, 0.91822]];
+
+                this._adt_mtxAdaptMaI = [
+                    [1.8599363874558397, 0.3611914362417676, -0],
+                    [-1.1293816185800916, 0.6388124632850422, -0],
+                    [0.21989740959619328, -0.000006370596838650885, 1.0890636230968613]];
+                break;
+            }
+
+        }
+
+
+    }
+
 
     //让经过 Gamma  的变换 RGB 归一化值还原
     ColorRNA.prototype._deGamma = function (rgb)
@@ -201,6 +332,7 @@ function ColorRNA()
             //Adobe RGB (1998)-------------------------------------
             case "AdobeRGB":
             {
+                this._gamma = 2.2;
                 if (this._dLV == 2)
                 {
                     return [[0.5767308871981477, 0.18555395071121408, 0.18818516209063843],
@@ -552,6 +684,7 @@ function ColorRNA()
     {
         var x, y, z;
         //this._gamma = -2.2222;
+        var nucleotids = this._getRGBnucleotids("AdobeRGB");
 
         var rgbs =
             [
@@ -561,7 +694,6 @@ function ColorRNA()
             ];
 
 
-        var nucleotids = this._getRGBnucleotids("sRGB");
         console.log(nucleotids);
         console.log("_gamma：" + this._gamma);
         //[[0.4124564, 0.3575761, 0.1804375], [0.2126729, 0.7151522, 0.0721750], [0.0193339, 0.1191920, 0.9503041]];
@@ -583,9 +715,9 @@ var test_color
 
 
 test_color = new ColorRNA(213, 113, 90);
-var test_color2 = new ColorRNA(111, 111, 111);
-//test_color._gamma = 1.8;
-test_color2._gamma = 1.8;
+test_color._dLV = 1;
+var test_color2 = new ColorRNA(213, 113, 90);
+
 
 console.log(test_color.RGBstring());
 console.log("=========test_color.RGB_to_XYZ()===========");
