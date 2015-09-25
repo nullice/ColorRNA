@@ -1263,11 +1263,10 @@ ColorRNA.prototype._normaOutRGB = function (inArray)
 
 
 //供各种色彩空间设置取值函数调用的模板
-ColorRNA.prototype._rgbX = function (argus, colorSpace, refWhite)
+ColorRNA.prototype._rgbX = function (argus, colorSpace)
 {
     var rgb = [0, 0, 0];
     this._colorSpace = colorSpace;
-    this._refWhite = refWhite;
 
     if (argus.length == 0)
     {
@@ -1300,26 +1299,55 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace, refWhite)
 
 
 }
+//  设置参考白色（光照条件）,没有参数将设置为 D65
+ColorRNA.prototype.setRefWhite = function (RefWhite)
+{
+    if(arguments.length==0)
+    {
+        this._refWhite=this._REFWHITES.D65;
+    }
+    else
+    {
+        this._refWhite=RefWhite;
+    }
+}
 
+//  返回当前参考白色设置（光照条件）
+ColorRNA.prototype.getRefWhite = function ()
+{
+    return this._refWhite;
+}
 
 //默认以 sRGB 设置 RGB 的值，
 ColorRNA.prototype.rgb = function ()
 {
-    return (this._rgbX(arguments,"sRGB","D65"));
+    return (this._rgbX(arguments,this._COLORSPACES.sRGB));
 }
 
 ColorRNA.prototype.AdobeRGB = function ()
 {
-    return (this._rgbX(arguments,"AdobeRGB","D65"));
+    return (this._rgbX(arguments,this._COLORSPACES.AdobeRGB));
 }
 
 ColorRNA.prototype.AppleRGB = function ()
 {
-    return (this._rgbX(arguments,this._COLORSPACES.AppleRGB,"D65"));
+    return (this._rgbX(arguments,this._COLORSPACES.AppleRGB));
 }
 
+ColorRNA.prototype.BestRGB = function ()
+{
+    return (this._rgbX(arguments,this._COLORSPACES.BestRGB));
+}
 
+ColorRNA.prototype.BestRGB = function ()
+{
+    return (this._rgbX(arguments,this._COLORSPACES.BestRGB));
+}
 
+ColorRNA.prototype.BestRGB = function ()
+{
+    return (this._rgbX(arguments,this._COLORSPACES.BestRGB));
+}
 
 
 var test_color

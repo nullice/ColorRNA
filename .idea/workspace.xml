@@ -26,8 +26,8 @@
           <file leaf-file-name="ColorRNA.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/ColorRNA.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="1.8666667">
-                  <caret line="413" column="19" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
+                <state vertical-scroll-proportion="-2.4333334">
+                  <caret line="1332" column="1" selection-start-line="1332" selection-start-column="1" selection-end-line="1332" selection-end-column="1" />
                   <folding />
                 </state>
               </provider>
@@ -43,11 +43,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/test.js">
+          <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <state vertical-scroll-proportion="-4.4333334">
+                  <caret line="714" column="22" selection-start-line="714" selection-start-column="22" selection-end-line="714" selection-end-column="22" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".gitattributes" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/.gitattributes">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.17152658">
+                  <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -58,7 +68,7 @@
       <split-second>
         <leaf>
           <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/test.js">
+            <entry file="file://$PROJECT_DIR$/test.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
                   <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -87,8 +97,8 @@
       <list>
         <option value="$PROJECT_DIR$/test.html" />
         <option value="util.js" />
-        <option value="$PROJECT_DIR$/src/ColorRNA.js" />
         <option value="$PROJECT_DIR$/src/test.js" />
+        <option value="$PROJECT_DIR$/src/ColorRNA.js" />
       </list>
     </option>
   </component>
@@ -200,16 +210,21 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.常规" />
+    <property name="settings.editor.selected.configurable" value="watcher.settings" />
     <property name="settings.editor.splitter.proportion" value="0.22918707" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/ColorRNA.js" />
+    <property name="last_opened_file_path" value="$USER_HOME$/node_modules/yuicompressor/build/yuicompressor-2.4.8.jar" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://E:/Webwork/test/ColorRNA/test.html" />
     <property name="JavaScriptLanguageLevel" value="JS_1_8_5" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Webwork\test\ColorRNA" />
+    </key>
   </component>
   <component name="RunManager" selected="Node.js.ColorRNA.js">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
@@ -247,7 +262,7 @@
     <configuration default="false" name="ColorRNA.js" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="$PROJECT_DIR$/../../tools/nodejs/node" path-to-js-file="src/ColorRNA.js" working-dir="$PROJECT_DIR$">
       <method />
     </configuration>
-    <configuration default="false" name="test.js" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="$PROJECT_DIR$/../../tools/nodejs/node" path-to-js-file="src/test.js" working-dir="$PROJECT_DIR$">
+    <configuration default="false" name="test.js" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="$PROJECT_DIR$/../../tools/nodejs/node" path-to-js-file="$PROJECT_DIR$/test.js" working-dir="$PROJECT_DIR$">
       <method />
     </configuration>
     <list size="2">
@@ -281,20 +296,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19345239" sideWeight="0.4914842" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19345239" sideWeight="0.4914842" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32843137" sideWeight="0.49702382" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0" sideWeight="0.37276787" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32843137" sideWeight="0.37276787" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3267974" sideWeight="0.48809522" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4852941" sideWeight="0.65029764" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26190478" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26190478" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32843137" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.08928572" sideWeight="0.50851583" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0" sideWeight="0.62723213" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0" sideWeight="0.62723213" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -351,16 +366,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ColorRNA.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.8666667">
-          <caret line="413" column="19" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
+        <state vertical-scroll-proportion="-2.4333334">
+          <caret line="1332" column="1" selection-start-line="1332" selection-start-column="1" selection-end-line="1332" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test.js">
+    <entry file="file://$PROJECT_DIR$/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="-4.4333334">
+          <caret line="714" column="22" selection-start-line="714" selection-start-column="22" selection-end-line="714" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17152658">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding />
         </state>
       </provider>
