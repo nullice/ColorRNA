@@ -1307,10 +1307,20 @@ ColorRNA.prototype.rgb = function ()
 {
     return (this._rgbX(arguments,"sRGB","D65"));
 }
+
 ColorRNA.prototype.AdobeRGB = function ()
 {
     return (this._rgbX(arguments,"AdobeRGB","D65"));
 }
+
+ColorRNA.prototype.AppleRGB = function ()
+{
+    return (this._rgbX(arguments,this._COLORSPACES.AppleRGB,"D65"));
+}
+
+
+
+
 
 var test_color
 

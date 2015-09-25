@@ -26,17 +26,10 @@
           <file leaf-file-name="ColorRNA.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/ColorRNA.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-7.4666667">
-                  <caret line="1239" column="0" selection-start-line="1239" selection-start-column="0" selection-end-line="1239" selection-end-column="0" />
+                <state vertical-scroll-proportion="1.8666667">
+                  <caret line="413" column="19" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
                   <folding />
                 </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="util.js" pinned="false" current-in-tab="false">
-            <entry file="mock://util.js">
-              <provider selected="true" editor-type-id="vmFileEditor">
-                <state />
               </provider>
             </entry>
           </file>
@@ -358,8 +351,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ColorRNA.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.4666667">
-          <caret line="1239" column="0" selection-start-line="1239" selection-start-column="0" selection-end-line="1239" selection-end-column="0" />
+        <state vertical-scroll-proportion="1.8666667">
+          <caret line="413" column="19" selection-start-line="413" selection-start-column="19" selection-end-line="413" selection-end-column="19" />
           <folding />
         </state>
       </provider>
