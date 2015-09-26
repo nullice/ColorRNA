@@ -10,9 +10,13 @@ function ColorRNA()
 
     this._gamma = -2.2; //gamma 变换值； _gamma < 0 表示 sRGB 模式
     this._colorSpace = "sRGB";
-    this._refWhite = "D65";
+    this._refWhiteName = "D65";
+    this._refWhiteNameUSER = "";//强制制度值
     this._adtAlg = "Bradford";
-    this._doAdapta = false;
+    this._doAdapta = true;
+    this._doAdaptaUSER = 0;// 0 默认，1 强制使用，-1 强制不使用
+
+
     this._dLV = 1; //计算精度 2：16位, 1：7位, 0：4位;
 
     this._COLORSPACES =
@@ -249,6 +253,12 @@ ColorRNA.prototype._adt_invAdaptation = function (xyz, lightName, algName)
 
 ColorRNA.prototype._adt_setRefWhite = function (lightname)
 {
+    if (this._refWhiteNameUSER.length > 0)//强制使用用户指定参考白
+    {
+        lightname = this._refWhiteNameUSER
+    }
+
+
     this._adt_refWhite.Y = 1.0;
     switch (lightname)
     {
@@ -414,6 +424,9 @@ ColorRNA.prototype._deGamma = function (rgb)
 ColorRNA.prototype._getRGBnucleotids = function (rabColorSpaceName, XYZtoRGB)
 {
     this._adt_refWhiteRGB.Y = 1.0;
+
+    this._refWhiteName = "D65";//设置缺省值
+    this._doAdapta = true;//设置缺省
 
     switch (rabColorSpaceName)
     {
@@ -699,7 +712,6 @@ ColorRNA.prototype._getRGBnucleotids = function (rabColorSpaceName, XYZtoRGB)
             this._gamma = 1.8;
             this._adt_refWhiteRGB.X = 0.96422;
             this._adt_refWhiteRGB.Z = 0.82521;
-
 
             if (XYZtoRGB == true)
             {
@@ -1056,6 +1068,7 @@ ColorRNA.prototype._RGB_to_XYZ = function ()
     var x, y, z;
     var nucleotids = this._getRGBnucleotids(this._colorSpace);
 
+
     var rgbs =
         [
             this._deGamma(this._normaliz(this.r)),
@@ -1072,9 +1085,9 @@ ColorRNA.prototype._RGB_to_XYZ = function ()
     this._xyz.Y = y;
     this._xyz.Z = z;
 
-    if (this._doAdapta == true)
+    if ((this._doAdapta == true || this._doAdaptaUSER == 1 ) && this._doAdaptaUSER != -1)
     {
-        var xyz2 = this._adt_adaptation(this._refWhite, this._adtAlg);
+        var xyz2 = this._adt_adaptation(this._refWhiteName, this._adtAlg);
         this._xyz.X = xyz2[0];
         this._xyz.Y = xyz2[1];
         this._xyz.Z = xyz2[2];
@@ -1089,9 +1102,11 @@ ColorRNA.prototype._XYZ_to_RGB = function ()
     var nucleotids = this._getRGBnucleotids(this._colorSpace, true);
     var xyzs = [this._xyz.X, this._xyz.Y, this._xyz.Z];
 
-    if (this._doAdapta == true)
+
+    if ((this._doAdapta == true || this._doAdaptaUSER == 1 ) && this._doAdaptaUSER != -1)
     {
-        xyzs = this._adt_invAdaptation(xyzs, this._refWhite, this._adtAlg);
+
+        xyzs = this._adt_invAdaptation(xyzs, this._refWhiteName, this._adtAlg);
     }
 
     var _r, _g, _b;
@@ -1117,7 +1132,7 @@ ColorRNA.prototype._XYZ_to_Lab = function (doAdt)
     var xyz = [this._xyz.X, this._xyz.Y, this._xyz.Z];
     if (doAdt === true)
     {
-        xyz = this._adt_adaptation(this._refWhite, this._adtAlg)
+        xyz = this._adt_adaptation(this._refWhiteName, this._adtAlg)
     }
 
 
@@ -1173,7 +1188,7 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, doAdt)
 
     if (doAdt === true)
     {
-        xyz = this._adt_invAdaptation(xyz, this._refWhite, this._adtAlg)
+        xyz = this._adt_invAdaptation(xyz, this._refWhiteName, this._adtAlg)
     }
 
     return xyz;
@@ -1190,7 +1205,7 @@ ColorRNA.prototype._XYZ_to_xyY = function ()
     }
     else
     {
-        this._adt_setRefWhite(this._refWhite);
+        this._adt_setRefWhite(this._refWhiteName);
         xyY[0] = this._adt_refWhite.X / (this._adt_refWhite.X + this._adt_refWhite.Y + this._adt_refWhite.Z);
         xyY[1] = this._adt_refWhite.Y / (this._adt_refWhite.X + this._adt_refWhite.Y + this._adt_refWhite.Z);
     }
@@ -1308,23 +1323,30 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace)
 
 
 }
-//  设置参考白色（光照条件）,没有参数将设置为 D65
-ColorRNA.prototype.setRefWhite = function (RefWhite)
+//  设置指定的参考白色（光照条件）,没有参数将设置为缺省值（RGB 默认 D65）
+ColorRNA.prototype.setRefWhite = function (inRefWhiteName)
 {
     if (arguments.length == 0)
     {
-        this._refWhite = this._REFWHITES.D65;
+        this._refWhiteNameUSER = "";
     }
     else
     {
-        this._refWhite = RefWhite;
+        this._refWhiteNameUSER = inRefWhiteName;
     }
+
+    return this;
 }
 
 //  返回当前参考白色设置（光照条件）
 ColorRNA.prototype.getRefWhite = function ()
 {
-    return this._refWhite;
+
+    if (this._refWhiteNameUSER.length > 0)
+    {
+        return this._refWhiteNameUSER;
+    }
+    return this._refWhiteName;
 }
 
 //默认以 sRGB 设置 RGB 的值，
@@ -1424,7 +1446,7 @@ ColorRNA.prototype.XYZ = function ()
 
     if (arguments.length == 0)
     {
-        xyz = [this._xyz.X,this._xyz.Y,this._xyz.Z];
+        xyz = [this._xyz.X, this._xyz.Y, this._xyz.Z];
         return xyz;
     }
 
@@ -1463,7 +1485,7 @@ ColorRNA.prototype.XYZ = function ()
 //console.log("=========_XYZ_to_RGB===========");
 //console.log(test_color._XYZ_to_RGB());
 //console.log("=========_XYZ_to_Lab===========");
-//test_color._refWhite = "D50"
+//test_color._refWhiteName = "D50"
 //console.log(test_color._XYZ_to_Lab(true));
 //console.log(test_color._XYZ_to_Lab());
 //console.log(test_color._XYZ_to_Lab(true));
@@ -1473,15 +1495,18 @@ ColorRNA.prototype.XYZ = function ()
 //console.log(test_color._XYZ_to_xyY());
 console.log("=========getttt===========");
 var color2 = new ColorRNA();
-color2.XYZ(0.5,0.5,0.5);
+color2.setRefWhite("D50");
+color2.sRGB(33, 111, 222);
 console.log("XYZ:" + color2.XYZ());
-
-console.log("AdobeRGB"+":" + color2["AdobeRGB"]());
-console.log("AdobeRGB"+":" + color2.AdobeRGB());
+console.log("AdobeRGB" + ":" + color2["AdobeRGB"]());
+console.log("AdobeRGB" + ":" + color2.AdobeRGB());
 console.log("sRGB:" + color2.sRGB());
 console.log("WideGamutRGB:" + color2.WideGamutRGB());
-
-console.log("XYZ:" +color2.XYZ(0.5,0.5,0.5).XYZ());
+console.log("ProPhotoRGB:" + color2.ProPhotoRGB());
+console.log("ColorMatchRGB:" + color2.ColorMatchRGB());
+console.log("getRefWhite:" + color2.getRefWhite());
+console.log("_doAdapta:" + color2._doAdapta);
+//console.log("XYZ:" +color2.XYZ(0.5,0.5,0.5).XYZ());
 
 var rgb = [];
 var count = 0;
