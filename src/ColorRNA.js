@@ -1127,17 +1127,22 @@ ColorRNA.prototype._XYZ_to_RGB = function ()
 }
 
 
-ColorRNA.prototype._XYZ_to_Lab = function (doAdt)
+ColorRNA.prototype._XYZ_to_Lab = function (psMod)
 {
     var xyz = [this._xyz.X, this._xyz.Y, this._xyz.Z];
-    if (doAdt === true)
-    {
-        xyz = this._adt_adaptation(this._refWhiteName, this._adtAlg)
-    }
-
 
     var kE = 0.008856451679 //216.0 / 24389.0;
     var kK = 903.2962962963 //24389.0 / 27.0;
+
+
+    this._adt_setRefWhite("D65");
+
+    if(psMod===true)//ps
+    {
+        this._getRGBnucleotids("sRGB");
+        xyz = this._adt_adaptation("D50", this._adtAlg);
+    }
+
 
     var xr = xyz[0] / this._adt_refWhite.X;
     var yr = xyz[1] / this._adt_refWhite.Y;
@@ -1152,11 +1157,10 @@ ColorRNA.prototype._XYZ_to_Lab = function (doAdt)
     return Lab;
 }
 
-ColorRNA.prototype._Lab_to_XYZ = function (Labs, doAdt)
+ColorRNA.prototype._Lab_to_XYZ = function (Labs, refWhiteName)
 {
 
-    var xyz = [this._xyz.X, this._xyz.Y, this._xyz.Z];
-
+    var xyz = [0, 0, 0];
 
     var kE = 0.008856451679 //216.0 / 24389.0;
     var kK = 903.2962962963 //24389.0 / 27.0;
@@ -1182,14 +1186,32 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, doAdt)
     var zr = (fz3 > kE) ? fz3 : ((116.0 * fz - 16.0) / kK);
 
 
+
+    if (refWhiteName === "D50")
+    {
+        this._adt_setRefWhite("D65");
+    }
+
+    else
+    {
+        this._adt_setRefWhite(refWhiteName);
+    }
+
+
+
     xyz[0] = xr * this._adt_refWhite.X;
     xyz[1] = yr * this._adt_refWhite.Y;
     xyz[2] = zr * this._adt_refWhite.Z;
 
-    if (doAdt === true)
+
+    if (refWhiteName === "D50")
     {
         xyz = this._adt_invAdaptation(xyz, this._refWhiteName, this._adtAlg)
     }
+
+    this._xyz.X = xyz[0];
+    this._xyz.Y = xyz[1];
+    this._xyz.Z = xyz[2];
 
     return xyz;
 }
@@ -1263,7 +1285,25 @@ ColorRNA.prototype._normaOutRGB = function (inArray)
             inArray[z] = 0;
         }
     }
+    return inArray;
+}
 
+// 检查输出的 Lab 值，四舍五入舍到 1 位小数，PS(PhotoShop)模式完全舍去小数位；
+ColorRNA.prototype._normaOutLab = function (inArray, PSMod)
+{
+    var z = 0
+    for (z = 0; z < inArray.length; z++)
+    {
+        if (PSMod)
+        {
+            inArray[z] = Math.round(inArray[z]);
+        }
+        else
+        {
+            inArray[z] = +inArray[z].toFixed(1);
+        }
+
+    }
     return inArray;
 }
 
@@ -1286,7 +1326,40 @@ ColorRNA.prototype._normaInputXYZ = function (inArray)
 }
 
 
-//供各种色彩空间设置取值函数调用的模板
+//  设置指定的参考白色（光照条件）,没有参数将设置为缺省值（RGB 默认 D65）
+ColorRNA.prototype.setRefWhite = function (inRefWhiteName)
+{
+    if (arguments.length == 0)
+    {
+        this._refWhiteNameUSER = "";
+    }
+    else
+    {
+        this._refWhiteNameUSER = inRefWhiteName;
+    }
+
+    return this;
+}
+
+//  返回当前参考白色设置（光照条件）
+ColorRNA.prototype.getRefWhite = function ()
+{
+
+    if (this._refWhiteNameUSER.length > 0)
+    {
+        return this._refWhiteNameUSER;
+    }
+    return this._refWhiteName;
+}
+
+//默认以 sRGB 设置 RGB 的值，
+ColorRNA.prototype.rgb = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.sRGB));
+}
+
+
+//供各种色彩空间设置取值函数调用的模板----------------------------------
 ColorRNA.prototype._rgbX = function (argus, colorSpace)
 {
     var rgb = [0, 0, 0];
@@ -1323,37 +1396,49 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace)
 
 
 }
-//  设置指定的参考白色（光照条件）,没有参数将设置为缺省值（RGB 默认 D65）
-ColorRNA.prototype.setRefWhite = function (inRefWhiteName)
+
+ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
 {
-    if (arguments.length == 0)
+    var Lab = [0, 0, 0];
+
+    if (argus.length == 0)
     {
-        this._refWhiteNameUSER = "";
-    }
-    else
-    {
-        this._refWhiteNameUSER = inRefWhiteName;
+        Lab = this._XYZ_to_Lab(PhotoShopMod);
+        this._normaOutLab(Lab, PhotoShopMod);
+        return Lab;
     }
 
-    return this;
+    if (argus.length == 1)
+    {
+        if (Array.isArray(argus[0]))
+        {
+            if (argus[0].length == 3)
+            {
+                Lab = argus[0];
+            }
+        }
+    }
+    if (argus.length == 3)
+    {
+        Lab[0] = argus[0];
+        Lab[1] = argus[1];
+        Lab[2] = argus[2];
+    }
+
+    return this._Lab_to_XYZ(Lab, this._refWhiteName);
 }
 
-//  返回当前参考白色设置（光照条件）
-ColorRNA.prototype.getRefWhite = function ()
-{
 
-    if (this._refWhiteNameUSER.length > 0)
-    {
-        return this._refWhiteNameUSER;
-    }
-    return this._refWhiteName;
+ColorRNA.prototype.LabPS = function ()
+{
+    return (this._LabX(arguments, true));
 }
 
-//默认以 sRGB 设置 RGB 的值，
-ColorRNA.prototype.rgb = function ()
+ColorRNA.prototype.Lab = function ()
 {
-    return (this._rgbX(arguments, this._COLORSPACES.sRGB));
+    return (this._LabX(arguments, false));
 }
+
 
 // 颜色设置、取值器，带参数调用设置颜色，不带参数调用取颜色
 // 各种 RGB 色彩空间 ---------------------------------------------------------------
@@ -1495,17 +1580,27 @@ ColorRNA.prototype.XYZ = function ()
 //console.log(test_color._XYZ_to_xyY());
 console.log("=========getttt===========");
 var color2 = new ColorRNA();
-color2.setRefWhite("D50");
-color2.sRGB(33, 111, 222);
-console.log("XYZ:" + color2.XYZ());
-console.log("AdobeRGB" + ":" + color2["AdobeRGB"]());
-console.log("AdobeRGB" + ":" + color2.AdobeRGB());
-console.log("sRGB:" + color2.sRGB());
-console.log("WideGamutRGB:" + color2.WideGamutRGB());
-console.log("ProPhotoRGB:" + color2.ProPhotoRGB());
-console.log("ColorMatchRGB:" + color2.ColorMatchRGB());
-console.log("getRefWhite:" + color2.getRefWhite());
-console.log("_doAdapta:" + color2._doAdapta);
+//color2.setRefWhite("D50");
+//color2.sRGB(33, 111, 222);
+//color2.LabPS(47, 9, -64);
+//console.log("XYZ:" + color2.XYZ(0.19491595435208875,0.1696366336906597,0.7134007359464754));
+color2.XYZ(0.194916,0.169637,0.713401)
+//console.log("sRGB:" + color2.sRGB());
+console.log("LabPS:" + color2.LabPS());
+console.log("Lab:" + color2.Lab());
+console.log("LabPS:" + color2.LabPS());
+
+console.log("=========LAB_===========");
+color2.LabPS()
+//console.log("Lab:" + color2.Lab());
+//console.log("AdobeRGB" + ":" + color2["AdobeRGB"]());
+//console.log("AdobeRGB" + ":" + color2.AdobeRGB());
+
+//console.log("WideGamutRGB:" + color2.WideGamutRGB());
+//console.log("ProPhotoRGB:" + color2.ProPhotoRGB());
+//console.log("ColorMatchRGB:" + color2.ColorMatchRGB());
+//console.log("getRefWhite:" + color2.getRefWhite());
+//console.log("_doAdapta:" + color2._doAdapta);
 //console.log("XYZ:" +color2.XYZ(0.5,0.5,0.5).XYZ());
 
 var rgb = [];
