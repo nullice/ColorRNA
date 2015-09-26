@@ -1200,41 +1200,42 @@ ColorRNA.prototype._XYZ_to_xyY = function ()
     return xyY;
 }
 
+
+// 检查输入的 RGB 值，如果是 0~1 的小数形式将转化为 0~255 的形式
 ColorRNA.prototype._normaInputRGB = function (inArray)
 {
-
     var modeFloat = false;
     var z = 0
     var flTest = "";
 
-    for (z = 0; z < inArray.length; z++)
+    if (inArray.length == 3)
     {
-        if (inArray[z] > 1)
+        if (inArray[1] > 1 && inArray[1] > 1 && inArray[1] > 1)
         {
             return inArray;
         }
-    }
-    for (z = 0; z < inArray.length; z++)
-    {
-        if (String(inArray[z]).indexOf(".") > -1)
-        {
-            modeFloat = true;
-        }
-        else
-        {
-            modeFloat = false;
-        }
-    }
-    if (modeFloat == true)
-    {
+
         for (z = 0; z < inArray.length; z++)
         {
-            inArray[z] = this._normaliz(inArray[z], 0, 1, 255);
+            if (String(inArray[z]).indexOf(".") > -1)
+            {
+                modeFloat = true;
+            }
         }
+        if (modeFloat == true)
+        {
+            for (z = 0; z < inArray.length; z++)
+            {
+                inArray[z] = this._normaliz(inArray[z], 0, 1, 255);
+            }
+        }
+
     }
+
     return inArray;
 }
 
+// 检查输出的 RGB 值，将小于 0 和 -0 的值转换为 0；
 ColorRNA.prototype._normaOutRGB = function (inArray)
 {
 
@@ -1252,14 +1253,22 @@ ColorRNA.prototype._normaOutRGB = function (inArray)
 }
 
 
+// 检查输入的 XYZ 值，如果有非 0~1 形式的值，将把所有值除以 100
+ColorRNA.prototype._normaInputXYZ = function (inArray)
+{
 
+    var z = 0
 
+    if (inArray[0] > 1 || inArray[1] > 1 || inArray[2] > 1)
+    {
+        for (z = 0; z < inArray.length; z++)
+        {
+            inArray[z] = inArray[z] / 100;
 
-
-
-
-
-
+        }
+    }
+    return inArray;
+}
 
 
 //供各种色彩空间设置取值函数调用的模板
@@ -1302,13 +1311,13 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace)
 //  设置参考白色（光照条件）,没有参数将设置为 D65
 ColorRNA.prototype.setRefWhite = function (RefWhite)
 {
-    if(arguments.length==0)
+    if (arguments.length == 0)
     {
-        this._refWhite=this._REFWHITES.D65;
+        this._refWhite = this._REFWHITES.D65;
     }
     else
     {
-        this._refWhite=RefWhite;
+        this._refWhite = RefWhite;
     }
 }
 
@@ -1321,101 +1330,195 @@ ColorRNA.prototype.getRefWhite = function ()
 //默认以 sRGB 设置 RGB 的值，
 ColorRNA.prototype.rgb = function ()
 {
-    return (this._rgbX(arguments,this._COLORSPACES.sRGB));
+    return (this._rgbX(arguments, this._COLORSPACES.sRGB));
 }
+
+// 颜色设置、取值器，带参数调用设置颜色，不带参数调用取颜色
+// 各种 RGB 色彩空间 ---------------------------------------------------------------
+ColorRNA.prototype.sRGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.sRGB));
+}
+
 
 ColorRNA.prototype.AdobeRGB = function ()
 {
-    return (this._rgbX(arguments,this._COLORSPACES.AdobeRGB));
+    return (this._rgbX(arguments, this._COLORSPACES.AdobeRGB));
 }
 
 ColorRNA.prototype.AppleRGB = function ()
 {
-    return (this._rgbX(arguments,this._COLORSPACES.AppleRGB));
+    return (this._rgbX(arguments, this._COLORSPACES.AppleRGB));
 }
 
 ColorRNA.prototype.BestRGB = function ()
 {
-    return (this._rgbX(arguments,this._COLORSPACES.BestRGB));
+    return (this._rgbX(arguments, this._COLORSPACES.BestRGB));
 }
 
-ColorRNA.prototype.BestRGB = function ()
+ColorRNA.prototype.BetaRGB = function ()
 {
-    return (this._rgbX(arguments,this._COLORSPACES.BestRGB));
+    return (this._rgbX(arguments, this._COLORSPACES.BetaRGB));
 }
 
-ColorRNA.prototype.BestRGB = function ()
+ColorRNA.prototype.BruceRGB = function ()
 {
-    return (this._rgbX(arguments,this._COLORSPACES.BestRGB));
+    return (this._rgbX(arguments, this._COLORSPACES.BruceRGB));
+}
+
+ColorRNA.prototype.CIERGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.CIERGB));
+}
+
+ColorRNA.prototype.ColorMatchRGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.ColorMatchRGB));
+}
+
+ColorRNA.prototype.DonRGB4 = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.DonRGB4));
+}
+
+ColorRNA.prototype.ECIRGBv2 = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.ECIRGBv2));
+}
+
+ColorRNA.prototype.EktaSpacePS5 = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.EktaSpacePS5));
+}
+
+ColorRNA.prototype.NTSCRGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.NTSCRGB));
+}
+
+ColorRNA.prototype.PALSECAMRGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.PALSECAMRGB));
+}
+
+ColorRNA.prototype.ProPhotoRGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.ProPhotoRGB));
+}
+
+ColorRNA.prototype.SMPTECRGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.SMPTECRGB));
+}
+
+ColorRNA.prototype.WideGamutRGB = function ()
+{
+    return (this._rgbX(arguments, this._COLORSPACES.WideGamutRGB));
+}
+// XYZ 色彩空间---------------------------------------------------------------
+
+ColorRNA.prototype.XYZ = function ()
+{
+    var xyz = [0, 0, 0];
+
+
+    if (arguments.length == 0)
+    {
+        xyz = [this._xyz.X,this._xyz.Y,this._xyz.Z];
+        return xyz;
+    }
+
+    if (arguments.length == 1)
+    {
+        if (Array.isArray(arguments[0]))
+        {
+            if (arguments[0].length == 3)
+            {
+                xyz = arguments[0];
+            }
+        }
+    }
+    if (arguments.length == 3)
+    {
+        xyz[0] = arguments[0];
+        xyz[1] = arguments[1];
+        xyz[2] = arguments[2];
+    }
+
+    this._normaInputXYZ(xyz);
+    this._xyz.X = xyz[0];
+    this._xyz.Y = xyz[1];
+    this._xyz.Z = xyz[2];
+    return this;
 }
 
 
-var test_color
-
-
-test_color = new ColorRNA(33, 111, 222);
-test_color._dLV = 1;
-
-console.log(test_color.r + "," + test_color.g + "," + test_color.b);
-console.log("=========color._RGB_to_XYZ()===========");
-test_color._doAdapta = true;
-console.log(test_color._RGB_to_XYZ());
-console.log("=========_XYZ_to_RGB===========");
-console.log(test_color._XYZ_to_RGB());
-console.log("=========_XYZ_to_Lab===========");
-test_color._refWhite = "D50"
-console.log(test_color._XYZ_to_Lab(true));
-console.log(test_color._XYZ_to_Lab());
-console.log(test_color._XYZ_to_Lab(true));
-console.log("=========_Lab_to_XYZ===========");
-console.log(test_color._Lab_to_XYZ(test_color._XYZ_to_Lab(true), true));
-console.log("=========_XYZ_to_xyY===========");
-console.log(test_color._XYZ_to_xyY());
+//test_color = new ColorRNA(33, 111, 222);
+//test_color._dLV = 1;
+//
+//console.log(test_color.r + "," + test_color.g + "," + test_color.b);
+//console.log("=========color._RGB_to_XYZ()===========");
+//test_color._doAdapta = true;
+//console.log(test_color._RGB_to_XYZ());
+//console.log("=========_XYZ_to_RGB===========");
+//console.log(test_color._XYZ_to_RGB());
+//console.log("=========_XYZ_to_Lab===========");
+//test_color._refWhite = "D50"
+//console.log(test_color._XYZ_to_Lab(true));
+//console.log(test_color._XYZ_to_Lab());
+//console.log(test_color._XYZ_to_Lab(true));
+//console.log("=========_Lab_to_XYZ===========");
+//console.log(test_color._Lab_to_XYZ(test_color._XYZ_to_Lab(true), true));
+//console.log("=========_XYZ_to_xyY===========");
+//console.log(test_color._XYZ_to_xyY());
 console.log("=========getttt===========");
 var color2 = new ColorRNA();
-color2.rgb([1.0, 0.1, 0.2]);
-color2.rgb([255, 123, 256]);
-color2.rgb(111, 222, 33);
-color2.rgb(33, 111, 222);
-console.log(color2.AdobeRGB());
+color2.XYZ(0.5,0.5,0.5);
+console.log("XYZ:" + color2.XYZ());
 
+console.log("AdobeRGB"+":" + color2["AdobeRGB"]());
+console.log("AdobeRGB"+":" + color2.AdobeRGB());
+console.log("sRGB:" + color2.sRGB());
+console.log("WideGamutRGB:" + color2.WideGamutRGB());
+
+console.log("XYZ:" +color2.XYZ(0.5,0.5,0.5).XYZ());
 
 var rgb = [];
 var count = 0;
 
 //
 //
-console.time("遍历");
-
-var test_color = new ColorRNA(rr, gg, bb);
-for (var rr = 0; rr < 256; rr++)
-{
-    for (var gg = 0; gg < 256; gg++)
-    {
-        for (var bb = 0; bb < 256; bb++)
-        {
-            count++;
-
-            color2.rgb(rr, gg, bb);
-            color2.AdobeRGB(color2.AdobeRGB());
-
-            rgb = color2.rgb();
-
-            if (count % 1000000 == 0)
-            {
-                console.log(count);
-            }
-
-            if (rgb[0] != rr && rgb[1] != gg && rgb[2] != bb)
-            {
-                console.log("E>>>" + rgb + ":" + [rr, gg, bb]);
-            }
-        }
-
-    }
-}
-console.timeEnd("遍历");
-console.log(count);
+//console.time("遍历");
+//
+//var test_color = new ColorRNA(rr, gg, bb);
+//for (var rr = 0; rr < 256; rr++)
+//{
+//    for (var gg = 0; gg < 256; gg++)
+//    {
+//        for (var bb = 0; bb < 256; bb++)
+//        {
+//            count++;
+//
+//            color2.rgb(rr, gg, bb);
+//            color2.AppleRGB(color2.AppleRGB());
+//
+//            rgb = color2.rgb();
+//
+//            if (count % 1000000 == 0)
+//            {
+//                console.log(count);
+//            }
+//
+//            if (rgb[0] != rr && rgb[1] != gg && rgb[2] != bb)
+//            {
+//                console.log("E>>>" + rgb + ":" + [rr, gg, bb]);
+//            }
+//        }
+//
+//    }
+//}
+//console.timeEnd("遍历");
+//console.log(count);
 
 //document.getElementById("color").style.background = test_color._RGBstring();
 //document.getElementById("color").style.color = test_color._RGBstring();
