@@ -1157,6 +1157,37 @@ ColorRNA.prototype._XYZ_to_Lab = function (psMod)
     return Lab;
 }
 
+
+ColorRNA.prototype._LCHab_to_XYZ = function (LCH)
+{
+    var Lab = [0, 0, 0];
+
+    Lab[0] = LCH[0];
+    Lab[1] = LCH[1] * Math.cos(LCHab[2] * Math.PI / 180.0);
+    Lab[2] = LCH[1] * Math.sin(LCHab[2] * Math.PI / 180.0);
+
+    return this._Lab_to_XYZ(Lab, false);
+}
+
+
+ColorRNA.prototype._XYZ_to_LCHab = function ()
+{
+    var Lab = this._XYZ_to_Lab(Lab, false);
+    var LCH = [0, 0, 0];
+
+    LCH[0] = Lab[0];
+    LCH[1] = Math.sqrt(Lab[1] * Lab[1] + Lab[2] * Lab[2]);
+    LCH[2] = 180.0 * Math.atan2(Lab[2], Lab[1]) / Math.PI;
+    if (LCH[2] < 0.0)
+    {
+        LCH[2] += 360.0;
+    }
+
+
+    return LCH;
+}
+
+
 ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
 {
 
@@ -1202,7 +1233,6 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
     }
 
 
-
     xyz[0] = xr * this._adt_refWhite.X;
     xyz[1] = yr * this._adt_refWhite.Y;
     xyz[2] = zr * this._adt_refWhite.Z;
@@ -1214,8 +1244,8 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
     if (psMod === true)
     {
         this._getRGBnucleotids("sRGB")
-       // xyz = this._adt_adaptation("D65", this._adtAlg);
-        xyz = this._adt_invAdaptation(xyz,"D50", this._adtAlg);
+        // xyz = this._adt_adaptation("D65", this._adtAlg);
+        xyz = this._adt_invAdaptation(xyz, "D50", this._adtAlg);
     }
 
     this._xyz.X = xyz[0];
@@ -1249,18 +1279,9 @@ ColorRNA.prototype._XYZ_to_xyY = function ()
 }
 
 
-
-
-
-
-
-
-
-
-
 ColorRNA.prototype._xyY_to_XYZ = function (xyY)
 {
-    var XYZ=[0,0,0];
+    var XYZ = [0, 0, 0];
     if (xyY[1] < 0.000001)
     {
         XYZ[0] = XYZ[1] = XYZ[2] = 0.0;
@@ -1272,14 +1293,12 @@ ColorRNA.prototype._xyY_to_XYZ = function (xyY)
         XYZ[2] = ((1.0 - xyY[0] - xyY[1]) * xyY[2]) / xyY[1];
     }
 
+
+    this._xyz.X = XYZ[0];
+    this._xyz.Y = XYZ[1];
+    this._xyz.Z = XYZ[2];
     return XYZ;
 }
-
-
-
-
-
-
 
 
 // 检查输入的 RGB 值，如果是 0~1 的小数形式将转化为 0~255 的形式
@@ -1315,13 +1334,6 @@ ColorRNA.prototype._normaInputRGB = function (inArray)
 
     return inArray;
 }
-
-
-
-
-
-
-
 
 
 // 检查输出的 RGB 值，将小于 0 和 -0 的值转换为 0；
@@ -1365,13 +1377,11 @@ ColorRNA.prototype._normaOutX = function (inArray, X)
     var z = 0
     for (z = 0; z < inArray.length; z++)
     {
-            inArray[z] = +inArray[z].toFixed(X);
+        inArray[z] = +inArray[z].toFixed(X);
 
     }
     return inArray;
 }
-
-
 
 
 // 检查输入的 XYZ 值，如果有非 0~1 形式的值，将把所有值除以 100
@@ -1501,7 +1511,7 @@ ColorRNA.prototype._xyYX = function (argus)
     if (argus.length == 0)
     {
         xyY = this._XYZ_to_xyY();
-        this._normaOutX(xyY,4);
+        this._normaOutX(xyY, 4);
         return xyY;
     }
 
@@ -1522,11 +1532,51 @@ ColorRNA.prototype._xyYX = function (argus)
         xyY[2] = argus[2];
     }
 
-    return this._Lab_to_XYZ(xyY);
+    return this._xyY_to_XYZ(xyY);
+}
+
+
+ColorRNA.prototype._LCHabX = function (argus)
+{
+
+    var LCH = [0, 0, 0];
+
+    if (argus.length == 0)
+    {
+        LCH = this._XYZ_to_LCHab();
+        this._normaOutX(LCH, 4);
+        return LCH;
+    }
+
+    if (argus.length == 1)
+    {
+        if (Array.isArray(argus[0]))
+        {
+            if (argus[0].length == 3)
+            {
+                LCH = argus[0];
+            }
+        }
+    }
+    if (argus.length == 3)
+    {
+        LCH[0] = argus[0];
+        LCH[1] = argus[1];
+        LCH[2] = argus[2];
+    }
+
+    return this._LCHab_to_XYZ(LCH);
 }
 
 
 
+
+
+
+ColorRNA.prototype.xyY = function ()
+{
+    return (this._xyYX(arguments));
+}
 
 
 ColorRNA.prototype.LabPS = function ()
@@ -1538,6 +1588,20 @@ ColorRNA.prototype.Lab = function ()
 {
     return (this._LabX(arguments, false));
 }
+
+
+
+
+ColorRNA.prototype.LCHab = function ()
+{
+    return (this._LCHabX(arguments, false));
+}
+
+
+
+
+
+
 
 
 // 颜色设置、取值器，带参数调用设置颜色，不带参数调用取颜色
@@ -1732,9 +1796,14 @@ var color2 = new ColorRNA();
 //console.log("_doAdapta:" + color2._doAdapta);
 //console.log("XYZ:" +color2.XYZ(0.5,0.5,0.5).XYZ());
 
-color2.XYZ(0.194916, 0.169637, 0.713401)
-console.log(color2._XYZ_to_xyY());
+//color2.XYZ(0.194916, 0.169637, 0.713401)
+//console.log(color2._XYZ_to_xyY());
 
+//color2.xyY(0.180820, 0.157369, 0.169637);
+
+color2.Lab(47, 9, -64);
+console.log("LCHab:" + color2.LCHab());
+console.log(color2.xyY());
 
 
 var rgb = [];
