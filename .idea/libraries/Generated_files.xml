@@ -3,10 +3,14 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/src/ColorRNA.min.js" />
+        <item url="file://$PROJECT_DIR$/11.min.js" />
+        <item url="file://$PROJECT_DIR$/test.min.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/src/ColorRNA.min.js" />
+      <root url="file://$PROJECT_DIR$/11.min.js" />
+      <root url="file://$PROJECT_DIR$/test.min.js" />
     </CLASSES>
     <SOURCES />
   </library>

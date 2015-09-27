@@ -1137,7 +1137,7 @@ ColorRNA.prototype._XYZ_to_Lab = function (psMod)
 
     this._adt_setRefWhite("D65");
 
-    if(psMod===true)//ps
+    if (psMod === true)//ps
     {
         this._getRGBnucleotids("sRGB");
         xyz = this._adt_adaptation("D50", this._adtAlg);
@@ -1157,7 +1157,7 @@ ColorRNA.prototype._XYZ_to_Lab = function (psMod)
     return Lab;
 }
 
-ColorRNA.prototype._Lab_to_XYZ = function (Labs, refWhiteName)
+ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
 {
 
     var xyz = [0, 0, 0];
@@ -1186,35 +1186,37 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, refWhiteName)
     var zr = (fz3 > kE) ? fz3 : ((116.0 * fz - 16.0) / kK);
 
 
-
-    if (refWhiteName === "D50")
-    {
-        this._adt_setRefWhite("D65");
-    }
-
-    else
-    {
-        this._adt_setRefWhite(refWhiteName);
-    }
+    //if (psMod === true)
+    //{
+    //    this._adt_setRefWhite("D65");
+    //}
 
 
+    this._adt_setRefWhite("D50");
 
     xyz[0] = xr * this._adt_refWhite.X;
     xyz[1] = yr * this._adt_refWhite.Y;
     xyz[2] = zr * this._adt_refWhite.Z;
 
+    this._xyz.X = xyz[0];
+    this._xyz.Y = xyz[1];
+    this._xyz.Z = xyz[2];
 
-    if (refWhiteName === "D50")
+    if (psMod === true)
     {
-        xyz = this._adt_invAdaptation(xyz, this._refWhiteName, this._adtAlg)
+        this._getRGBnucleotids("sRGB")
+       // xyz = this._adt_adaptation("D65", this._adtAlg);
+        xyz = this._adt_invAdaptation(xyz,"D50", this._adtAlg);
     }
 
     this._xyz.X = xyz[0];
     this._xyz.Y = xyz[1];
     this._xyz.Z = xyz[2];
 
-    return xyz;
+
+    return [this._xyz.X, this._xyz.Y, this._xyz.Z];
 }
+
 
 ColorRNA.prototype._XYZ_to_xyY = function ()
 {
@@ -1425,7 +1427,7 @@ ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
         Lab[2] = argus[2];
     }
 
-    return this._Lab_to_XYZ(Lab, this._refWhiteName);
+    return this._Lab_to_XYZ(Lab, PhotoShopMod);
 }
 
 
@@ -1578,20 +1580,44 @@ ColorRNA.prototype.XYZ = function ()
 //console.log(test_color._Lab_to_XYZ(test_color._XYZ_to_Lab(true), true));
 //console.log("=========_XYZ_to_xyY===========");
 //console.log(test_color._XYZ_to_xyY());
+
+
+console.log("0.194916,0.169637,0.713401");
 console.log("=========getttt===========");
 var color2 = new ColorRNA();
 //color2.setRefWhite("D50");
-//color2.sRGB(33, 111, 222);
+color2.sRGB(33, 111, 222);
 //color2.LabPS(47, 9, -64);
 //console.log("XYZ:" + color2.XYZ(0.19491595435208875,0.1696366336906597,0.7134007359464754));
-color2.XYZ(0.194916,0.169637,0.713401)
-//console.log("sRGB:" + color2.sRGB());
-console.log("LabPS:" + color2.LabPS());
-console.log("Lab:" + color2.Lab());
-console.log("LabPS:" + color2.LabPS());
 
-console.log("=========LAB_===========");
-color2.LabPS()
+
+//color2.XYZ(0.194916, 0.169637, 0.713401)
+//console.log("sRGB:" + color2.sRGB());
+//console.log("LabPS:" + color2.LabPS());
+//console.log("Lab  :" + color2.Lab());
+//console.log("LabPS:" + color2.LabPS());
+//console.log("Lab  :" + color2.Lab());
+//
+//console.log("========= 47,9,-64 LAB_TO_XYZ===========");
+//color2.LabPS(47, 9, -64);
+//console.log("XYZ:" + color2.XYZ());
+//console.log("LabPS:" + color2.LabPS());
+//console.log("LabPS:" + color2.LabPS());
+//console.log("Lab  :" + color2.Lab());
+//console.log("XYZ:" + color2.XYZ());
+//console.log("LabPS:" + color2.LabPS());
+//console.log("Lab  :" + color2.Lab());
+//console.log("sRGB:" + color2.sRGB());
+//console.log("========= sRGB(33, 111, 222)==========");
+//
+//color2.sRGB(33, 111, 222);
+//console.log("LabPS:" + color2.LabPS());
+
+
+//color2.LabPS(47,9,-64);
+//console.log("XYZ:" + color2.XYZ());
+//console.log("sRGB:" + color2.sRGB());
+
 //console.log("Lab:" + color2.Lab());
 //console.log("AdobeRGB" + ":" + color2["AdobeRGB"]());
 //console.log("AdobeRGB" + ":" + color2.AdobeRGB());
