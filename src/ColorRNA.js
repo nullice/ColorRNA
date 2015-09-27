@@ -1192,7 +1192,16 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
     //}
 
 
-    this._adt_setRefWhite("D50");
+    if (psMod === true)
+    {
+        this._adt_setRefWhite("D50");
+    }
+    else
+    {
+        this._adt_setRefWhite("D65");
+    }
+
+
 
     xyz[0] = xr * this._adt_refWhite.X;
     xyz[1] = yr * this._adt_refWhite.Y;
@@ -1240,6 +1249,39 @@ ColorRNA.prototype._XYZ_to_xyY = function ()
 }
 
 
+
+
+
+
+
+
+
+
+
+ColorRNA.prototype._xyY_to_XYZ = function (xyY)
+{
+    var XYZ=[0,0,0];
+    if (xyY[1] < 0.000001)
+    {
+        XYZ[0] = XYZ[1] = XYZ[2] = 0.0;
+    }
+    else
+    {
+        XYZ[0] = (xyY[0] * xyY[2]) / xyY[1];
+        XYZ[1] = xyY[2];
+        XYZ[2] = ((1.0 - xyY[0] - xyY[1]) * xyY[2]) / xyY[1];
+    }
+
+    return XYZ;
+}
+
+
+
+
+
+
+
+
 // 检查输入的 RGB 值，如果是 0~1 的小数形式将转化为 0~255 的形式
 ColorRNA.prototype._normaInputRGB = function (inArray)
 {
@@ -1273,6 +1315,14 @@ ColorRNA.prototype._normaInputRGB = function (inArray)
 
     return inArray;
 }
+
+
+
+
+
+
+
+
 
 // 检查输出的 RGB 值，将小于 0 和 -0 的值转换为 0；
 ColorRNA.prototype._normaOutRGB = function (inArray)
@@ -1308,6 +1358,20 @@ ColorRNA.prototype._normaOutLab = function (inArray, PSMod)
     }
     return inArray;
 }
+
+// 检查输出的值数组，四舍五入舍到 X 位小数；
+ColorRNA.prototype._normaOutX = function (inArray, X)
+{
+    var z = 0
+    for (z = 0; z < inArray.length; z++)
+    {
+            inArray[z] = +inArray[z].toFixed(X);
+
+    }
+    return inArray;
+}
+
+
 
 
 // 检查输入的 XYZ 值，如果有非 0~1 形式的值，将把所有值除以 100
@@ -1429,6 +1493,40 @@ ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
 
     return this._Lab_to_XYZ(Lab, PhotoShopMod);
 }
+
+ColorRNA.prototype._xyYX = function (argus)
+{
+    var xyY = [0, 0, 0];
+
+    if (argus.length == 0)
+    {
+        xyY = this._XYZ_to_xyY();
+        this._normaOutX(xyY,4);
+        return xyY;
+    }
+
+    if (argus.length == 1)
+    {
+        if (Array.isArray(argus[0]))
+        {
+            if (argus[0].length == 3)
+            {
+                xyY = argus[0];
+            }
+        }
+    }
+    if (argus.length == 3)
+    {
+        xyY[0] = argus[0];
+        xyY[1] = argus[1];
+        xyY[2] = argus[2];
+    }
+
+    return this._Lab_to_XYZ(xyY);
+}
+
+
+
 
 
 ColorRNA.prototype.LabPS = function ()
@@ -1582,11 +1680,11 @@ ColorRNA.prototype.XYZ = function ()
 //console.log(test_color._XYZ_to_xyY());
 
 
-console.log("0.194916,0.169637,0.713401");
-console.log("=========getttt===========");
+//console.log("0.194916,0.169637,0.713401");
+//console.log("=========getttt===========");
 var color2 = new ColorRNA();
 //color2.setRefWhite("D50");
-color2.sRGB(33, 111, 222);
+//color2.sRGB(33, 111, 222);
 //color2.LabPS(47, 9, -64);
 //console.log("XYZ:" + color2.XYZ(0.19491595435208875,0.1696366336906597,0.7134007359464754));
 
@@ -1614,10 +1712,15 @@ color2.sRGB(33, 111, 222);
 //console.log("LabPS:" + color2.LabPS());
 
 
-//color2.LabPS(47,9,-64);
+//color2.Lab(48,18,-64);
 //console.log("XYZ:" + color2.XYZ());
 //console.log("sRGB:" + color2.sRGB());
+//console.log("Lab:" + color2.Lab());
 
+//color2.Lab(47,9,-64);
+//console.log("XYZ:" + color2.XYZ());
+//console.log("sRGB:" + color2.sRGB());
+//console.log("Lab:" + color2.Lab());
 //console.log("Lab:" + color2.Lab());
 //console.log("AdobeRGB" + ":" + color2["AdobeRGB"]());
 //console.log("AdobeRGB" + ":" + color2.AdobeRGB());
@@ -1628,6 +1731,11 @@ color2.sRGB(33, 111, 222);
 //console.log("getRefWhite:" + color2.getRefWhite());
 //console.log("_doAdapta:" + color2._doAdapta);
 //console.log("XYZ:" +color2.XYZ(0.5,0.5,0.5).XYZ());
+
+color2.XYZ(0.194916, 0.169637, 0.713401)
+console.log(color2._XYZ_to_xyY());
+
+
 
 var rgb = [];
 var count = 0;
