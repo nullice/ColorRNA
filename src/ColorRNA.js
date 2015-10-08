@@ -1,23 +1,23 @@
 /**
- * Created by Óï±ù on 2015/9/22.
+ * Created by è¯­å†° on 2015/9/22.
  */
 
 function ColorRNA()
 {
-//---Ë½ÓĞ
+//---ç§æœ‰
 
     this._xyz = {X: 0, Y: 0, Z: 0};
 
-    this._gamma = -2.2; //gamma ±ä»»Öµ£» _gamma < 0 ±íÊ¾ sRGB Ä£Ê½
+    this._gamma = -2.2; //gamma å˜æ¢å€¼ï¼› _gamma < 0 è¡¨ç¤º sRGB æ¨¡å¼
     this._colorSpace = "sRGB";
     this._refWhiteName = "D65";
-    this._refWhiteNameUSER = "";//Ç¿ÖÆÖÆ¶ÈÖµ
+    this._refWhiteNameUSER = "";//å¼ºåˆ¶åˆ¶åº¦å€¼
     this._adtAlg = "Bradford";
     this._doAdapta = true;
-    this._doAdaptaUSER = 0;// 0 Ä¬ÈÏ£¬1 Ç¿ÖÆÊ¹ÓÃ£¬-1 Ç¿ÖÆ²»Ê¹ÓÃ
+    this._doAdaptaUSER = 0;// 0 é»˜è®¤ï¼Œ1 å¼ºåˆ¶ä½¿ç”¨ï¼Œ-1 å¼ºåˆ¶ä¸ä½¿ç”¨
 
 
-    this._dLV = 1; //¼ÆËã¾«¶È 2£º16Î», 1£º7Î», 0£º4Î»;
+    this._dLV = 1; //è®¡ç®—ç²¾åº¦ 2ï¼š16ä½, 1ï¼š7ä½, 0ï¼š4ä½;
 
     this._COLORSPACES =
     {
@@ -54,8 +54,8 @@ function ColorRNA()
     }
 
 
-    this._adt_refWhite = {X: 0, Y: 0, Z: 0};// ²Î¿¼°×
-    this._adt_refWhiteRGB = {X: 0, Y: 0, Z: 0};// RGB É«²Ê¿Õ¼ä²Î¿¼°×
+    this._adt_refWhite = {X: 0, Y: 0, Z: 0};// å‚è€ƒç™½
+    this._adt_refWhiteRGB = {X: 0, Y: 0, Z: 0};// RGB è‰²å½©ç©ºé—´å‚è€ƒç™½
     this._adt_mtxAdaptMa = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
     this._adt_mtxAdaptMaI = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 
@@ -83,10 +83,10 @@ function ColorRNA()
 
 }
 
-//---Ô­ĞÍº¯Êı--------------------------------------------------------------------------------------------------
+//---åŸå‹å‡½æ•°--------------------------------------------------------------------------------------------------
 
 
-//È¡ RGB Öµ£¬Èç£º#ffffff
+//å– RGB å€¼ï¼Œå¦‚ï¼š#ffffff
 ColorRNA.prototype._RGBstring = function ()
 {
     return "#" + this.r.toString(16) + this.g.toString(16) + this.b.toString(16)
@@ -104,7 +104,7 @@ ColorRNA.prototype._arrayProduct = function (inArray, inArray2)
 }
 
 
-//°ÑÒ»¸öÊı inNumber ¹éÒ»»¯£»inMax,inMin ÎªÔ­×î´ó×îĞ¡Çø¼ä£¬newMax ÎªĞÂ×î´óÖµ£»Èç¹ûÖ»ÓĞÒ»¸ö²ÎÊı½«°´[0,255] ¹éÒ»»¯µ½ [0,1]
+//æŠŠä¸€ä¸ªæ•° inNumber å½’ä¸€åŒ–ï¼›inMax,inMin ä¸ºåŸæœ€å¤§æœ€å°åŒºé—´ï¼ŒnewMax ä¸ºæ–°æœ€å¤§å€¼ï¼›å¦‚æœåªæœ‰ä¸€ä¸ªå‚æ•°å°†æŒ‰[0,255] å½’ä¸€åŒ–åˆ° [0,1]
 ColorRNA.prototype._normaliz = function (inNumber, inMin, inMax, newMax)
 {
     var newNumber = 0;
@@ -140,13 +140,13 @@ ColorRNA.prototype._arrayRound = function (inArray)
 }
 
 
-//¶ÔÒÑ¾­¹éÒ»»¯µÄ RGB Öµ½øĞĞ  Gamma 2.2 µÄ±ä»»£¬
+//å¯¹å·²ç»å½’ä¸€åŒ–çš„ RGB å€¼è¿›è¡Œ  Gamma 2.2 çš„å˜æ¢ï¼Œ
 ColorRNA.prototype._enGamma = function (rgb)
 {
     var newRGB = 0;
     var sign = 1;
 
-    if (rgb < 0)//´¦Àí¸ºÊıÇé¿ö
+    if (rgb < 0)//å¤„ç†è´Ÿæ•°æƒ…å†µ
     {
         sign = -1;
         rgb = -rgb;
@@ -177,7 +177,7 @@ ColorRNA.prototype._enGamma = function (rgb)
             newRGB = sign * (1.16 * Math.pow(rgb, 1.0 / 3.0) - 0.16);
         }
     }
-    if (this._gamma > 0)//-----ÆÕÍ¨ Gamma-----------
+    if (this._gamma > 0)//-----æ™®é€š Gamma-----------
     {
 
         newRGB = sign * Math.pow(rgb, 1 / this._gamma);
@@ -253,7 +253,7 @@ ColorRNA.prototype._adt_invAdaptation = function (xyz, lightName, algName)
 
 ColorRNA.prototype._adt_setRefWhite = function (lightname)
 {
-    if (this._refWhiteNameUSER.length > 0)//Ç¿ÖÆÊ¹ÓÃÓÃ»§Ö¸¶¨²Î¿¼°×
+    if (this._refWhiteNameUSER.length > 0)//å¼ºåˆ¶ä½¿ç”¨ç”¨æˆ·æŒ‡å®šå‚è€ƒç™½
     {
         lightname = this._refWhiteNameUSER
     }
@@ -374,13 +374,13 @@ ColorRNA.prototype._adt_setAdaptMa = function (aglName)
 }
 
 
-//ÈÃ¾­¹ı Gamma  µÄ±ä»» RGB ¹éÒ»»¯Öµ»¹Ô­
+//è®©ç»è¿‡ Gamma  çš„å˜æ¢ RGB å½’ä¸€åŒ–å€¼è¿˜åŸ
 ColorRNA.prototype._deGamma = function (rgb)
 {
     var newRGB = 0;
     var sign = 1;
 
-    if (rgb < 0)//´¦Àí¸ºÊıÇé¿ö
+    if (rgb < 0)//å¤„ç†è´Ÿæ•°æƒ…å†µ
     {
         sign = -1;
         rgb = -rgb;
@@ -411,7 +411,7 @@ ColorRNA.prototype._deGamma = function (rgb)
             newRGB = sign * ((((1000000.0 * rgb + 480000.0) * rgb + 76800.0) * rgb + 4096.0) / 1560896.0);
         }
     }
-    if (this._gamma > 0)//-----ÆÕÍ¨ Gamma-----------
+    if (this._gamma > 0)//-----æ™®é€š Gamma-----------
     {
 
         newRGB = sign * Math.pow(rgb, this._gamma);
@@ -425,8 +425,8 @@ ColorRNA.prototype._getRGBnucleotids = function (rabColorSpaceName, XYZtoRGB)
 {
     this._adt_refWhiteRGB.Y = 1.0;
 
-    this._refWhiteName = "D65";//ÉèÖÃÈ±Ê¡Öµ
-    this._doAdapta = true;//ÉèÖÃÈ±Ê¡
+    this._refWhiteName = "D65";//è®¾ç½®ç¼ºçœå€¼
+    this._doAdapta = true;//è®¾ç½®ç¼ºçœ
 
     switch (rabColorSpaceName)
     {
@@ -1063,6 +1063,55 @@ ColorRNA.prototype._getRGBnucleotids = function (rabColorSpaceName, XYZtoRGB)
 }
 
 
+ColorRNA.prototype._RGB_to_YPbPr = function (rgb)
+{
+    var
+        Y = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2],
+        Pb = -0.1687367 * rgb[0] - 0.331264 * rgb[1] + 0.5 * rgb[2],
+        Pr = 0.5 * rgb[0] - 0.418688 * rgb[1] - 0.081312 * rgb[2];
+
+    return [Y, Pb, Pr];
+}
+
+ColorRNA.prototype._YPbPr_to_RGB_ = function (YPbPr)
+{
+    var
+        r = 0.99999999999914679361 * YPbPr[0] - 1.2188941887145875e-06 * YPbPr[1] + 1.4019995886561440468 * YPbPr[2],
+        g = 0.99999975910502514331 * YPbPr[0] - 0.34413567816504303521 * YPbPr[1] - 0.71413649331646789076 * YPbPr[2],
+        b = 1.00000124040004623180 * YPbPr[0] + 1.77200006607230409200 * YPbPr[1] + 2.1453384174593273e-06 * YPbPr[2];
+
+    return [r, g, b];
+}
+
+
+ColorRNA.prototype._RGB_to_YCbCr = function (rgb)
+{
+    var
+        Y = 65.481 * rgb[0] + 128.553 * rgb[1] + 24.966 * rgb[2] + 16,
+        Cb = -37.797 * rgb[0] - 74.203 * rgb[1] + 112.0 * rgb[2] + 128,
+        Cr = 112.0 * rgb[0] - 93.786 * rgb[1] - 18.214 * rgb[2] + 128;
+
+    return [Y, Cb, Cr];
+}
+
+ColorRNA.prototype._YCbCr_to_RGB = function (YCbCr)
+{
+    YCbCr[0] -= 16.0
+    YCbCr[1] -= 128.0
+    YCbCr[2] -= 128.0
+
+    var
+    r = 0.00456621004566210107*YCbCr[0] + 1.1808799897946415e-09*YCbCr[1] + 0.00625892896994393634*YCbCr[2],
+    g = 0.00456621004566210107*YCbCr[0] - 0.00153632368604490212*YCbCr[1] - 0.00318811094965570701*YCbCr[2],
+    b = 0.00456621004566210107*YCbCr[0] + 0.00791071623355474145*YCbCr[1] + 1.1977497040190077e-08*YCbCr[2];
+
+    return [r, g, b];
+}
+
+
+
+
+
 ColorRNA.prototype._RGB_to_XYZ = function ()
 {
     var x, y, z;
@@ -1163,8 +1212,8 @@ ColorRNA.prototype._LCHab_to_XYZ = function (LCH)
     var Lab = [0, 0, 0];
 
     Lab[0] = LCH[0];
-    Lab[1] = LCH[1] * Math.cos(LCHab[2] * Math.PI / 180.0);
-    Lab[2] = LCH[1] * Math.sin(LCHab[2] * Math.PI / 180.0);
+    Lab[1] = LCH[1] * Math.cos(LCH[2] * Math.PI / 180.0);
+    Lab[2] = LCH[1] * Math.sin(LCH[2] * Math.PI / 180.0);
 
     return this._Lab_to_XYZ(Lab, false);
 }
@@ -1300,8 +1349,166 @@ ColorRNA.prototype._xyY_to_XYZ = function (xyY)
     return XYZ;
 }
 
+ColorRNA.prototype._xyY_to_Wavelength = function (xyY)
+{
 
-// ¼ì²éÊäÈëµÄ RGB Öµ£¬Èç¹ûÊÇ 0~1 µÄĞ¡ÊıĞÎÊ½½«×ª»¯Îª 0~255 µÄĞÎÊ½
+    var x = xyY[0],
+        y = xyY[1],
+        xr = this._adt_refWhite.X / ( this._adt_refWhite.X + this._adt_refWhite.Y + this._adt_refWhite.Z),
+        yr = this._adt_refWhite.Y / (this._adt_refWhite.X + this._adt_refWhite.Y + this._adt_refWhite.Z);
+
+
+    var dominantWavelength;
+    var count = 0;
+    var tArray = [0.0, 0.0];	// t
+    var wArray = [0.0, 0.0];	// wavelength
+    var cArray = [0, 0];		// cycle
+
+    var nm;
+
+    var a = x - xr;
+    var b = y - yr;
+
+    if ((a >= -0.000001) && (a <= 0.000001) && (b >= -0.000001) && (b <= 0.000001))
+    {
+        return (0.0);	// cannot compute the dominant wavelength, because (x, y) is the same as (xr, yr)
+    }
+
+    for (nm = 360; nm <= 830; nm += 5)
+    {
+        var i1 = (nm - 360) / 5;
+        var i2 = (nm == 830) ? 0 : i1 + 1;
+        var nm2 = 5 * i2 + 360;
+
+        var CIE1931StdObs_x = [
+            0.000129900000, 0.000232100000, 0.000414900000, 0.000741600000, 0.001368000000, 0.002236000000,
+            0.004243000000, 0.007650000000, 0.014310000000, 0.023190000000, 0.043510000000, 0.077630000000, 0.134380000000, 0.214770000000, 0.283900000000, 0.328500000000,
+            0.348280000000, 0.348060000000, 0.336200000000, 0.318700000000, 0.290800000000, 0.251100000000, 0.195360000000, 0.142100000000, 0.095640000000, 0.057950010000,
+            0.032010000000, 0.014700000000, 0.004900000000, 0.002400000000, 0.009300000000, 0.029100000000, 0.063270000000, 0.109600000000, 0.165500000000, 0.225749900000,
+            0.290400000000, 0.359700000000, 0.433449900000, 0.512050100000, 0.594500000000, 0.678400000000, 0.762100000000, 0.842500000000, 0.916300000000, 0.978600000000,
+            1.026300000000, 1.056700000000, 1.062200000000, 1.045600000000, 1.002600000000, 0.938400000000, 0.854449900000, 0.751400000000, 0.642400000000, 0.541900000000,
+            0.447900000000, 0.360800000000, 0.283500000000, 0.218700000000, 0.164900000000, 0.121200000000, 0.087400000000, 0.063600000000, 0.046770000000, 0.032900000000,
+            0.022700000000, 0.015840000000, 0.011359160000, 0.008110916000, 0.005790346000, 0.004109457000, 0.002899327000, 0.002049190000, 0.001439971000, 0.000999949300,
+            0.000690078600, 0.000476021300, 0.000332301100, 0.000234826100, 0.000166150500, 0.000117413000, 0.000083075270, 0.000058706520, 0.000041509940, 0.000029353260,
+            0.000020673830, 0.000014559770, 0.000010253980, 0.000007221456, 0.000005085868, 0.000003581652, 0.000002522525, 0.000001776509, 0.000001251141];
+        var CIE1931StdObs_y = [
+            0.000003917000, 0.000006965000, 0.000012390000, 0.000022020000, 0.000039000000, 0.000064000000,
+            0.000120000000, 0.000217000000, 0.000396000000, 0.000640000000, 0.001210000000, 0.002180000000, 0.004000000000, 0.007300000000, 0.011600000000, 0.016840000000,
+            0.023000000000, 0.029800000000, 0.038000000000, 0.048000000000, 0.060000000000, 0.073900000000, 0.090980000000, 0.112600000000, 0.139020000000, 0.169300000000,
+            0.208020000000, 0.258600000000, 0.323000000000, 0.407300000000, 0.503000000000, 0.608200000000, 0.710000000000, 0.793200000000, 0.862000000000, 0.914850100000,
+            0.954000000000, 0.980300000000, 0.994950100000, 1.000000000000, 0.995000000000, 0.978600000000, 0.952000000000, 0.915400000000, 0.870000000000, 0.816300000000,
+            0.757000000000, 0.694900000000, 0.631000000000, 0.566800000000, 0.503000000000, 0.441200000000, 0.381000000000, 0.321000000000, 0.265000000000, 0.217000000000,
+            0.175000000000, 0.138200000000, 0.107000000000, 0.081600000000, 0.061000000000, 0.044580000000, 0.032000000000, 0.023200000000, 0.017000000000, 0.011920000000,
+            0.008210000000, 0.005723000000, 0.004102000000, 0.002929000000, 0.002091000000, 0.001484000000, 0.001047000000, 0.000740000000, 0.000520000000, 0.000361100000,
+            0.000249200000, 0.000171900000, 0.000120000000, 0.000084800000, 0.000060000000, 0.000042400000, 0.000030000000, 0.000021200000, 0.000014990000, 0.000010600000,
+            0.000007465700, 0.000005257800, 0.000003702900, 0.000002607800, 0.000001836600, 0.000001293400, 0.000000910930, 0.000000641530, 0.000000451810];
+        var CIE1931StdObs_z = [
+            0.000606100000, 0.001086000000, 0.001946000000, 0.003486000000, 0.006450001000, 0.010549990000,
+            0.020050010000, 0.036210000000, 0.067850010000, 0.110200000000, 0.207400000000, 0.371300000000, 0.645600000000, 1.039050100000, 1.385600000000, 1.622960000000,
+            1.747060000000, 1.782600000000, 1.772110000000, 1.744100000000, 1.669200000000, 1.528100000000, 1.287640000000, 1.041900000000, 0.812950100000, 0.616200000000,
+            0.465180000000, 0.353300000000, 0.272000000000, 0.212300000000, 0.158200000000, 0.111700000000, 0.078249990000, 0.057250010000, 0.042160000000, 0.029840000000,
+            0.020300000000, 0.013400000000, 0.008749999000, 0.005749999000, 0.003900000000, 0.002749999000, 0.002100000000, 0.001800000000, 0.001650001000, 0.001400000000,
+            0.001100000000, 0.001000000000, 0.000800000000, 0.000600000000, 0.000340000000, 0.000240000000, 0.000190000000, 0.000100000000, 0.000049999990, 0.000030000000,
+            0.000020000000, 0.000010000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000,
+            0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000,
+            0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000,
+            0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000];
+
+
+        var x1 = CIE1931StdObs_x[i1] / (CIE1931StdObs_x[i1] + CIE1931StdObs_y[i1] + CIE1931StdObs_z[i1]);
+        var y1 = CIE1931StdObs_y[i1] / (CIE1931StdObs_x[i1] + CIE1931StdObs_y[i1] + CIE1931StdObs_z[i1]);
+        var x2 = CIE1931StdObs_x[i2] / (CIE1931StdObs_x[i2] + CIE1931StdObs_y[i2] + CIE1931StdObs_z[i2]);
+        var y2 = CIE1931StdObs_y[i2] / (CIE1931StdObs_x[i2] + CIE1931StdObs_y[i2] + CIE1931StdObs_z[i2]);
+
+        var c = x1 - xr;
+        var d = y1 - yr;
+        var e = x2 - x1;
+        var f = y2 - y1;
+
+        var s = (a * d - b * c) / (b * e - a * f);
+        if ((s < 0.0) || (s >= 1.0))
+        {
+            continue;
+        }
+
+        var t = (Math.abs(a) >= Math.abs(b)) ? ((e * s + c) / a) : ((f * s + d) / b);
+        tArray[count] = t;
+        cArray[count] = nm;
+        wArray[count] = (nm2 - nm) * s + nm;
+        count += 1;
+    }
+
+    if ((cArray[1] == 830) && (tArray[1] > 0.0))
+    {
+        dominantWavelength = -wArray[0];
+    }
+    else
+    {
+        dominantWavelength = (tArray[0] >= 0.0) ? wArray[0] : wArray[1];
+    }
+
+    return (dominantWavelength);
+
+
+}
+
+
+ColorRNA.prototype._XYZ_to_Luv = function ()
+{
+
+    var Luv = [0, 0, 0]
+    var kE = 216.0 / 24389.0;
+    var kK = 24389.0 / 27.0;
+    var kKE = 8.0;
+    this._adt_setRefWhite("D65");
+
+
+    var Den = this._xyz.X + 15.0 * this._xyz.Y + 3.0 * this._xyz.Z;
+    var up = (Den > 0.0) ? ((4.0 * this._xyz.X) / (this._xyz.X + 15.0 * this._xyz.Y + 3.0 * this._xyz.Z)) : 0.0;
+    var vp = (Den > 0.0) ? ((9.0 * this._xyz.Y) / (this._xyz.X + 15.0 * this._xyz.Y + 3.0 * this._xyz.Z)) : 0.0;
+
+    var urp = (4.0 * this._adt_refWhite.X) / (this._adt_refWhite.X + 15.0 * this._adt_refWhite.Y + 3.0 * this._adt_refWhite.Z);
+    var vrp = (9.0 * this._adt_refWhite.Y) / (this._adt_refWhite.X + 15.0 * this._adt_refWhite.Y + 3.0 * this._adt_refWhite.Z);
+
+    var yr = this._xyz.Y / this._adt_refWhite.Y;
+
+    Luv[0] = (yr > kE) ? (116.0 * Math.pow(yr, 1.0 / 3.0) - 16.0) : (kK * yr);
+    Luv[1] = 13.0 * Luv[0] * (up - urp);
+    Luv[2] = 13.0 * Luv[0] * (vp - vrp);
+
+    return Luv;
+
+}
+
+
+ColorRNA.prototype._Luv_to_XYZ = function (Luv)
+{
+
+    var kK = 24389.0 / 27.0;
+    var kKE = 8.0;
+    var XYZ = {X: 0, Y: 0, Z: 0};
+    this._adt_setRefWhite("D65");
+
+
+    XYZ.Y = (Luv[0] > kKE) ? Math.pow((Luv[0] + 16.0) / 116.0, 3.0) : (Luv[0] / kK);
+    var u0 = (4.0 * this._adt_refWhite.X) / (this._adt_refWhite.X + 15.0 * this._adt_refWhite.Y + 3.0 * this._adt_refWhite.Z);
+    var v0 = (9.0 * this._adt_refWhite.Y) / (this._adt_refWhite.X + 15.0 * this._adt_refWhite.Y + 3.0 * this._adt_refWhite.Z);
+
+    var a = (((52.0 * Luv[0]) / (Luv[1] + 13.0 * Luv[0] * u0)) - 1.0) / 3.0;
+    var b = -5.0 * XYZ.Y;
+    var c = -1.0 / 3.0;
+    var d = XYZ.Y * (((39.0 * Luv[0]) / (Luv[2] + 13.0 * Luv[0] * v0)) - 5.0);
+
+    XYZ.X = (d - b) / (a - c);
+    XYZ.Z = XYZ.X * a + b;
+
+    this._xyz.X = XYZ.X;
+    this._xyz.Y = XYZ.Y;
+    this._xyz.Z = XYZ.Z;
+}
+
+
+// æ£€æŸ¥è¾“å…¥çš„ RGB å€¼ï¼Œå¦‚æœæ˜¯ 0~1 çš„å°æ•°å½¢å¼å°†è½¬åŒ–ä¸º 0~255 çš„å½¢å¼
 ColorRNA.prototype._normaInputRGB = function (inArray)
 {
     var modeFloat = false;
@@ -1336,7 +1543,7 @@ ColorRNA.prototype._normaInputRGB = function (inArray)
 }
 
 
-// ¼ì²éÊä³öµÄ RGB Öµ£¬½«Ğ¡ÓÚ 0 ºÍ -0 µÄÖµ×ª»»Îª 0£»
+// æ£€æŸ¥è¾“å‡ºçš„ RGB å€¼ï¼Œå°†å°äº 0 å’Œ -0 çš„å€¼è½¬æ¢ä¸º 0ï¼›
 ColorRNA.prototype._normaOutRGB = function (inArray)
 {
 
@@ -1352,7 +1559,7 @@ ColorRNA.prototype._normaOutRGB = function (inArray)
     return inArray;
 }
 
-// ¼ì²éÊä³öµÄ Lab Öµ£¬ËÄÉáÎåÈëÉáµ½ 1 Î»Ğ¡Êı£¬PS(PhotoShop)Ä£Ê½ÍêÈ«ÉáÈ¥Ğ¡ÊıÎ»£»
+// æ£€æŸ¥è¾“å‡ºçš„ Lab å€¼ï¼Œå››èˆäº”å…¥èˆåˆ° 1 ä½å°æ•°ï¼ŒPS(PhotoShop)æ¨¡å¼å®Œå…¨èˆå»å°æ•°ä½ï¼›
 ColorRNA.prototype._normaOutLab = function (inArray, PSMod)
 {
     var z = 0
@@ -1371,7 +1578,7 @@ ColorRNA.prototype._normaOutLab = function (inArray, PSMod)
     return inArray;
 }
 
-// ¼ì²éÊä³öµÄÖµÊı×é£¬ËÄÉáÎåÈëÉáµ½ X Î»Ğ¡Êı£»
+// æ£€æŸ¥è¾“å‡ºçš„å€¼æ•°ç»„ï¼Œå››èˆäº”å…¥èˆåˆ° X ä½å°æ•°ï¼›
 ColorRNA.prototype._normaOutX = function (inArray, X)
 {
     var z = 0
@@ -1384,7 +1591,7 @@ ColorRNA.prototype._normaOutX = function (inArray, X)
 }
 
 
-// ¼ì²éÊäÈëµÄ XYZ Öµ£¬Èç¹ûÓĞ·Ç 0~1 ĞÎÊ½µÄÖµ£¬½«°ÑËùÓĞÖµ³ıÒÔ 100
+// æ£€æŸ¥è¾“å…¥çš„ XYZ å€¼ï¼Œå¦‚æœæœ‰é 0~1 å½¢å¼çš„å€¼ï¼Œå°†æŠŠæ‰€æœ‰å€¼é™¤ä»¥ 100
 ColorRNA.prototype._normaInputXYZ = function (inArray)
 {
 
@@ -1402,7 +1609,7 @@ ColorRNA.prototype._normaInputXYZ = function (inArray)
 }
 
 
-//  ÉèÖÃÖ¸¶¨µÄ²Î¿¼°×É«£¨¹âÕÕÌõ¼ş£©,Ã»ÓĞ²ÎÊı½«ÉèÖÃÎªÈ±Ê¡Öµ£¨RGB Ä¬ÈÏ D65£©
+//  è®¾ç½®æŒ‡å®šçš„å‚è€ƒç™½è‰²ï¼ˆå…‰ç…§æ¡ä»¶ï¼‰,æ²¡æœ‰å‚æ•°å°†è®¾ç½®ä¸ºç¼ºçœå€¼ï¼ˆRGB é»˜è®¤ D65ï¼‰
 ColorRNA.prototype.setRefWhite = function (inRefWhiteName)
 {
     if (arguments.length == 0)
@@ -1417,7 +1624,7 @@ ColorRNA.prototype.setRefWhite = function (inRefWhiteName)
     return this;
 }
 
-//  ·µ»Øµ±Ç°²Î¿¼°×É«ÉèÖÃ£¨¹âÕÕÌõ¼ş£©
+//  è¿”å›å½“å‰å‚è€ƒç™½è‰²è®¾ç½®ï¼ˆå…‰ç…§æ¡ä»¶ï¼‰
 ColorRNA.prototype.getRefWhite = function ()
 {
 
@@ -1428,14 +1635,14 @@ ColorRNA.prototype.getRefWhite = function ()
     return this._refWhiteName;
 }
 
-//Ä¬ÈÏÒÔ sRGB ÉèÖÃ RGB µÄÖµ£¬
+//é»˜è®¤ä»¥ sRGB è®¾ç½® RGB çš„å€¼ï¼Œ
 ColorRNA.prototype.rgb = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.sRGB));
 }
 
 
-//¹©¸÷ÖÖÉ«²Ê¿Õ¼äÉèÖÃÈ¡Öµº¯Êıµ÷ÓÃµÄÄ£°å----------------------------------
+//ä¾›å„ç§è‰²å½©ç©ºé—´è®¾ç½®å–å€¼å‡½æ•°è°ƒç”¨çš„æ¨¡æ¿----------------------------------
 ColorRNA.prototype._rgbX = function (argus, colorSpace)
 {
     var rgb = [0, 0, 0];
@@ -1469,8 +1676,6 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace)
     this.g = rgb[1];
     this.b = rgb[2];
     this._RGB_to_XYZ();
-
-
 }
 
 ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
@@ -1569,8 +1774,43 @@ ColorRNA.prototype._LCHabX = function (argus)
 }
 
 
+ColorRNA.prototype._LuvX = function (argus)
+{
+
+    var Luv = [0, 0, 0];
+
+    if (argus.length == 0)
+    {
+        Luv = this._XYZ_to_Luv();
+        this._normaOutX(Luv, 4);
+        return Luv;
+    }
+
+    if (argus.length == 1)
+    {
+        if (Array.isArray(argus[0]))
+        {
+            if (argus[0].length == 3)
+            {
+                Luv = argus[0];
+            }
+        }
+    }
+    if (argus.length == 3)
+    {
+        Luv[0] = argus[0];
+        Luv[1] = argus[1];
+        Luv[2] = argus[2];
+    }
+
+    return this._Luv_to_XYZ(Luv);
+}
 
 
+ColorRNA.prototype.Luv = function ()
+{
+    return (this._LuvX(arguments));
+}
 
 
 ColorRNA.prototype.xyY = function ()
@@ -1590,22 +1830,14 @@ ColorRNA.prototype.Lab = function ()
 }
 
 
-
-
 ColorRNA.prototype.LCHab = function ()
 {
     return (this._LCHabX(arguments, false));
 }
 
 
-
-
-
-
-
-
-// ÑÕÉ«ÉèÖÃ¡¢È¡ÖµÆ÷£¬´ø²ÎÊıµ÷ÓÃÉèÖÃÑÕÉ«£¬²»´ø²ÎÊıµ÷ÓÃÈ¡ÑÕÉ«
-// ¸÷ÖÖ RGB É«²Ê¿Õ¼ä ---------------------------------------------------------------
+// é¢œè‰²è®¾ç½®ã€å–å€¼å™¨ï¼Œå¸¦å‚æ•°è°ƒç”¨è®¾ç½®é¢œè‰²ï¼Œä¸å¸¦å‚æ•°è°ƒç”¨å–é¢œè‰²
+// å„ç§ RGB è‰²å½©ç©ºé—´ ---------------------------------------------------------------
 ColorRNA.prototype.sRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.sRGB));
@@ -1686,7 +1918,7 @@ ColorRNA.prototype.WideGamutRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.WideGamutRGB));
 }
-// XYZ É«²Ê¿Õ¼ä---------------------------------------------------------------
+// XYZ è‰²å½©ç©ºé—´---------------------------------------------------------------
 
 ColorRNA.prototype.XYZ = function ()
 {
@@ -1801,17 +2033,22 @@ var color2 = new ColorRNA();
 
 //color2.xyY(0.180820, 0.157369, 0.169637);
 
-color2.Lab(47, 9, -64);
-console.log("LCHab:" + color2.LCHab());
-console.log(color2.xyY());
+//color2.Lab(47, 9, -64);
+//onsole.log("LCHab:" + color2.LCHab());
+//console.log(color2.xyY());
 
+
+color2.Luv(47, -33.0281, -97.565);
+console.log(color2.xyY());
+console.log("Luv:" + color2.Luv());
+console.log("Wavelength:" + color2._xyY_to_Wavelength(color2.xyY()));
 
 var rgb = [];
 var count = 0;
 
 //
 //
-//console.time("±éÀú");
+//console.time("éå†");
 //
 //var test_color = new ColorRNA(rr, gg, bb);
 //for (var rr = 0; rr < 256; rr++)
@@ -1840,7 +2077,7 @@ var count = 0;
 //
 //    }
 //}
-//console.timeEnd("±éÀú");
+//console.timeEnd("éå†");
 //console.log(count);
 
 //document.getElementById("color").style.background = test_color._RGBstring();
