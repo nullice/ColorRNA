@@ -2,6 +2,166 @@
  * Created by 语冰 on 2015/9/22.
  */
 
+function colorDiff(color1, color2, alg)
+{
+    var ca1 = color1.Lab();
+    var Lab1 = {L:ca1[0], a:ca1[1], b:ca1[2]};
+
+    var ca2 = color2.Lab();
+    var Lab2 = {L:ca2[0], a:ca2[1], b:ca2[2]};
+
+
+    var deltaE = 0;
+
+    if (alg == "DeltaE1976")
+    {
+        var delL = Lab1.L - Lab2.L;
+        var dela = Lab1.a - Lab2.a;
+        var delb = Lab1.b - Lab2.b;
+        deltaE = Math.sqrt(delL * delL + dela * dela + delb * delb);
+    }
+
+
+    // textiles OR Graphic Arts
+    if (alg == "DeltaE1994_T" || alg == "DeltaE1994_G")
+    {
+        var k1 = (alg == "DeltaE1994_T") ? 0.048 : 0.045;
+        var k2 = (alg == "DeltaE1994_T") ? 0.014 : 0.015;
+        var kL = (alg == "DeltaE1994_T") ? 2.0 : 1.0;
+        var kC = 1.0;
+        var kH = 1.0;
+
+        var C1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
+        var C2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
+
+        var delA = Lab1.a - Lab2.a;
+        var delB = Lab1.b - Lab2.b;
+        var delC = C1 - C2;
+        var delH2 = delA * delA + delB * delB - delC * delC;
+        var delH = (delH2 > 0.0) ? Math.sqrt(delH2) : 0.0;
+        var delL = Lab1.L - Lab2.L;
+
+        var sL = 1.0;
+        var sC = 1.0 + k1 * C1;
+        var sH = 1.0 + k2 * C1;
+
+        var vL = delL / (kL * sL);
+        var vC = delC / (kC * sC);
+        var vH = delH / (kH * sH);
+
+        if (alg == "DeltaE1994_T")
+        {
+            deltaE = Math.sqrt(vL * vL + vC * vC + vH * vH);
+        }
+        else
+        {
+            deltaE = Math.sqrt(vL * vL + vC * vC + vH * vH);
+        }
+    }
+
+
+    if (alg == "DeltaE2000")
+    {
+        var kL = 1.0;
+        var kC = 1.0;
+        var kH = 1.0;
+        var lBarPrime = 0.5 * (Lab1.L + Lab2.L);
+        var c1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
+        var c2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
+        var cBar = 0.5 * (c1 + c2);
+        var cBar7 = cBar * cBar * cBar * cBar * cBar * cBar * cBar;
+        var g = 0.5 * (1.0 - Math.sqrt(cBar7 / (cBar7 + 6103515625.0)));
+        /* 6103515625 = 25^7 */
+        var a1Prime = Lab1.a * (1.0 + g);
+        var a2Prime = Lab2.a * (1.0 + g);
+        var c1Prime = Math.sqrt(a1Prime * a1Prime + Lab1.b * Lab1.b);
+        var c2Prime = Math.sqrt(a2Prime * a2Prime + Lab2.b * Lab2.b);
+        var cBarPrime = 0.5 * (c1Prime + c2Prime);
+        var h1Prime = (Math.atan2(Lab1.b, a1Prime) * 180.0) / Math.PI;
+        if (h1Prime < 0.0)
+            h1Prime += 360.0;
+        var h2Prime = (Math.atan2(Lab2.b, a2Prime) * 180.0) / Math.PI;
+        if (h2Prime < 0.0)
+            h2Prime += 360.0;
+        var hBarPrime = (Math.abs(h1Prime - h2Prime) > 180.0) ? (0.5 * (h1Prime + h2Prime + 360.0)) : (0.5 * (h1Prime + h2Prime));
+        var t = 1.0 -
+            0.17 * Math.cos(Math.PI * (      hBarPrime - 30.0) / 180.0) +
+            0.24 * Math.cos(Math.PI * (2.0 * hBarPrime       ) / 180.0) +
+            0.32 * Math.cos(Math.PI * (3.0 * hBarPrime + 6.0) / 180.0) -
+            0.20 * Math.cos(Math.PI * (4.0 * hBarPrime - 63.0) / 180.0);
+        if (Math.abs(h2Prime - h1Prime) <= 180.0)
+        {
+            var dhPrime = h2Prime - h1Prime;
+        }
+
+        else
+        {
+            var dhPrime = (h2Prime <= h1Prime) ? (h2Prime - h1Prime + 360.0) : (h2Prime - h1Prime - 360.0);
+        }
+        var dLPrime = Lab2.L - Lab1.L;
+        var dCPrime = c2Prime - c1Prime;
+        var dHPrime = 2.0 * Math.sqrt(c1Prime * c2Prime) * Math.sin(Math.PI * (0.5 * dhPrime) / 180.0);
+        var sL = 1.0 + ((0.015 * (lBarPrime - 50.0) * (lBarPrime - 50.0)) / Math.sqrt(20.0 + (lBarPrime - 50.0) * (lBarPrime - 50.0)));
+        var sC = 1.0 + 0.045 * cBarPrime;
+        var sH = 1.0 + 0.015 * cBarPrime * t;
+        var dTheta = 30.0 * Math.exp(-((hBarPrime - 275.0) / 25.0) * ((hBarPrime - 275.0) / 25.0));
+        var cBarPrime7 = cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime;
+        var rC = Math.sqrt(cBarPrime7 / (cBarPrime7 + 6103515625.0));
+        var rT = -2.0 * rC * Math.sin(Math.PI * (2.0 * dTheta) / 180.0);
+        deltaE = Math.sqrt(
+            (dLPrime / (kL * sL)) * (dLPrime / (kL * sL)) +
+            (dCPrime / (kC * sC)) * (dCPrime / (kC * sC)) +
+            (dHPrime / (kH * sH)) * (dHPrime / (kH * sH)) +
+            (dCPrime / (kC * sC)) * (dHPrime / (kH * sH)) * rT);
+    }
+
+
+    if (alg == "DeltaECMC_11" || alg == "DeltaECMC_21")
+    {
+        if (alg == "DeltaECMC_11")
+        {
+            var L = 1.0, C = 1.0;
+        }
+        else if (alg == "DeltaECMC_21")
+        {
+            var L = 2.0, C = 1.0;
+        }
+
+        var c1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
+        var c2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
+        var sl = (Lab1.L < 16.0) ? (0.511) : ((0.040975 * Lab1.L) / (1.0 + 0.01765 * Lab1.L));
+        var sc = (0.0638 * c1) / (1.0 + 0.0131 * c1) + 0.638;
+        var h1 = (c1 < 0.000001) ? 0.0 : ((Math.atan2(Lab1.b, Lab1.a) * 180.0) / Math.PI);
+        while (h1 < 0.0)
+            h1 += 360.0;
+        while (h1 >= 360.0)
+            h1 -= 360.0;
+        var t = ((h1 >= 164.0) && (h1 <= 345.0)) ? (0.56 + Math.abs(0.2 * Math.cos((Math.PI * (h1 + 168.0)) / 180.0))) : (0.36 + Math.abs(0.4 * Math.cos((Math.PI * (h1 + 35.0)) / 180.0)));
+        var c4 = c1 * c1 * c1 * c1;
+        var f = Math.sqrt(c4 / (c4 + 1900.0));
+        var sh = sc * (f * t + 1.0 - f);
+        var delL = Lab1.L - Lab2.L;
+        var delC = c1 - c2;
+        var delA = Lab1.a - Lab2.a;
+        var delB = Lab1.b - Lab2.b;
+        var dH2 = delA * delA + delB * delB - delC * delC;
+        var v1 = delL / (L * sl);
+        var v2 = delC / (C * sc);
+        var v3 = sh;
+        if (L == 2.0)
+        {
+            deltaE = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
+        }
+        else
+        {
+            deltaE = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
+        }
+    }
+
+    return +deltaE.toFixed(2);
+}
+
+
 function ColorRNA()
 {
 //---私有
@@ -121,6 +281,16 @@ ColorRNA.prototype._normaliz = function (inNumber, inMin, inMax, newMax)
 
     return newNumber;
 }
+
+ColorRNA.prototype._normalizArray = function (inArray, inMin, inMax, newMax)
+{
+    for (var i = 0; i < inArray.length; i++)
+    {
+        inArray[i] = this._normaliz(inArray[i], inMin, inMax, newMax);
+    }
+    return inArray;
+}
+
 
 ColorRNA.prototype._arrayFixed = function (inArray, Number)
 {
@@ -1065,6 +1235,9 @@ ColorRNA.prototype._getRGBnucleotids = function (rabColorSpaceName, XYZtoRGB)
 
 ColorRNA.prototype._RGB_to_YPbPr = function (rgb)
 {
+
+    rgb = this._normalizArray(rgb, 0, 255, 1);
+
     var
         Y = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2],
         Pb = -0.1687367 * rgb[0] - 0.331264 * rgb[1] + 0.5 * rgb[2],
@@ -1080,12 +1253,15 @@ ColorRNA.prototype._YPbPr_to_RGB_ = function (YPbPr)
         g = 0.99999975910502514331 * YPbPr[0] - 0.34413567816504303521 * YPbPr[1] - 0.71413649331646789076 * YPbPr[2],
         b = 1.00000124040004623180 * YPbPr[0] + 1.77200006607230409200 * YPbPr[1] + 2.1453384174593273e-06 * YPbPr[2];
 
-    return [r, g, b];
+
+    return this._normalizArray([r, g, b], 0, 1, 255);
 }
 
 
 ColorRNA.prototype._RGB_to_YCbCr = function (rgb)
 {
+
+    rgb = this._normalizArray(rgb, 0, 255, 1);
     var
         Y = 65.481 * rgb[0] + 128.553 * rgb[1] + 24.966 * rgb[2] + 16,
         Cb = -37.797 * rgb[0] - 74.203 * rgb[1] + 112.0 * rgb[2] + 128,
@@ -1101,17 +1277,456 @@ ColorRNA.prototype._YCbCr_to_RGB = function (YCbCr)
     YCbCr[2] -= 128.0
 
     var
-    r = 0.00456621004566210107*YCbCr[0] + 1.1808799897946415e-09*YCbCr[1] + 0.00625892896994393634*YCbCr[2],
-    g = 0.00456621004566210107*YCbCr[0] - 0.00153632368604490212*YCbCr[1] - 0.00318811094965570701*YCbCr[2],
-    b = 0.00456621004566210107*YCbCr[0] + 0.00791071623355474145*YCbCr[1] + 1.1977497040190077e-08*YCbCr[2];
+        r = 0.00456621004566210107 * YCbCr[0] + 1.1808799897946415e-09 * YCbCr[1] + 0.00625892896994393634 * YCbCr[2],
+        g = 0.00456621004566210107 * YCbCr[0] - 0.00153632368604490212 * YCbCr[1] - 0.00318811094965570701 * YCbCr[2],
+        b = 0.00456621004566210107 * YCbCr[0] + 0.00791071623355474145 * YCbCr[1] + 1.1977497040190077e-08 * YCbCr[2];
 
-    return [r, g, b];
+
+    return this._normalizArray([r, g, b], 0, 1, 255);
 }
 
 
+ColorRNA.prototype._RGB_to_JpegYCbCr = function (rgb)
+{
+
+    var YPbPr = this._RGB_to_YPbPr(rgb);
+    var
+        Y = YPbPr[0],
+        Cb = YPbPr[1] + 0.5,
+        Cr = YPbPr[2] + 0.5;
+
+    return [Y, Cb, Cr];
+}
+
+ColorRNA.prototype._JpegYCbCr_to_RGB = function (YCbCr)
+{
+    var rgb = this._YPbPr_to_RGB_([YCbCr[0], YCbCr[1] - 0.5, YCbCr[2] - 0.5]);
+    return rgb;
+}
 
 
+ColorRNA.prototype._RGB_to_YIQ = function (rgb)
+{
+    rgb = this._normalizArray(rgb, 0, 255, 1);
 
+    var
+        Y = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2],
+        I = 0.595716 * rgb[0] - 0.274453 * rgb[1] - 0.321263 * rgb[2],
+        Q = 0.211456 * rgb[0] - 0.522591 * rgb[1] + 0.311135 * rgb[2];
+    return [Y, I, Q];
+}
+
+ColorRNA.prototype._YIQ_to_RGB = function (YIQ)
+{
+    var
+        r = YIQ[0] + 0.9562957197589482261 * YIQ[1] + 0.6210244164652610754 * YIQ[2],
+        g = YIQ[0] - 0.2721220993185104464 * YIQ[1] - 0.6473805968256950427 * YIQ[2],
+        b = YIQ[0] - 1.1069890167364901945 * YIQ[1] + 1.7046149983646481374 * YIQ[2];
+
+    return this._normalizArray([r, g, b], 0, 1, 255);
+}
+
+ColorRNA.prototype._RGB_to_YUV = function (rgb)
+{
+    rgb = this._normalizArray(rgb, 0, 255, 1);
+
+    var
+        Y = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2],
+        U = -0.147 * rgb[0] - 0.289 * rgb[1] + 0.436 * rgb[2],
+        V = 0.615 * rgb[0] - 0.515 * rgb[1] - 0.100 * rgb[2];
+
+    return [Y, U, V];
+}
+
+
+ColorRNA.prototype._YUV_to_RGB = function (YUV)
+{
+    var
+        r = YUV[0] - 3.945707070708279e-05 * YUV[1] + 1.1398279671717170825 * YUV[2],
+        g = YUV[0] - 0.3946101641414141437 * YUV[1] - 0.5805003156565656797 * YUV[2],
+        b = YUV[0] + 2.0319996843434342537 * YUV[1] - 4.813762626262513e-04 * YUV[2];
+
+
+    return this._normalizArray([r, g, b], 0, 1, 255);
+}
+
+
+ColorRNA.prototype._RGB_to_HSL = function (rgb, outFloat)
+{
+    rgb = this._normalizArray(rgb, 0, 255, 1);
+
+    var r, g, b, h, s, l, d, max, min;
+
+    r = rgb[0];
+    g = rgb[1];
+    b = rgb[2];
+
+    max = Math.max(r, g, b);
+    min = Math.min(r, g, b);
+    l = (max + min) / 2;
+
+    if (max === min)
+    {
+        h = s = 0; // achromatic
+    }
+    else
+    {
+        d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+        switch (max)
+        {
+            case r:
+                h = (g - b) / d + (g < b ? 6 : 0);
+                break;
+            case g:
+                h = (b - r) / d + 2;
+                break;
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+
+        h /= 6;
+    }
+
+    h = h * 360;
+    s = s * 100;
+    l = l * 100;
+
+
+    if (outFloat != true)
+    {
+        h = Math.round(h);
+        s = Math.round(s);
+        l = Math.round(l);
+    }
+
+    return [h, s, l];
+}
+
+
+ColorRNA.prototype._HSL_to_RGB = function (HSL)
+{
+    var
+        h = HSL[0],
+        s = this._normaliz(HSL[1], 0, 100, 1),
+        l = this._normaliz(HSL[2], 0, 100, 1);
+
+
+    if (h == undefined)
+    {
+        return [0, 0, 0];
+    }
+
+    var C = (1 - Math.abs((2 * l) - 1)) * s;
+    var hh = h / 60;
+    var temp = C * (1 - Math.abs((hh % 2) - 1));
+
+    hh = Math.floor(hh);
+    var r;
+    var g;
+    var b;
+
+    if (hh === 0)
+    {
+        r = C;
+        g = temp;
+        b = 0;
+    }
+    else if (hh === 1)
+    {
+        r = temp;
+        g = C;
+        b = 0;
+    }
+    else if (hh === 2)
+    {
+        r = 0;
+        g = C;
+        b = temp;
+    }
+    else if (hh === 3)
+    {
+        r = 0;
+        g = temp;
+        b = C;
+    }
+    else if (hh === 4)
+    {
+        r = temp;
+        g = 0;
+        b = C;
+    }
+    else if (hh === 5)
+    {
+        r = C;
+        g = 0;
+        b = temp;
+    }
+
+    var CC = l - (C / 2);
+    r += CC;
+    g += CC;
+    b += CC;
+
+    return this._normaOutRGB(this._normalizArray([r, g, b], 0, 1, 255));
+}
+
+ColorRNA.prototype._RGB_to_HSL_255 = function (rgb)
+{
+    var hsl = this._RGB_to_HSL(rgb, true);
+    hsl[0] = Math.round(this._normaliz(hsl[0], 0, 360, 255));
+    hsl[1] = Math.round(this._normaliz(hsl[1], 0, 100, 255));
+    hsl[2] = Math.round(this._normaliz(hsl[2], 0, 100, 255));
+
+    return hsl;
+}
+
+ColorRNA.prototype._HSL_to_RGB_255 = function (inHSL)
+{
+    var hsl = [0, 0, 0];
+
+    hsl[0] = Math.round(this._normaliz(inHSL[0], 0, 255, 360)),
+        hsl[1] = Math.round(this._normaliz(inHSL[1], 0, 255, 100)),
+        hsl[2] = Math.round(this._normaliz(inHSL[2], 0, 255, 100));
+    var rgb = this._HSL_to_RGB(hsl);
+
+    return rgb;
+}
+
+
+ColorRNA.prototype._RGB_to_HSL_win239 = function (rgb)
+{
+    var hsl = this._RGB_to_HSL(rgb, true);
+    hsl[0] = Math.round(this._normaliz(hsl[0], 0, 360, 239));
+    hsl[1] = Math.round(this._normaliz(hsl[1], 0, 100, 240));
+    hsl[2] = Math.round(this._normaliz(hsl[2], 0, 100, 240));
+
+    return hsl;
+}
+
+ColorRNA.prototype._HSL_to_RGB_win240 = function (inHSL)
+{
+    var hsl = [0, 0, 0];
+
+    hsl[0] = Math.round(this._normaliz(inHSL[0], 0, 239, 360)),
+        hsl[1] = Math.round(this._normaliz(inHSL[1], 0, 240, 100)),
+        hsl[2] = Math.round(this._normaliz(inHSL[2], 0, 240, 100));
+    var rgb = this._HSL_to_RGB(hsl);
+
+    return rgb;
+}
+
+
+ColorRNA.prototype._RGB_to_HSV = function (rgb)
+{
+    var max, min, h, s, v, d,
+        r = this._normaliz(rgb[0], 0, 255, 1),
+        g = this._normaliz(rgb[1], 0, 255, 1),
+        b = this._normaliz(rgb[2], 0, 255, 1);
+
+    max = Math.max(r, g, b);
+    min = Math.min(r, g, b);
+    v = max;
+
+    d = max - min;
+    s = max === 0 ? 0 : d / max;
+
+    if (max === min)
+    {
+        h = 0;
+    }
+    else
+    {
+        switch (max)
+        {
+            case r:
+                h = (g - b) / d + (g < b ? 6 : 0);
+                break;
+            case g:
+                h = (b - r) / d + 2;
+                break;
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+        h /= 6;
+    }
+
+    h = Math.round(h * 360);
+    s = Math.round(s * 100);
+    v = Math.round(v * 100);
+
+    return [h, s, v];
+}
+
+ColorRNA.prototype._HSV_to_RGB = function (HSV)
+{
+    var r, g, b, i, f, p, q, t;
+
+    // h = h / 360;
+    if (v === 0)
+    {
+        return [0, 0, 0];
+    }
+
+    var
+        s = this._normaliz(HSV[1], 0, 100, 1),
+        v = this._normaliz(HSV[2], 0, 100, 1),
+        h = HSV[0] / 60;
+
+    i = Math.floor(h);
+    f = h - i;
+    p = v * (1 - s);
+    q = v * (1 - (s * f));
+    t = v * (1 - (s * (1 - f)));
+
+    switch (i)
+    {
+        case 0 :
+        {
+            r = v;
+            g = t;
+            b = p;
+            break;
+        }
+        case 1 :
+        {
+            r = q;
+            g = v;
+            b = p;
+            break;
+        }
+        case 2:
+        {
+            r = p;
+            g = v;
+            b = t;
+            break;
+        }
+        case 3:
+        {
+            r = p;
+            g = q;
+            b = v;
+            break;
+        }
+        case 4:
+        {
+            r = t;
+            g = p;
+            b = v;
+            break;
+        }
+        case 5:
+        {
+            r = v;
+            g = p;
+            b = q;
+            break;
+        }
+    }
+
+
+    return this._normaOutRGB(this._normalizArray([r, g, b], 0, 1, 255));
+}
+
+ColorRNA.prototype._RGB_to_HWB = function (rgb)
+{
+    var HSV = this._RGB_to_HSV(rgb);
+
+    var H, W, B;
+
+    H = HSV[0];
+    W = Math.round(((100 - HSV[1]) * HSV[2]) / 100);
+    B = Math.round(100 - HSV[2]);
+
+    return [H, W, B];
+}
+
+ColorRNA.prototype._HWB_to_RGB = function (HWB)
+{
+
+
+    var H, S, V;
+
+    H = HWB[0];
+    S = 100 - (HWB[1] / (100 - HWB[2]) * 100);
+    V = 100 - HWB[2];
+
+    var rgb = this._HSV_to_RGB([H, S, V]);
+
+
+    return rgb;
+}
+
+
+ColorRNA.prototype._RGB_to_CMY = function (rgb)
+{
+    var
+        C = 1 - (rgb[0] / 255),
+        M = 1 - (rgb[1] / 255),
+        Y = 1 - (rgb[2] / 255);
+
+    C = Math.round(C * 100);
+    M = Math.round(M * 100);
+    Y = Math.round(Y * 100);
+
+    return [C, M, Y];
+
+}
+
+ColorRNA.prototype._CMY_to_RGB = function (CMY)
+{
+    var
+        C = CMY[0] / 100,
+        M = CMY[1] / 100,
+        Y = CMY[2] / 100;
+
+    var
+        R = Math.round(Math.max(0, (1 - C) * 255)),
+        G = Math.round(Math.max(0, (1 - M) * 255)),
+        B = Math.round(Math.max(0, (1 - Y) * 255));
+    return [R, G, B];
+}
+
+ColorRNA.prototype._CMY_to_CMYK = function (CMY)
+{
+    var C = CMY[0] / 100;
+    var M = CMY[1] / 100;
+    var Y = CMY[2] / 100;
+    var K = Math.min(Y, Math.min(M, Math.min(C, 1)));
+    C = Math.round((C - K) / (1 - K) * 100);
+    M = Math.round((M - K) / (1 - K) * 100);
+    Y = Math.round((Y - K) / (1 - K) * 100);
+    K = Math.round(K * 100);
+    return [C, M, Y, K];
+}
+
+ColorRNA.prototype._CMYK_to_CMY = function (CMYK)
+{
+
+    var
+        C = CMYK[0] / 100 * (1 - CMYK[3] / 100) + CMYK[3] / 100,
+        M = CMYK[1] / 100 * (1 - CMYK[3] / 100) + CMYK[3] / 100,
+        Y = CMYK[2] / 100 * (1 - CMYK[3] / 100) + CMYK[3] / 100;
+
+
+    return [Math.round(C * 100), Math.round(M * 100), Math.round(Y * 100)];
+}
+
+
+ColorRNA.prototype._RGB_to_CMYK = function (rgb)
+{
+    return this._CMY_to_CMYK(this._RGB_to_CMY(rgb));
+}
+
+ColorRNA.prototype._CMYK_to_RGB = function (CMYK)
+{
+    return this._CMY_to_RGB(this._CMYK_to_CMY(CMYK));
+
+}
 
 ColorRNA.prototype._RGB_to_XYZ = function ()
 {
@@ -1991,7 +2606,19 @@ var color2 = new ColorRNA();
 //console.log("LabPS:" + color2.LabPS());
 //console.log("Lab  :" + color2.Lab());
 //console.log("LabPS:" + color2.LabPS());
-//console.log("Lab  :" + color2.Lab());
+
+console.log("_RGB_to_CMY112,112,11  :" + color2._RGB_to_CMY([112, 112, 11]));
+
+
+var colorA = new ColorRNA();
+var colorB = new ColorRNA();
+colorA.rgb([112,112,11]);
+colorB.rgb([33,22,11]);
+
+console.log("colorDiff_" + colorDiff(colorA,colorB,"DeltaE2000"));
+
+
+
 //
 //console.log("========= 47,9,-64 LAB_TO_XYZ===========");
 //color2.LabPS(47, 9, -64);
@@ -2039,10 +2666,33 @@ var color2 = new ColorRNA();
 //console.log(color2.xyY());
 
 
-color2.Luv(47, -33.0281, -97.565);
-console.log(color2.xyY());
-console.log("Luv:" + color2.Luv());
-console.log("Wavelength:" + color2._xyY_to_Wavelength(color2.xyY()));
+//color2.Luv(47, -33.0281, -97.565);
+//console.log(color2.xyY());
+//console.log("Luv:" + color2.Luv());
+//console.log("Wavelength:" + color2._xyY_to_Wavelength(color2.xyY()));
+
+
+color2.rgb(114, 21, 4);
+
+//console.log("RGB [9,93,23]:" + color2._HSL_to_RGB([9, 93, 23]));
+//console.log("HSL [114,21,4]:" + color2._RGB_to_HSL([114, 21, 4]));
+//console.log("YUV [112,112,11]:" + color2._RGB_to_YUV([112, 112, 11]));
+
+//console.log("_RGB_to_HSL [112,112,11]:" + color2._RGB_to_HSL([112, 112, 11]));
+//console.log("_HSL_to_RGB [60,82,24]:" + color2._HSL_to_RGB([60, 82, 24]));
+//
+//
+//console.log("_RGB_to_HSL_office [42,11,77]:" + color2._RGB_to_HSL_255([42, 11, 77]));
+//console.log("_HSL_to_RGB_office [43,209,62]:" + color2._HSL_to_RGB_255([43, 209, 62]));
+//
+//console.log("_RGB_to_HSL_win239 [42,11,77]:" + color2._RGB_to_HSL_win239([112, 112, 11]));
+//console.log("_HSL_to_RGB_win240 [40,197,58]:" + color2._HSL_to_RGB_win240([40, 197, 58]));
+//
+//console.log("_HSV_to_RGB [60,90,44]:" + color2._HSV_to_RGB([60, 90, 44]));
+//console.log("_RGB_to_HWB [112, 112, 11]:" + color2._RGB_to_HWB([112, 112, 11]));
+//
+//console.log("_HWB_to_RGB [60,4,56]:" + color2._HWB_to_RGB([60, 4, 56]));
+
 
 var rgb = [];
 var count = 0;
@@ -2082,6 +2732,4 @@ var count = 0;
 //console.log(count);
 
 //document.getElementById("color").style.background = test_color._RGBstring();
-//document.getElementById("color").style.color = test_color._RGBstring();
-//document.getElementById("color").style.fontSize = "32pt";
-
+//document.getElementByI
