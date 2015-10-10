@@ -2463,7 +2463,7 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
 
     if (argus.length == 0 || typeof argus[0] == "string")
     {
-        if(typeof argus[0] == "string") this._colorSpace = argus[0];
+        if (typeof argus[0] == "string") this._colorSpace = argus[0];
 
         var rgb = this._XYZ_to_RGB();
 
@@ -2517,10 +2517,8 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
         XXX[0] = argus[0];
         XXX[1] = argus[1];
         XXX[2] = argus[2];
-        if(typeof argus[3]=="number")  XXX[3] = argus[3];
+        if (typeof argus[3] == "number")  XXX[3] = argus[3];
     }
-
-
 
 
     var rgb2 = [0, 0, 0];
@@ -2553,9 +2551,9 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
         rgb2 = this._CMYK_to_RGB([XXX[0], XXX[1], XXX[2], XXX[3]]);
     }
 
-    this.r=rgb2[0];
-    this.g=rgb2[1];
-    this.b=rgb2[2];
+    this.r = rgb2[0];
+    this.g = rgb2[1];
+    this.b = rgb2[2];
 
     this._RGB_to_XYZ();
 
@@ -2710,6 +2708,62 @@ ColorRNA.prototype.WideGamutRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.WideGamutRGB));
 }
+
+// ---------------------------------------------------------------
+
+ColorRNA.prototype.getLuma = function (alg)
+{
+    var luma = 0;
+    var rgb = this._XYZ_to_RGB();
+    this._normalizArray(rgb, 0, 255, 1);
+
+    if (alg == "601")
+    {
+        luma = rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114;
+    }
+    else if (alg == "HSP")
+    {
+
+        luma = Math.sqrt(.241 * Math.pow(rgb[0], 2) + 0.691 * Math.pow(rgb[1], 2) + 0.068 * Math.pow(rgb[2], 2));
+
+    }
+    else //709
+    {
+        luma = rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+    }
+
+    return luma;
+    //0~1
+}
+
+ColorRNA.prototype.getWCAGluma = function ()
+{// http://www.w3.org/TR/WCAG20/#relativeluminancedef
+
+    var rgb = this._XYZ_to_RGB();
+    var luma = [];
+    for (var i = 0; i < rgb.length; i++)
+    {
+        var chan = rgb[i] / 255;
+        luma[i] = (chan <= 0.03928) ? chan / 12.92 : Math.pow(((chan + 0.055) / 1.055), 2.4)
+    }
+    return 0.2126 * luma[0] + 0.7152 * luma[1] + 0.0722 * luma[2];
+}
+
+
+ColorRNA.prototype.getWCAGcontrastThan = function (inColor)
+{//http://www.w3.org/TR/WCAG20/#contrast-ratiodef
+
+    var luma1 = this.getWCAGluma(),
+        luma2 = inColor.getWCAGluma();
+
+    if (luma1 > luma2) {
+        return (luma1 + 0.05) / (luma2 + 0.05)
+    };
+    return (luma2 + 0.05) / (luma1 + 0.05);
+
+}
+
+
 // XYZ 色彩空间---------------------------------------------------------------
 
 ColorRNA.prototype.XYZ = function ()
@@ -2748,10 +2802,9 @@ ColorRNA.prototype.XYZ = function ()
 }
 
 
-var color1=new ColorRNA().rgb(22,33,144);
+var color1 = new ColorRNA().rgb(22, 33, 144);
 
 console.log(color1.HSL())
-
 
 
 //
