@@ -22,6 +22,9 @@ Color & colorspace converter with Javascript;
 支持以下辉度计算方法：CCIR 601, Rec 709, WCAGluma;
 支持 WCAG contrast 对比度计算;
 
+###其他
+计算颜色的光谱主波长。
+
 
 ---------------
 
