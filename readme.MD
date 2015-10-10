@@ -10,12 +10,17 @@ Color & colorspace converter with Javascript;
 
 ##功能
 ###转换 RGB 色彩空间
-支持以下色彩空间之间颜色值的互换 ：Adobe RGB, Apple RGB, Best RGB, Beta RGB, BruceRGB, CIERGB, ColorMatchRGB, ECIRGBv2, DonRGB4, EktaSpacePS5, NTSC RGB, PALSECAM RGB, ProPhotoRGB, SMPTEC RGB, WideGamut RGB。
+支持以下 RGB 色彩空间之间颜色值的互换 ：Adobe RGB, Apple RGB, Best RGB, Beta RGB, BruceRGB, CIERGB, ColorMatchRGB, ECIRGBv2, DonRGB4, EktaSpacePS5, NTSC RGB, PALSECAM RGB, ProPhotoRGB, SMPTEC RGB, WideGamut RGB。
 
 并且支持白点校正，支持以下白点参考光照：A, B, C, D50, D55, D65, D75, E, F2, F7, F11。
 
+
 ###转换基于 RGB 的色彩模型
 支持以下色彩模型的转换：HSL,HSL240(Windows 拾色器), HSL255(MS Office拾色器), HSV（HSB）, HWB, CMY, CMYK。
+
+###转换参考色彩空间
+支持以下参考色彩空间的转换：CIE Lab, CIE Luv, CIE XYZ, CIE xyY ,CIE LCHab;
+内部色彩使用 CIE XYZ 存储。
 
 ###色差与辉度计算
 支持以下色差计算方法：DeltaE 1994, DeltaE 2000, DeltaE CMC;
