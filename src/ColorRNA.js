@@ -5,10 +5,10 @@
 function colorDiff(color1, color2, alg)
 {
     var ca1 = color1.Lab();
-    var Lab1 = {L:ca1[0], a:ca1[1], b:ca1[2]};
+    var Lab1 = {L: ca1[0], a: ca1[1], b: ca1[2]};
 
     var ca2 = color2.Lab();
-    var Lab2 = {L:ca2[0], a:ca2[1], b:ca2[2]};
+    var Lab2 = {L: ca2[0], a: ca2[1], b: ca2[2]};
 
 
     var deltaE = 0;
@@ -2124,6 +2124,34 @@ ColorRNA.prototype._Luv_to_XYZ = function (Luv)
 }
 
 
+ColorRNA.prototype._hex_to_rgb = function (hex)
+{
+    var r, g, b;
+    if (hex.length == 3)
+    {
+        r = parseInt((hex.slice(0, 1) + hex.slice(0, 1)), 16);
+        g = parseInt((hex.slice(1, 2) + hex.slice(1, 2)), 16);
+        b = parseInt((hex.slice(2, 3) + hex.slice(2, 3)), 16);
+    }
+    else if (hex.length == 6)
+    {
+        r = parseInt((hex.slice(0, 2) ), 16);
+        g = parseInt((hex.slice(2, 4)), 16);
+        b = parseInt((hex.slice(4, 6) ), 16);
+    }
+
+    return [r, g, b];
+}
+
+
+ColorRNA.prototype._rgb_to_hex = function (rgb)
+{
+    var hex = rgb[0] * 65536 + rgb[1] * 256 + rgb[2];
+    return hex.toString(16).toUpperCase();
+
+}
+
+
 // 检查输入的 RGB 值，如果是 0~1 的小数形式将转化为 0~255 的形式
 ColorRNA.prototype._normaInputRGB = function (inArray)
 {
@@ -2279,6 +2307,11 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace)
                 rgb = argus[0];
             }
         }
+        else if (argus[0].slice(0, 1) == "#")
+        {
+            rgb = this._hex_to_rgb(argus[0].slice(1, argus[0].length));
+        }
+
     }
     if (argus.length == 3)
     {
@@ -2423,6 +2456,115 @@ ColorRNA.prototype._LuvX = function (argus)
 }
 
 
+ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
+{
+    var XXX = [0, 0, 0];
+
+
+    if (argus.length == 0 || typeof argus[0] == "string")
+    {
+        if(typeof argus[0] == "string") this._colorSpace = argus[0];
+
+        var rgb = this._XYZ_to_RGB();
+
+        if (mode == "HSL")
+        {
+            return this._RGB_to_HSL(rgb);
+        }
+        else if (mode == "HSL255")
+        {
+            return this._RGB_to_HSL_255(rgb);
+        }
+        else if (mode == "HSLwin")
+        {
+            return this._RGB_to_HSL_win239(rgb);
+        }
+        else if (mode == "HSV" || mode == "HSB")
+        {
+            return this._RGB_to_HSV(rgb);
+        }
+        else if (mode == "HWB")
+        {
+            return this._RGB_to_HWB(rgb);
+        }
+        else if (mode == "CMY")
+        {
+            return this._RGB_to_CMY(rgb);
+        }
+        else if (mode == "CMYK")
+        {
+            return this._RGB_to_CMYK(rgb);
+        }
+
+
+    }
+
+    if (argus.length == 1)
+    {
+        if (Array.isArray(argus[0]))
+        {
+            if (argus[0].length == 3)
+            {
+                XXX = argus[0];
+            }
+        }
+
+    }
+    if (argus.length >= 3 || typeof argus[3] == "string")
+    {
+        if (typeof argus[3] == "string") this._colorSpace = argus[3];
+
+        XXX[0] = argus[0];
+        XXX[1] = argus[1];
+        XXX[2] = argus[2];
+        if(typeof argus[3]=="number")  XXX[3] = argus[3];
+    }
+
+
+
+
+    var rgb2 = [0, 0, 0];
+    if (mode == "HSL")
+    {
+        rgb2 = this._HSL_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "HSL255")
+    {
+        rgb2 = this._HSL_to_RGB_255([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "HSLwin")
+    {
+        rgb2 = this._HSL_to_RGB_win240([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "HSV" || mode == "HSB")
+    {
+        rgb2 = this._HSV_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "HWB")
+    {
+        rgb2 = this._HWB_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "CMY")
+    {
+        rgb2 = this._CMY_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "CMYK")
+    {
+        rgb2 = this._CMYK_to_RGB([XXX[0], XXX[1], XXX[2], XXX[3]]);
+    }
+
+    this.r=rgb2[0];
+    this.g=rgb2[1];
+    this.b=rgb2[2];
+
+    this._RGB_to_XYZ();
+
+    return rgb2;
+}
+
+
+//-----------------------------------
+
 ColorRNA.prototype.Luv = function ()
 {
     return (this._LuvX(arguments));
@@ -2451,6 +2593,40 @@ ColorRNA.prototype.LCHab = function ()
     return (this._LCHabX(arguments, false));
 }
 
+ColorRNA.prototype.HSL = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "HSL"));
+}
+
+ColorRNA.prototype.HSV = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "HSV"));
+}
+
+ColorRNA.prototype.HSB = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "HSV"));
+}
+
+ColorRNA.prototype.HSB = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "HSV"));
+}
+
+ColorRNA.prototype.HWB = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "HWB"));
+}
+
+ColorRNA.prototype.CMYK = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "CMYK"));
+}
+
+ColorRNA.prototype.CMY = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "CMY"));
+}
 
 // 颜色设置、取值器，带参数调用设置颜色，不带参数调用取颜色
 // 各种 RGB 色彩空间 ---------------------------------------------------------------
@@ -2572,130 +2748,11 @@ ColorRNA.prototype.XYZ = function ()
 }
 
 
-//test_color = new ColorRNA(33, 111, 222);
-//test_color._dLV = 1;
-//
-//console.log(test_color.r + "," + test_color.g + "," + test_color.b);
-//console.log("=========color._RGB_to_XYZ()===========");
-//test_color._doAdapta = true;
-//console.log(test_color._RGB_to_XYZ());
-//console.log("=========_XYZ_to_RGB===========");
-//console.log(test_color._XYZ_to_RGB());
-//console.log("=========_XYZ_to_Lab===========");
-//test_color._refWhiteName = "D50"
-//console.log(test_color._XYZ_to_Lab(true));
-//console.log(test_color._XYZ_to_Lab());
-//console.log(test_color._XYZ_to_Lab(true));
-//console.log("=========_Lab_to_XYZ===========");
-//console.log(test_color._Lab_to_XYZ(test_color._XYZ_to_Lab(true), true));
-//console.log("=========_XYZ_to_xyY===========");
-//console.log(test_color._XYZ_to_xyY());
+var color1=new ColorRNA().rgb(22,33,144);
+
+console.log(color1.HSL())
 
 
-//console.log("0.194916,0.169637,0.713401");
-//console.log("=========getttt===========");
-var color2 = new ColorRNA();
-//color2.setRefWhite("D50");
-//color2.sRGB(33, 111, 222);
-//color2.LabPS(47, 9, -64);
-//console.log("XYZ:" + color2.XYZ(0.19491595435208875,0.1696366336906597,0.7134007359464754));
-
-
-//color2.XYZ(0.194916, 0.169637, 0.713401)
-//console.log("sRGB:" + color2.sRGB());
-//console.log("LabPS:" + color2.LabPS());
-//console.log("Lab  :" + color2.Lab());
-//console.log("LabPS:" + color2.LabPS());
-
-console.log("_RGB_to_CMY112,112,11  :" + color2._RGB_to_CMY([112, 112, 11]));
-
-
-var colorA = new ColorRNA();
-var colorB = new ColorRNA();
-colorA.rgb([112,112,11]);
-colorB.rgb([33,22,11]);
-
-console.log("colorDiff_" + colorDiff(colorA,colorB,"DeltaE2000"));
-
-
-
-//
-//console.log("========= 47,9,-64 LAB_TO_XYZ===========");
-//color2.LabPS(47, 9, -64);
-//console.log("XYZ:" + color2.XYZ());
-//console.log("LabPS:" + color2.LabPS());
-//console.log("LabPS:" + color2.LabPS());
-//console.log("Lab  :" + color2.Lab());
-//console.log("XYZ:" + color2.XYZ());
-//console.log("LabPS:" + color2.LabPS());
-//console.log("Lab  :" + color2.Lab());
-//console.log("sRGB:" + color2.sRGB());
-//console.log("========= sRGB(33, 111, 222)==========");
-//
-//color2.sRGB(33, 111, 222);
-//console.log("LabPS:" + color2.LabPS());
-
-
-//color2.Lab(48,18,-64);
-//console.log("XYZ:" + color2.XYZ());
-//console.log("sRGB:" + color2.sRGB());
-//console.log("Lab:" + color2.Lab());
-
-//color2.Lab(47,9,-64);
-//console.log("XYZ:" + color2.XYZ());
-//console.log("sRGB:" + color2.sRGB());
-//console.log("Lab:" + color2.Lab());
-//console.log("Lab:" + color2.Lab());
-//console.log("AdobeRGB" + ":" + color2["AdobeRGB"]());
-//console.log("AdobeRGB" + ":" + color2.AdobeRGB());
-
-//console.log("WideGamutRGB:" + color2.WideGamutRGB());
-//console.log("ProPhotoRGB:" + color2.ProPhotoRGB());
-//console.log("ColorMatchRGB:" + color2.ColorMatchRGB());
-//console.log("getRefWhite:" + color2.getRefWhite());
-//console.log("_doAdapta:" + color2._doAdapta);
-//console.log("XYZ:" +color2.XYZ(0.5,0.5,0.5).XYZ());
-
-//color2.XYZ(0.194916, 0.169637, 0.713401)
-//console.log(color2._XYZ_to_xyY());
-
-//color2.xyY(0.180820, 0.157369, 0.169637);
-
-//color2.Lab(47, 9, -64);
-//onsole.log("LCHab:" + color2.LCHab());
-//console.log(color2.xyY());
-
-
-//color2.Luv(47, -33.0281, -97.565);
-//console.log(color2.xyY());
-//console.log("Luv:" + color2.Luv());
-//console.log("Wavelength:" + color2._xyY_to_Wavelength(color2.xyY()));
-
-
-color2.rgb(114, 21, 4);
-
-//console.log("RGB [9,93,23]:" + color2._HSL_to_RGB([9, 93, 23]));
-//console.log("HSL [114,21,4]:" + color2._RGB_to_HSL([114, 21, 4]));
-//console.log("YUV [112,112,11]:" + color2._RGB_to_YUV([112, 112, 11]));
-
-//console.log("_RGB_to_HSL [112,112,11]:" + color2._RGB_to_HSL([112, 112, 11]));
-//console.log("_HSL_to_RGB [60,82,24]:" + color2._HSL_to_RGB([60, 82, 24]));
-//
-//
-//console.log("_RGB_to_HSL_office [42,11,77]:" + color2._RGB_to_HSL_255([42, 11, 77]));
-//console.log("_HSL_to_RGB_office [43,209,62]:" + color2._HSL_to_RGB_255([43, 209, 62]));
-//
-//console.log("_RGB_to_HSL_win239 [42,11,77]:" + color2._RGB_to_HSL_win239([112, 112, 11]));
-//console.log("_HSL_to_RGB_win240 [40,197,58]:" + color2._HSL_to_RGB_win240([40, 197, 58]));
-//
-//console.log("_HSV_to_RGB [60,90,44]:" + color2._HSV_to_RGB([60, 90, 44]));
-//console.log("_RGB_to_HWB [112, 112, 11]:" + color2._RGB_to_HWB([112, 112, 11]));
-//
-//console.log("_HWB_to_RGB [60,4,56]:" + color2._HWB_to_RGB([60, 4, 56]));
-
-
-var rgb = [];
-var count = 0;
 
 //
 //
@@ -2730,6 +2787,3 @@ var count = 0;
 //}
 //console.timeEnd("遍历");
 //console.log(count);
-
-//document.getElementById("color").style.background = test_color._RGBstring();
-//document.getElementByI
