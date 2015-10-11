@@ -12,7 +12,7 @@ Color & colorspace converter with Javascript;
 ###转换 RGB 色彩空间
 支持以下 RGB 色彩空间之间颜色值的互换 ：Adobe RGB, Apple RGB, Best RGB, Beta RGB, BruceRGB, CIERGB, ColorMatchRGB, ECIRGBv2, DonRGB4, EktaSpacePS5, NTSC RGB, PALSECAM RGB, ProPhotoRGB, SMPTEC RGB, WideGamut RGB。
 
-并且支持白点校正，支持以下白点参考光照：A, B, C, D50, D55, D65, D75, E, F2, F7, F11。
+并且支持白点校正与指定伽马参数。支持以下白点参考光照：A, B, C, D50, D55, D65, D75, E, F2, F7, F11。
 
 
 ###转换基于 RGB 的色彩模型
@@ -24,7 +24,7 @@ Color & colorspace converter with Javascript;
 
 ###色差与辉度计算
 支持以下色差计算方法：DeltaE 1994, DeltaE 2000, DeltaE CMC;
-支持以下辉度计算方法：CCIR 601, Rec 709, WCAGluma;
+支持以下辉度计算方法：CCIR 601, Rec 709, HSP, WCAGluma;
 支持 WCAG contrast 对比度计算;
 
 ###其他
@@ -177,7 +177,32 @@ ColorRNA 除了支持各种 RGB 色彩空间之间的互相转换，还支持 `XYZ`、`xyY`、`XYZ`、`L
 
 `HSL255` 是微软 Office 中拾色器使用的模型，HSL255 的取值范围是： `0~255, 0~255 ,0~255`。
 
+### 其他色彩信息计算
+
+#### 主波长
+```js
+color1.rgb(255, 255, 0).getWavelength() //  570.4668 (nm)
+```
+
+#### 辉度
+```js
+color1.rgb(112, 255, 0);
+color1.getLuma(); // 0.8085772549019608
+color1.getLuma("709"); // 0.8085772549019608
+color1.getLuma("601"); // 0.7183254901960784
+color1.getLuma("HSP"); // 0.8587732011397251
+color1.getWCAGluma(); // 0.7496474452608749
+
+```
+`ColorRNA.getLuma()` 方法能得到颜色的辉度，也就是视觉亮度，可用 CCIR 601, Rec 709, HSP, 三种计算方法，如果不在参数中指定计算方法，默认使用 "Rec 709" 计算;。
+
+`ColorRNA.getWCAGluma()`  是互联网无障碍标准中的视觉亮度计算方法。
+
+#### 色差与对比度计算
+
+```js
+color1.rgb(112, 255, 0);
 
 
-
+```
 

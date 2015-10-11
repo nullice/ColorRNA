@@ -2629,6 +2629,12 @@ ColorRNA.prototype.WideGamutRGB = function ()
 
 // ---------------------------------------------------------------
 
+ColorRNA.prototype.getWavelength = function (alg)
+{
+    return +this._xyY_to_Wavelength(this.xyY()).toFixed(4);
+
+}
+
 ColorRNA.prototype.getLuma = function (alg)
 {
     var luma = 0;
@@ -2994,6 +3000,19 @@ console.log("JpegYCbCr:" + color1.JpegYCbCr(0.7059647058823528, 0.63937717490196
 ;
 console.log("YPbPr:" + color1.YPbPr(0.7059647058823528, 0.13937717490196078, -0.35809066666666667).rgb());
 
+console.log("----");
+
+
+console.log("getWavelength:" + color1.rgb(255, 255, 0).getWavelength() +"nm");
+console.log("getWavelength:" + color1.rgb(0, 222, 255).getWavelength() +"nm");
+
+color1.rgb(112, 255, 0);
+console.log("getLumi:" + color1.getLuma());
+console.log("getLumi709:" + color1.getLuma("709"));
+console.log("getLumi601:" + color1.getLuma("601"));
+console.log("getLumiHSP:" + color1.getLuma("HSP"));
+console.log("getWCAGluma:" + color1.getWCAGluma());
+console.log("getWCAGluma:" + color1.getWCAGluma());
 
 //color1.rgb(10, 20, 17);
 //
