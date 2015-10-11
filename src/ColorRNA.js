@@ -2358,8 +2358,12 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
 
     }
 
-    if (argus.length == 1)
+    if (argus.length == 1 || argus.length == 2)
     {
+
+        this._colorSpace = "sRGB";
+        if (typeof argus[1] == "string") this._colorSpace = argus[3];
+
         if (Array.isArray(argus[0]))
         {
             if (argus[0].length == 3)
@@ -2369,8 +2373,11 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
         }
 
     }
+
+
     if (argus.length >= 3 || typeof argus[3] == "string")
     {
+        this._colorSpace = "sRGB";
         if (typeof argus[3] == "string") this._colorSpace = argus[3];
 
         XXX[0] = argus[0];
