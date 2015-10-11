@@ -1165,6 +1165,7 @@ ColorRNA.prototype._RGB_to_YUV = function (rgb)
 
 ColorRNA.prototype._YUV_to_RGB = function (YUV)
 {
+
     var
         r = YUV[0] - 3.945707070708279e-05 * YUV[1] + 1.1398279671717170825 * YUV[2],
         g = YUV[0] - 0.3946101641414141437 * YUV[1] - 0.5805003156565656797 * YUV[2],
@@ -2325,6 +2326,27 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
         {
             return this._RGB_to_HWB(rgb);
         }
+        else if (mode == "YUV")
+        {
+            return this._RGB_to_YUV(rgb);
+        }
+        else if (mode == "YCbCr")
+        {
+            return this._RGB_to_YCbCr(rgb);
+        }
+        else if (mode == "JpegYCbCr")
+        {
+            return this._RGB_to_JpegYCbCr(rgb);
+        }
+        else if (mode == "YIQ")
+        {
+            return this._RGB_to_YIQ(rgb);
+        }
+        else if (mode == "YPbPr")
+        {
+            return this._RGB_to_YPbPr(rgb);
+        }
+
         else if (mode == "CMY")
         {
             return this._RGB_to_CMY(rgb);
@@ -2333,7 +2355,6 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
         {
             return this._RGB_to_CMYK(rgb);
         }
-
 
     }
 
@@ -2384,6 +2405,26 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
     {
         rgb2 = this._CMY_to_RGB([XXX[0], XXX[1], XXX[2]]);
     }
+    else if (mode == "YUV")
+    {
+        rgb2 = this._YUV_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "YCbCr")
+    {
+        rgb2 = this._YCbCr_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "JpegYCbCr")
+    {
+        rgb2 = this._JpegYCbCr_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "YIQ")
+    {
+        rgb2 = this._YIQ_to_RGB([XXX[0], XXX[1], XXX[2]]);
+    }
+    else if (mode == "YPbPr")
+    {
+        rgb2 = this._YPbPr_to_RGB_([XXX[0], XXX[1], XXX[2]]);
+    }
     else if (mode == "CMYK")
     {
         rgb2 = this._CMYK_to_RGB([XXX[0], XXX[1], XXX[2], XXX[3]]);
@@ -2395,7 +2436,7 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
 
     this._RGB_to_XYZ();
 
-    return rgb2;
+    return this;
 }
 
 
@@ -2434,12 +2475,18 @@ ColorRNA.prototype.HSL = function ()
     return (this._baseRGB_XXXx(arguments, "HSL"));
 }
 
-ColorRNA.prototype.HSV = function ()
+ColorRNA.prototype.HSL255 = function ()
 {
-    return (this._baseRGB_XXXx(arguments, "HSV"));
+    return (this._baseRGB_XXXx(arguments, "HSL255"));
 }
 
-ColorRNA.prototype.HSB = function ()
+ColorRNA.prototype.HSL240 = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "HSLwin"));
+}
+
+
+ColorRNA.prototype.HSV = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HSV"));
 }
@@ -2453,6 +2500,32 @@ ColorRNA.prototype.HWB = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HWB"));
 }
+
+ColorRNA.prototype.YPbPr = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "YPbPr"));
+}
+
+ColorRNA.prototype.YIQ = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "YIQ"));
+}
+
+ColorRNA.prototype.JpegYCbCr = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "JpegYCbCr"));
+}
+
+ColorRNA.prototype.YCbCr = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "YCbCr"));
+}
+
+ColorRNA.prototype.YUV = function ()
+{
+    return (this._baseRGB_XXXx(arguments, "YUV"));
+}
+
 
 ColorRNA.prototype.CMYK = function ()
 {
@@ -2840,7 +2913,7 @@ ColorRNA.prototype.diff_DE1994_Textiles_Than = function (color2)
     return this.colorDiff(this, color2, "DeltaE1994_T");
 }
 
-
+console.log("---------TEST---------");
 var color1 = new ColorRNA(10, 235, 245);
 
 
@@ -2879,12 +2952,40 @@ console.log("XYZ:" + color1.rgb(52, 233, 243).XYZ());
 console.log("----");
 
 
-console.log("Lab_to_rgb:" + color1.Lab(84.7269,-39.5516,-17.4109).rgb());
-console.log("LabPs_to_rgb:" + color1.LabPS(84,-42,-18).rgb());
-console.log("LCHab_to_rgb:" + color1.LCHab(84.7269,43.2142,203.7594).rgb());
-console.log("xyY_to_rgb:" + color1.xyY(0.2256,0.3161,0.6547).rgb());
-console.log("Luv_to_rgb:" + color1.Luv(84.7269,-61.2033,-21.7867).rgb());
-console.log("XYZ_to_rgb:" + color1.XYZ(0.4672539339338757,0.6547307056620336,0.9495155562423543).rgb());
+console.log("Lab_to_rgb:" + color1.Lab(84.7269, -39.5516, -17.4109).rgb());
+console.log("LabPs_to_rgb:" + color1.LabPS(84, -42, -18).rgb());
+console.log("LCHab_to_rgb:" + color1.LCHab(84.7269, 43.2142, 203.7594).rgb());
+console.log("xyY_to_rgb:" + color1.xyY(0.2256, 0.3161, 0.6547).rgb());
+console.log("Luv_to_rgb:" + color1.Luv(84.7269, -61.2033, -21.7867).rgb());
+console.log("XYZ_to_rgb:" + color1.XYZ(0.4672539339338757, 0.6547307056620336, 0.9495155562423543).rgb());
+
+console.log("----");
+
+console.log("HSB:" + color1.rgb(52, 233, 243).HSB());
+console.log("HSL:" + color1.rgb(52, 233, 243).HSL());
+console.log("HSL240:" + color1.rgb(52, 233, 243).HSL240());
+console.log("HSL255:" + color1.rgb(52, 233, 243).HSL255());
+console.log("HWB:" + color1.rgb(52, 233, 243).HWB());
+console.log("YUV:" + color1.rgb(52, 233, 243).YUV());
+console.log("YIQ:" + color1.rgb(52, 233, 243).YIQ());
+console.log("YCbCr:" + color1.rgb(52, 233, 243).YCbCr());
+console.log("JpegYCbCr:" + color1.rgb(52, 233, 243).JpegYCbCr());
+;
+console.log("YPbPr:" + color1.rgb(52, 233, 243).YPbPr());
+
+console.log("----");
+
+console.log("HSB:" + color1.HSB(183, 79, 95).rgb());
+console.log("HSL:" + color1.HSL(183, 89, 58).rgb());
+console.log("HSL240:" + color1.HSL240(122, 213, 139).rgb());
+console.log("HSL255:" + color1.HSL255(130, 227, 147).rgb());
+console.log("HWB:" + color1.HWB(183, 20, 5).rgb());
+console.log("YUV:" + color1.YUV(0.7059647058823528, 0.12143921568627458, -0.44045098039215685).rgb());
+console.log("YIQ:" + color1.YIQ(0.7059647058823528, -0.43544010196078436, -0.1378909254901961).rgb());
+console.log("YCbCr:" + color1.YCbCr(170.60627058823528, 159.2206156862745, 47.78768627450981).rgb());
+console.log("JpegYCbCr:" + color1.JpegYCbCr(0.7059647058823528, 0.6393771749019608, 0.14190933333333333).rgb());
+;
+console.log("YPbPr:" + color1.YPbPr(0.7059647058823528, 0.13937717490196078, -0.35809066666666667).rgb());
 
 
 //color1.rgb(10, 20, 17);
