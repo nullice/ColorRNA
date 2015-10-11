@@ -16,7 +16,7 @@ Color & colorspace converter with Javascript;
 
 
 ###转换基于 RGB 的色彩模型
-支持以下色彩模型的转换：HSL,HSL240(Windows 拾色器), HSL255(MS Office拾色器), HSV（HSB）, HWB, CMY, CMYK。
+支持以下色彩模型的转换：HSL,HSL240(Windows 拾色器), HSL255(MS Office拾色器), HSV（HSB）, HWB, CMY, CMYK, YPbPr, JpegYCbCr, YCbCr, YIQ, YUV 。
 
 ###转换参考色彩空间
 支持以下参考色彩空间的转换：CIE Lab, CIE Luv, CIE XYZ, CIE xyY ,CIE LCHab;
@@ -168,9 +168,12 @@ ColorRNA 除了支持各种 RGB 色彩空间之间的互相转换，还支持 `XYZ`、`xyY`、`XYZ`、`L
  color1.JpegYCbCr(0.7059647058823528,0.6393771749019608,0.14190933333333333).rgb ();  // [52,233,243]
  color1.YPbPr(0.7059647058823528,0.13937717490196078,-0.35809066666666667).rgb ();  // [52,233,243]
 ```
-除了以上色彩空间之间的转换， ColorRNA  还支持各种基于 RGB 值的色彩模型之间的转换（前面的各种色彩空间基于 CIE XYZ 进行转换），默认是基于 sRGB 色彩空间来计算，比如使用 `color1.HSB(183,79,95)`  将认为这是一个基于 sRGB 的 HSB 值，并返回一个 sRGB 色彩空间的 RGB 值：`[51,233,242]`; 可以在色彩模型方法最后一个参数传递指定的色彩空间如 ：`color1.HSB(183,79,95,"AdobeRGB")`;
+除了以上色彩空间之间的转换， ColorRNA  还支持各种基于 RGB 值的色彩模型之间的转换（前面的各种色彩空间基于 CIE XYZ 进行转换）。
 
-另外 `HSL240` 是 Windows 系统拾色器使用的模型，出现在“画图”和各种使用系统 API 的程序中，它与通常 HSL （比如 Photoshop 和 网页标准）取值范围：`0~360, 0~100, 0~100`不同，HSL240 的取值范围是： `0~239, 0~240 ,0~240`。
+默认是基于 sRGB 色彩空间来计算，比如使用 `color1.HSB(183,79,95)`  将认为这是一个基于 sRGB 的 HSB 值，并返回一个 sRGB 色彩空间的 RGB 值：`[51,233,242]`; 可以在色彩模型方法最后一个参数传递指定的色彩空间如 ：`color1.HSB(183,79,95,"AdobeRGB")`;
+
+另外   
+`HSL240` 是 Windows 系统拾色器使用的模型，出现在“画图”和各种使用系统 API 的程序中，它与通常 HSL （比如 Photoshop 和 网页标准）取值范围：`0~360, 0~100, 0~100`不同，HSL240 的取值范围是： `0~239, 0~240 ,0~240`。
 
 `HSL255` 是微软 Office 中拾色器使用的模型，HSL255 的取值范围是： `0~255, 0~255 ,0~255`。
 
