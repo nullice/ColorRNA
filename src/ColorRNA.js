@@ -2983,8 +2983,9 @@ console.log("YUV:" + color1.rgb(52, 233, 243).YUV());
 console.log("YIQ:" + color1.rgb(52, 233, 243).YIQ());
 console.log("YCbCr:" + color1.rgb(52, 233, 243).YCbCr());
 console.log("JpegYCbCr:" + color1.rgb(52, 233, 243).JpegYCbCr());
-;
 console.log("YPbPr:" + color1.rgb(52, 233, 243).YPbPr());
+console.log("CMY:" + color1.rgb(52, 233, 243).CMY());
+console.log("CMYK:" + color1.rgb(52, 233, 243).CMYK());
 
 console.log("----");
 
@@ -2997,8 +2998,9 @@ console.log("YUV:" + color1.YUV(0.7059647058823528, 0.12143921568627458, -0.4404
 console.log("YIQ:" + color1.YIQ(0.7059647058823528, -0.43544010196078436, -0.1378909254901961).rgb());
 console.log("YCbCr:" + color1.YCbCr(170.60627058823528, 159.2206156862745, 47.78768627450981).rgb());
 console.log("JpegYCbCr:" + color1.JpegYCbCr(0.7059647058823528, 0.6393771749019608, 0.14190933333333333).rgb());
-;
 console.log("YPbPr:" + color1.YPbPr(0.7059647058823528, 0.13937717490196078, -0.35809066666666667).rgb());
+console.log("CMY:" + color1.CMY(80,9,5).rgb());
+console.log("CMYK:" + color1.CMYK(79,4,0,5).rgb());
 
 console.log("----");
 
