@@ -58,7 +58,7 @@ color1.rgb(44,21,211);
 
 创建后使用可用 `ColorRNA.rgb(r,g,b)` 重新指定颜色，用法和创建时一样。
 
-#### 各种色彩空间
+#### 指定色彩空间
 ```js
 //支持的 RGB 色彩空间：
 color1.sRGB ([10, 20, 107]);
@@ -81,9 +81,26 @@ color1.WideGamutRGB (44, 21, 211);
 
 和使用 `ColorRNA.rgb(r,g,b)` 一样，还有以上 16 个指定色彩空间颜色值的方法，用法和 `ColorRNA.rgb(r,g,b)`  完全一样。另外 `ColorRNA.rgb (r,g,b)`  与  `ColorRNA.sRGB (r,g,b)` 效果是一样的，`ColorRNA.rgb (r,g,b)` 使用 sRGB 色彩空间。
 
-,
 
+###返回色彩
 
+```js
+var color1 = new ColorRNA(10,235,245);
+
+color1.rgb ()  // [10, 235, 245]
+color1.sRGB ()  // [10, 235, 245]
+color1.getHex () // #0AEBF5
+
+color1.AdobeRGB ()  // [133, 234, 244]
+color1.getHex () // #85EAF4
+
+color1.AppleRGB ()  // [52, 233, 243]
+color1.getHex () // #34E9F3
+
+color1.ProPhotoRGB ()  // [154, 218, 239]
+color1.getHex () // #9ADAEF
+
+```
 
 
 

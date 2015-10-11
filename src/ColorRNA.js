@@ -2599,11 +2599,12 @@ ColorRNA.prototype.getWCAGcontrastThan = function (inColor)
 
 }
 
-ColorRNA.prototype.getHex = function (inColor)
+ColorRNA.prototype.getHex = function ()
 {//get RGB Hex
 
-    this._XYZ_to_RGB();
-    var hex = this._rgb_to_hex([this.r, this.g, this.b]);
+    var rgb =
+        this._XYZ_to_RGB();
+    var hex = this._rgb_to_hex([rgb[0], rgb[1], rgb[2]]);
     return "#" + hex;
 }
 
@@ -2836,28 +2837,33 @@ ColorRNA.prototype.diff_DE1994_Textiles_Than = function (color2)
 }
 
 
-var color1 = new ColorRNA("#FF0101");
+var color1 = new ColorRNA(10, 235, 245);
 
 
-console.log(color1.rgb());
+//console.log(color1.getHex());
+console.log("RGB:" + color1.rgb());
+console.log("sRGB:" + color1.sRGB());
+console.log(color1.getHex());
+console.log("AdobeRGB:" + color1.AdobeRGB());
+console.log(color1.getHex());
+console.log("AppleRGB:" + color1.AppleRGB());
+console.log(color1.getHex());
+console.log("ProPhotoRGB:" + color1.ProPhotoRGB());
 console.log(color1.getHex());
 
-color1.sRGB ([10, 20, 107]);
-color1.AdobeRGB (44, 21, 211);
-color1.AppleRGB (44, 21, 211);
-color1.BestRGB (44, 21, 211);
-color1.BetaRGB (44, 21, 211);
-color1.BruceRGB (44, 21, 211);
-color1.CIERGB (44, 21, 211);
-color1.ColorMatchRGB (44, 21, 211);
-color1.DonRGB4 (44, 21, 211);
-color1.ECIRGBv2 (44, 21, 211);
-color1.EktaSpacePS5 (44, 21, 211);
-color1.NTSCRGB (44, 21, 211);
-color1.PALSECAMRGB (44, 21, 211);
-color1.ProPhotoRGB (44, 21, 211);
-color1.SMPTECRGB (44, 21, 211);
-color1.WideGamutRGB (44, 21, 211);
+color1.BestRGB();
+color1.BetaRGB();
+color1.BruceRGB();
+color1.CIERGB();
+color1.ColorMatchRGB();
+color1.DonRGB4();
+color1.ECIRGBv2();
+color1.EktaSpacePS5();
+color1.NTSCRGB();
+color1.PALSECAMRGB();
+color1.ProPhotoRGB();
+color1.SMPTECRGB();
+color1.WideGamutRGB();
 
 
 //color1.rgb(10, 20, 17);
