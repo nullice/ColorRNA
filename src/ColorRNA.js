@@ -2926,6 +2926,31 @@ ColorRNA.prototype.diff_DE1994_Textiles_Than = function (color2)
     return this.colorDiff(this, color2, "DeltaE1994_T");
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//==============================================================================================
 console.log("---------TEST---------");
 var color1 = new ColorRNA(10, 235, 245);
 var color2 = new ColorRNA(10, 235, 245);
