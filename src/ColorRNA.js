@@ -2159,6 +2159,8 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace)
     this.g = rgb[1];
     this.b = rgb[2];
     this._RGB_to_XYZ();
+
+    return this;
 }
 
 ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
@@ -2851,19 +2853,17 @@ console.log(color1.getHex());
 console.log("ProPhotoRGB:" + color1.ProPhotoRGB());
 console.log(color1.getHex());
 
-color1.BestRGB();
-color1.BetaRGB();
-color1.BruceRGB();
-color1.CIERGB();
-color1.ColorMatchRGB();
-color1.DonRGB4();
-color1.ECIRGBv2();
-color1.EktaSpacePS5();
-color1.NTSCRGB();
-color1.PALSECAMRGB();
-color1.ProPhotoRGB();
-color1.SMPTECRGB();
-color1.WideGamutRGB();
+
+// 转换色彩空间 sRGB -> AdobeRGB：
+color1.sRGB(10, 235, 245);
+color1.AdobeRGB(); // [133, 234, 244]
+
+// 转换色彩空间 ProPhotoRGB -> AdobeRGB
+color1.ProPhotoRGB(154, 218, 239);
+console.log("ProPhotoRGB -> sRGB:" + color1.AdobeRGB()); // [10, 235, 245]
+
+// 转换色彩空间 AppleRGB -> ProPhotoRGB
+console.log("AppleRGB -> ProPhotoRGB:" + color1.AppleRGB(52, 233, 243).ProPhotoRGB());
 
 
 //color1.rgb(10, 20, 17);

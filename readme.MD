@@ -102,9 +102,25 @@ color1.getHex () // #9ADAEF
 
 ```
 
+像上面这样不指定参数的使用 `ColorRNA.rgb()` 和其他色彩空间方法，会返回 ColorRNA 存储的颜色用相应色彩空间表示的色彩值；另外用  `ColorRNA.getHex ()`  会返回最后一次计算的 RGB 值的 16 进制代码，如果没有计算过则使用 sRGB 色彩空间的 RGB 值。
 
 
+```js
+var color1 = new ColorRNA();
 
+// 转换色彩空间 sRGB -> AdobeRGB：
+color1.sRGB (10, 235, 245);
+color1.AdobeRGB (); // [133, 234, 244]
+
+// 转换色彩空间 ProPhotoRGB -> AdobeRGB
+color1.ProPhotoRGB (154, 218, 239);
+color1.AdobeRGB (); // [133,235,244]
+
+// 转换色彩空间 AppleRGB -> ProPhotoRGB
+color1.AppleRGB(52, 233, 243).ProPhotoRGB (); //[154,218,239
+
+
+```
 
 
 

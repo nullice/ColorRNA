@@ -28,8 +28,8 @@
           <file leaf-file-name="ColorRNA.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/ColorRNA.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.6">
-                  <caret line="2849" column="27" selection-start-line="2849" selection-start-column="12" selection-end-line="2849" selection-end-column="27" />
+                <state vertical-scroll-proportion="0.5485714">
+                  <caret line="2865" column="84" selection-start-line="2865" selection-start-column="41" selection-end-line="2865" selection-end-column="84" />
                   <folding />
                 </state>
               </provider>
@@ -72,7 +72,7 @@
           <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/test.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.51428574">
+                <state vertical-scroll-proportion="0.34285715">
                   <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
                   <folding />
                 </state>
@@ -317,7 +317,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="120" />
+      <option name="time" value="121" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="NodeJSConfigurationType">
@@ -566,8 +566,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ColorRNA.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6">
-          <caret line="2849" column="27" selection-start-line="2849" selection-start-column="12" selection-end-line="2849" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.5485714">
+          <caret line="2865" column="84" selection-start-line="2865" selection-start-column="41" selection-end-line="2865" selection-end-column="84" />
           <folding />
         </state>
       </provider>
