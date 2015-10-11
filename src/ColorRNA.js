@@ -2049,7 +2049,7 @@ ColorRNA.prototype._normaOutLab = function (inArray, PSMod)
         }
         else
         {
-            inArray[z] = +inArray[z].toFixed(1);
+            inArray[z] = +inArray[z].toFixed(4);
         }
 
     }
@@ -2864,6 +2864,15 @@ console.log("ProPhotoRGB -> sRGB:" + color1.AdobeRGB()); // [10, 235, 245]
 
 // 转换色彩空间 AppleRGB -> ProPhotoRGB
 console.log("AppleRGB -> ProPhotoRGB:" + color1.AppleRGB(52, 233, 243).ProPhotoRGB());
+
+console.log("------------------------------------------------------------------------------");
+
+console.log("Lab:" + color1.rgb(52, 233, 243).Lab());
+console.log("LabPs:" + color1.rgb(52, 233, 243).LabPS());
+console.log("LCHab:" + color1.rgb(52, 233, 243).LCHab());
+console.log("Luv:" + color1.rgb(52, 233, 243).Luv());
+console.log("xyY:" + color1.rgb(52, 233, 243).xyY());
+console.log("XYZ:" + color1.rgb(52, 233, 243).XYZ());
 
 
 //color1.rgb(10, 20, 17);
