@@ -2191,7 +2191,8 @@ ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
         Lab[2] = argus[2];
     }
 
-    return this._Lab_to_XYZ(Lab, PhotoShopMod);
+    this._Lab_to_XYZ(Lab, PhotoShopMod);
+    return this;
 }
 
 ColorRNA.prototype._xyYX = function (argus)
@@ -2222,7 +2223,8 @@ ColorRNA.prototype._xyYX = function (argus)
         xyY[2] = argus[2];
     }
 
-    return this._xyY_to_XYZ(xyY);
+    this._xyY_to_XYZ(xyY);
+    return this;
 }
 
 
@@ -2254,8 +2256,8 @@ ColorRNA.prototype._LCHabX = function (argus)
         LCH[1] = argus[1];
         LCH[2] = argus[2];
     }
-
-    return this._LCHab_to_XYZ(LCH);
+    this._LCHab_to_XYZ(LCH)
+    return this;
 }
 
 
@@ -2287,8 +2289,8 @@ ColorRNA.prototype._LuvX = function (argus)
         Luv[1] = argus[1];
         Luv[2] = argus[2];
     }
-
-    return this._Luv_to_XYZ(Luv);
+    this._Luv_to_XYZ(Luv)
+    return this;
 }
 
 
@@ -2873,6 +2875,16 @@ console.log("LCHab:" + color1.rgb(52, 233, 243).LCHab());
 console.log("Luv:" + color1.rgb(52, 233, 243).Luv());
 console.log("xyY:" + color1.rgb(52, 233, 243).xyY());
 console.log("XYZ:" + color1.rgb(52, 233, 243).XYZ());
+
+console.log("----");
+
+
+console.log("Lab_to_rgb:" + color1.Lab(84.7269,-39.5516,-17.4109).rgb());
+console.log("LabPs_to_rgb:" + color1.LabPS(84,-42,-18).rgb());
+console.log("LCHab_to_rgb:" + color1.LCHab(84.7269,43.2142,203.7594).rgb());
+console.log("xyY_to_rgb:" + color1.xyY(0.2256,0.3161,0.6547).rgb());
+console.log("Luv_to_rgb:" + color1.Luv(84.7269,-61.2033,-21.7867).rgb());
+console.log("XYZ_to_rgb:" + color1.XYZ(0.4672539339338757,0.6547307056620336,0.9495155562423543).rgb());
 
 
 //color1.rgb(10, 20, 17);
