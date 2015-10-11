@@ -2,164 +2,6 @@
  * Created by 语冰 on 2015/9/22.
  */
 
-function colorDiff(color1, color2, alg)
-{
-    var ca1 = color1.Lab();
-    var Lab1 = {L: ca1[0], a: ca1[1], b: ca1[2]};
-
-    var ca2 = color2.Lab();
-    var Lab2 = {L: ca2[0], a: ca2[1], b: ca2[2]};
-
-
-    var deltaE = 0;
-
-    if (alg == "DeltaE1976")
-    {
-        var delL = Lab1.L - Lab2.L;
-        var dela = Lab1.a - Lab2.a;
-        var delb = Lab1.b - Lab2.b;
-        deltaE = Math.sqrt(delL * delL + dela * dela + delb * delb);
-    }
-
-
-    // textiles OR Graphic Arts
-    if (alg == "DeltaE1994_T" || alg == "DeltaE1994_G")
-    {
-        var k1 = (alg == "DeltaE1994_T") ? 0.048 : 0.045;
-        var k2 = (alg == "DeltaE1994_T") ? 0.014 : 0.015;
-        var kL = (alg == "DeltaE1994_T") ? 2.0 : 1.0;
-        var kC = 1.0;
-        var kH = 1.0;
-
-        var C1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
-        var C2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
-
-        var delA = Lab1.a - Lab2.a;
-        var delB = Lab1.b - Lab2.b;
-        var delC = C1 - C2;
-        var delH2 = delA * delA + delB * delB - delC * delC;
-        var delH = (delH2 > 0.0) ? Math.sqrt(delH2) : 0.0;
-        var delL = Lab1.L - Lab2.L;
-
-        var sL = 1.0;
-        var sC = 1.0 + k1 * C1;
-        var sH = 1.0 + k2 * C1;
-
-        var vL = delL / (kL * sL);
-        var vC = delC / (kC * sC);
-        var vH = delH / (kH * sH);
-
-        if (alg == "DeltaE1994_T")
-        {
-            deltaE = Math.sqrt(vL * vL + vC * vC + vH * vH);
-        }
-        else
-        {
-            deltaE = Math.sqrt(vL * vL + vC * vC + vH * vH);
-        }
-    }
-
-
-    if (alg == "DeltaE2000")
-    {
-        var kL = 1.0;
-        var kC = 1.0;
-        var kH = 1.0;
-        var lBarPrime = 0.5 * (Lab1.L + Lab2.L);
-        var c1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
-        var c2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
-        var cBar = 0.5 * (c1 + c2);
-        var cBar7 = cBar * cBar * cBar * cBar * cBar * cBar * cBar;
-        var g = 0.5 * (1.0 - Math.sqrt(cBar7 / (cBar7 + 6103515625.0)));
-        /* 6103515625 = 25^7 */
-        var a1Prime = Lab1.a * (1.0 + g);
-        var a2Prime = Lab2.a * (1.0 + g);
-        var c1Prime = Math.sqrt(a1Prime * a1Prime + Lab1.b * Lab1.b);
-        var c2Prime = Math.sqrt(a2Prime * a2Prime + Lab2.b * Lab2.b);
-        var cBarPrime = 0.5 * (c1Prime + c2Prime);
-        var h1Prime = (Math.atan2(Lab1.b, a1Prime) * 180.0) / Math.PI;
-        if (h1Prime < 0.0)
-            h1Prime += 360.0;
-        var h2Prime = (Math.atan2(Lab2.b, a2Prime) * 180.0) / Math.PI;
-        if (h2Prime < 0.0)
-            h2Prime += 360.0;
-        var hBarPrime = (Math.abs(h1Prime - h2Prime) > 180.0) ? (0.5 * (h1Prime + h2Prime + 360.0)) : (0.5 * (h1Prime + h2Prime));
-        var t = 1.0 -
-            0.17 * Math.cos(Math.PI * (      hBarPrime - 30.0) / 180.0) +
-            0.24 * Math.cos(Math.PI * (2.0 * hBarPrime       ) / 180.0) +
-            0.32 * Math.cos(Math.PI * (3.0 * hBarPrime + 6.0) / 180.0) -
-            0.20 * Math.cos(Math.PI * (4.0 * hBarPrime - 63.0) / 180.0);
-        if (Math.abs(h2Prime - h1Prime) <= 180.0)
-        {
-            var dhPrime = h2Prime - h1Prime;
-        }
-
-        else
-        {
-            var dhPrime = (h2Prime <= h1Prime) ? (h2Prime - h1Prime + 360.0) : (h2Prime - h1Prime - 360.0);
-        }
-        var dLPrime = Lab2.L - Lab1.L;
-        var dCPrime = c2Prime - c1Prime;
-        var dHPrime = 2.0 * Math.sqrt(c1Prime * c2Prime) * Math.sin(Math.PI * (0.5 * dhPrime) / 180.0);
-        var sL = 1.0 + ((0.015 * (lBarPrime - 50.0) * (lBarPrime - 50.0)) / Math.sqrt(20.0 + (lBarPrime - 50.0) * (lBarPrime - 50.0)));
-        var sC = 1.0 + 0.045 * cBarPrime;
-        var sH = 1.0 + 0.015 * cBarPrime * t;
-        var dTheta = 30.0 * Math.exp(-((hBarPrime - 275.0) / 25.0) * ((hBarPrime - 275.0) / 25.0));
-        var cBarPrime7 = cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime;
-        var rC = Math.sqrt(cBarPrime7 / (cBarPrime7 + 6103515625.0));
-        var rT = -2.0 * rC * Math.sin(Math.PI * (2.0 * dTheta) / 180.0);
-        deltaE = Math.sqrt(
-            (dLPrime / (kL * sL)) * (dLPrime / (kL * sL)) +
-            (dCPrime / (kC * sC)) * (dCPrime / (kC * sC)) +
-            (dHPrime / (kH * sH)) * (dHPrime / (kH * sH)) +
-            (dCPrime / (kC * sC)) * (dHPrime / (kH * sH)) * rT);
-    }
-
-
-    if (alg == "DeltaECMC_11" || alg == "DeltaECMC_21")
-    {
-        if (alg == "DeltaECMC_11")
-        {
-            var L = 1.0, C = 1.0;
-        }
-        else if (alg == "DeltaECMC_21")
-        {
-            var L = 2.0, C = 1.0;
-        }
-
-        var c1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
-        var c2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
-        var sl = (Lab1.L < 16.0) ? (0.511) : ((0.040975 * Lab1.L) / (1.0 + 0.01765 * Lab1.L));
-        var sc = (0.0638 * c1) / (1.0 + 0.0131 * c1) + 0.638;
-        var h1 = (c1 < 0.000001) ? 0.0 : ((Math.atan2(Lab1.b, Lab1.a) * 180.0) / Math.PI);
-        while (h1 < 0.0)
-            h1 += 360.0;
-        while (h1 >= 360.0)
-            h1 -= 360.0;
-        var t = ((h1 >= 164.0) && (h1 <= 345.0)) ? (0.56 + Math.abs(0.2 * Math.cos((Math.PI * (h1 + 168.0)) / 180.0))) : (0.36 + Math.abs(0.4 * Math.cos((Math.PI * (h1 + 35.0)) / 180.0)));
-        var c4 = c1 * c1 * c1 * c1;
-        var f = Math.sqrt(c4 / (c4 + 1900.0));
-        var sh = sc * (f * t + 1.0 - f);
-        var delL = Lab1.L - Lab2.L;
-        var delC = c1 - c2;
-        var delA = Lab1.a - Lab2.a;
-        var delB = Lab1.b - Lab2.b;
-        var dH2 = delA * delA + delB * delB - delC * delC;
-        var v1 = delL / (L * sl);
-        var v2 = delC / (C * sc);
-        var v3 = sh;
-        if (L == 2.0)
-        {
-            deltaE = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
-        }
-        else
-        {
-            deltaE = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
-        }
-    }
-
-    return +deltaE.toFixed(2);
-}
 
 
 function ColorRNA()
@@ -221,25 +63,7 @@ function ColorRNA()
 
 
 //---in RGB-----------------------
-    if (arguments.length == 3)
-    {
-        this.colorType = "RGB"
-
-        if (typeof arguments[0] == "number")
-        {
-            this.r = arguments[0];
-        }
-
-        if (typeof arguments[1] == "number")
-        {
-            this.g = arguments[1];
-        }
-
-        if (typeof arguments[2] == "number")
-        {
-            this.b = arguments[2];
-        }
-    }
+    this._rgbX(arguments, this._COLORSPACES.sRGB)
 
 }
 
@@ -2147,7 +1971,17 @@ ColorRNA.prototype._hex_to_rgb = function (hex)
 ColorRNA.prototype._rgb_to_hex = function (rgb)
 {
     var hex = rgb[0] * 65536 + rgb[1] * 256 + rgb[2];
+
+    hex = hex.toString(16).toUpperCase();
+
+
+    while (hex.length < 6)
+    {
+        hex = "0" + hex;
+    }
+
     return hex.toString(16).toUpperCase();
+
 
 }
 
@@ -2756,13 +2590,22 @@ ColorRNA.prototype.getWCAGcontrastThan = function (inColor)
     var luma1 = this.getWCAGluma(),
         luma2 = inColor.getWCAGluma();
 
-    if (luma1 > luma2) {
+    if (luma1 > luma2)
+    {
         return (luma1 + 0.05) / (luma2 + 0.05)
-    };
+    }
+    ;
     return (luma2 + 0.05) / (luma1 + 0.05);
 
 }
 
+ColorRNA.prototype.getHex = function (inColor)
+{//get RGB Hex
+
+    this._XYZ_to_RGB();
+    var hex = this._rgb_to_hex([this.r, this.g, this.b]);
+    return "#" + hex;
+}
 
 // XYZ 色彩空间---------------------------------------------------------------
 
@@ -2801,12 +2644,223 @@ ColorRNA.prototype.XYZ = function ()
     return this;
 }
 
+//--------------------------------------------
+ColorRNA.prototype.colorDiff = function (color1, color2, alg)
+{
+    var ca1 = color1.Lab();
+    var Lab1 = {L: ca1[0], a: ca1[1], b: ca1[2]};
 
-var color1 = new ColorRNA().rgb(22, 33, 144);
+    var ca2 = color2.Lab();
+    var Lab2 = {L: ca2[0], a: ca2[1], b: ca2[2]};
 
-console.log(color1.HSL())
+
+    var deltaE = 0;
+
+    if (alg == "DeltaE1976")
+    {
+        var delL = Lab1.L - Lab2.L;
+        var dela = Lab1.a - Lab2.a;
+        var delb = Lab1.b - Lab2.b;
+        deltaE = Math.sqrt(delL * delL + dela * dela + delb * delb);
+    }
 
 
+    // textiles OR Graphic Arts
+    if (alg == "DeltaE1994_T" || alg == "DeltaE1994_G")
+    {
+        var k1 = (alg == "DeltaE1994_T") ? 0.048 : 0.045;
+        var k2 = (alg == "DeltaE1994_T") ? 0.014 : 0.015;
+        var kL = (alg == "DeltaE1994_T") ? 2.0 : 1.0;
+        var kC = 1.0;
+        var kH = 1.0;
+
+        var C1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
+        var C2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
+
+        var delA = Lab1.a - Lab2.a;
+        var delB = Lab1.b - Lab2.b;
+        var delC = C1 - C2;
+        var delH2 = delA * delA + delB * delB - delC * delC;
+        var delH = (delH2 > 0.0) ? Math.sqrt(delH2) : 0.0;
+        var delL = Lab1.L - Lab2.L;
+
+        var sL = 1.0;
+        var sC = 1.0 + k1 * C1;
+        var sH = 1.0 + k2 * C1;
+
+        var vL = delL / (kL * sL);
+        var vC = delC / (kC * sC);
+        var vH = delH / (kH * sH);
+
+        if (alg == "DeltaE1994_T")
+        {
+            deltaE = Math.sqrt(vL * vL + vC * vC + vH * vH);
+        }
+        else
+        {
+            deltaE = Math.sqrt(vL * vL + vC * vC + vH * vH);
+        }
+    }
+
+
+    if (alg == "DeltaE2000")
+    {
+        var kL = 1.0;
+        var kC = 1.0;
+        var kH = 1.0;
+        var lBarPrime = 0.5 * (Lab1.L + Lab2.L);
+        var c1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
+        var c2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
+        var cBar = 0.5 * (c1 + c2);
+        var cBar7 = cBar * cBar * cBar * cBar * cBar * cBar * cBar;
+        var g = 0.5 * (1.0 - Math.sqrt(cBar7 / (cBar7 + 6103515625.0)));
+        /* 6103515625 = 25^7 */
+        var a1Prime = Lab1.a * (1.0 + g);
+        var a2Prime = Lab2.a * (1.0 + g);
+        var c1Prime = Math.sqrt(a1Prime * a1Prime + Lab1.b * Lab1.b);
+        var c2Prime = Math.sqrt(a2Prime * a2Prime + Lab2.b * Lab2.b);
+        var cBarPrime = 0.5 * (c1Prime + c2Prime);
+        var h1Prime = (Math.atan2(Lab1.b, a1Prime) * 180.0) / Math.PI;
+        if (h1Prime < 0.0)
+            h1Prime += 360.0;
+        var h2Prime = (Math.atan2(Lab2.b, a2Prime) * 180.0) / Math.PI;
+        if (h2Prime < 0.0)
+            h2Prime += 360.0;
+        var hBarPrime = (Math.abs(h1Prime - h2Prime) > 180.0) ? (0.5 * (h1Prime + h2Prime + 360.0)) : (0.5 * (h1Prime + h2Prime));
+        var t = 1.0 -
+            0.17 * Math.cos(Math.PI * (      hBarPrime - 30.0) / 180.0) +
+            0.24 * Math.cos(Math.PI * (2.0 * hBarPrime       ) / 180.0) +
+            0.32 * Math.cos(Math.PI * (3.0 * hBarPrime + 6.0) / 180.0) -
+            0.20 * Math.cos(Math.PI * (4.0 * hBarPrime - 63.0) / 180.0);
+        if (Math.abs(h2Prime - h1Prime) <= 180.0)
+        {
+            var dhPrime = h2Prime - h1Prime;
+        }
+
+        else
+        {
+            var dhPrime = (h2Prime <= h1Prime) ? (h2Prime - h1Prime + 360.0) : (h2Prime - h1Prime - 360.0);
+        }
+        var dLPrime = Lab2.L - Lab1.L;
+        var dCPrime = c2Prime - c1Prime;
+        var dHPrime = 2.0 * Math.sqrt(c1Prime * c2Prime) * Math.sin(Math.PI * (0.5 * dhPrime) / 180.0);
+        var sL = 1.0 + ((0.015 * (lBarPrime - 50.0) * (lBarPrime - 50.0)) / Math.sqrt(20.0 + (lBarPrime - 50.0) * (lBarPrime - 50.0)));
+        var sC = 1.0 + 0.045 * cBarPrime;
+        var sH = 1.0 + 0.015 * cBarPrime * t;
+        var dTheta = 30.0 * Math.exp(-((hBarPrime - 275.0) / 25.0) * ((hBarPrime - 275.0) / 25.0));
+        var cBarPrime7 = cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime * cBarPrime;
+        var rC = Math.sqrt(cBarPrime7 / (cBarPrime7 + 6103515625.0));
+        var rT = -2.0 * rC * Math.sin(Math.PI * (2.0 * dTheta) / 180.0);
+        deltaE = Math.sqrt(
+            (dLPrime / (kL * sL)) * (dLPrime / (kL * sL)) +
+            (dCPrime / (kC * sC)) * (dCPrime / (kC * sC)) +
+            (dHPrime / (kH * sH)) * (dHPrime / (kH * sH)) +
+            (dCPrime / (kC * sC)) * (dHPrime / (kH * sH)) * rT);
+    }
+
+
+    if (alg == "DeltaECMC_11" || alg == "DeltaECMC_21")
+    {
+        if (alg == "DeltaECMC_11")
+        {
+            var L = 1.0, C = 1.0;
+        }
+        else if (alg == "DeltaECMC_21")
+        {
+            var L = 2.0, C = 1.0;
+        }
+
+        var c1 = Math.sqrt(Lab1.a * Lab1.a + Lab1.b * Lab1.b);
+        var c2 = Math.sqrt(Lab2.a * Lab2.a + Lab2.b * Lab2.b);
+        var sl = (Lab1.L < 16.0) ? (0.511) : ((0.040975 * Lab1.L) / (1.0 + 0.01765 * Lab1.L));
+        var sc = (0.0638 * c1) / (1.0 + 0.0131 * c1) + 0.638;
+        var h1 = (c1 < 0.000001) ? 0.0 : ((Math.atan2(Lab1.b, Lab1.a) * 180.0) / Math.PI);
+        while (h1 < 0.0)
+            h1 += 360.0;
+        while (h1 >= 360.0)
+            h1 -= 360.0;
+        var t = ((h1 >= 164.0) && (h1 <= 345.0)) ? (0.56 + Math.abs(0.2 * Math.cos((Math.PI * (h1 + 168.0)) / 180.0))) : (0.36 + Math.abs(0.4 * Math.cos((Math.PI * (h1 + 35.0)) / 180.0)));
+        var c4 = c1 * c1 * c1 * c1;
+        var f = Math.sqrt(c4 / (c4 + 1900.0));
+        var sh = sc * (f * t + 1.0 - f);
+        var delL = Lab1.L - Lab2.L;
+        var delC = c1 - c2;
+        var delA = Lab1.a - Lab2.a;
+        var delB = Lab1.b - Lab2.b;
+        var dH2 = delA * delA + delB * delB - delC * delC;
+        var v1 = delL / (L * sl);
+        var v2 = delC / (C * sc);
+        var v3 = sh;
+        if (L == 2.0)
+        {
+            deltaE = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
+        }
+        else
+        {
+            deltaE = Math.sqrt(v1 * v1 + v2 * v2 + (dH2 / (v3 * v3)));
+        }
+    }
+
+    return +deltaE.toFixed(2);
+}
+
+
+ColorRNA.prototype.diff_ECMC11_Than = function (color2)
+{
+    return this.colorDiff(this, color2, "DeltaECMC_11");
+}
+
+ColorRNA.prototype.diff_ECMC21_Than = function (color2)
+{
+    return this.colorDiff(this, color2, "DeltaECMC_21");
+}
+
+ColorRNA.prototype.diff_DE2000_Than = function (color2)
+{
+    return this.colorDiff(this, color2, "DeltaE2000");
+}
+
+ColorRNA.prototype.diff_DE1976_Than = function (color2)
+{
+    return this.colorDiff(this, color2, "DeltaE1976");
+}
+
+ColorRNA.prototype.diff_DE1994_GraphicArts_Than = function (color2)
+{
+    return this.colorDiff(this, color2, "DeltaE1994_G");
+}
+
+ColorRNA.prototype.diff_DE1994_Textiles_Than = function (color2)
+{
+    return this.colorDiff(this, color2, "DeltaE1994_T");
+}
+
+
+var color1 = new ColorRNA("#FF0101");
+
+
+console.log(color1.rgb());
+console.log(color1.getHex());
+
+color1.sRGB ([10, 20, 107]);
+color1.AdobeRGB (44, 21, 211);
+color1.AppleRGB (44, 21, 211);
+color1.BestRGB (44, 21, 211);
+color1.BetaRGB (44, 21, 211);
+color1.BruceRGB (44, 21, 211);
+color1.CIERGB (44, 21, 211);
+color1.ColorMatchRGB (44, 21, 211);
+color1.DonRGB4 (44, 21, 211);
+color1.ECIRGBv2 (44, 21, 211);
+color1.EktaSpacePS5 (44, 21, 211);
+color1.NTSCRGB (44, 21, 211);
+color1.PALSECAMRGB (44, 21, 211);
+color1.ProPhotoRGB (44, 21, 211);
+color1.SMPTECRGB (44, 21, 211);
+color1.WideGamutRGB (44, 21, 211);
+
+
+//color1.rgb(10, 20, 17);
 //
 //
 //console.time("遍历");
