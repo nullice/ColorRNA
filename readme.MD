@@ -201,8 +201,51 @@ color1.getWCAGluma(); // 0.7496474452608749
 #### 色差与对比度计算
 
 ```js
-color1.rgb(112, 255, 0);
+color1.rgb(123, 124, 21);
+color2.rgb(44, 22, 33);
 
+ color1.diff_DE1976_Than(color2); // 71.42
+ color2.diff_DE1976_Than(color1); // 71.42
+ color1.diff_DE1994_GraphicArts_Than(color2); // 48.35
+ color2.diff_DE1994_GraphicArts_Than(color1); // 59.65
+ color1.diff_DE1994_Textiles_Than(color2); // 34.46
+ color2.diff_DE1994_Textiles_Than(color1); // 48.83
+ color1.diff_DE2000_Than(color2); // 48.63
+ color2.diff_DE2000_Than(color1); // 48.63
+ color1.diff_ECMC11_Than(color2); // 47.01
+ color2.diff_ECMC11_Than(color1); // 93.92
+ color1.diff_ECMC11_Than(color2); // 47.01
+ color2.diff_ECMC11_Than(color1); // 93.92
+ color1.diff_ECMC21_Than(color2); // 34.96
+ color2.diff_ECMC21_Than(color1); // 65.67
+ color1.getWCAGcontrastThan(color2); // 3.8076911332106675
+ color2.getWCAGcontrastThan(color1); // 3.8076911332106675
 
 ```
+可用使用
+`ColorRNA.diff_DE1976_Than()`、`ColorRNA.diff_DE1994_GraphicArts_Than()`、`ColorRNA.diff_DE1994_Textiles_Than()`、`ColorRNA.diff_DE2000_Than()`、`ColorRNA.diff_ECMC11_Than()`、`ColorRNA.diff_ECMC21_Than()` 这些计算方法得到一个颜色相对于另一个颜色的色差 ，注意颜色有前景背景之分，顺序不同结果可能会不一样。
+
+`ColorRNA.getWCAGcontrastThan()` 可用得到互联网无障碍标准中一个颜色相对于另一个颜色的的对比度，其结果取值范围： `0~21`。 
+
+
+##高级功能
+
+###指定参考白点
+```
+color1.setRefWhite("A");
+color1.setRefWhite("B");
+color1.setRefWhite("C");
+color1.setRefWhite("D50");
+color1.setRefWhite("D55");
+color1.setRefWhite("D65");
+color1.setRefWhite("D75");
+color1.setRefWhite("E");
+color1.setRefWhite("F2");
+color1.setRefWhite("F7");
+color1.setRefWhite("F11");
+
+```
+
+`ColorRNA.setRefWhite()`, ColorRNA.getRefWhite`()` 可用分别用来设置和返回的参考白点参数，这会对色彩空间转换有影响。
+
 

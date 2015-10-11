@@ -2928,7 +2928,7 @@ ColorRNA.prototype.diff_DE1994_Textiles_Than = function (color2)
 
 console.log("---------TEST---------");
 var color1 = new ColorRNA(10, 235, 245);
-
+var color2 = new ColorRNA(10, 235, 245);
 
 //console.log(color1.getHex());
 console.log("RGB:" + color1.rgb());
@@ -3013,6 +3013,36 @@ console.log("getLumi601:" + color1.getLuma("601"));
 console.log("getLumiHSP:" + color1.getLuma("HSP"));
 console.log("getWCAGluma:" + color1.getWCAGluma());
 console.log("getWCAGluma:" + color1.getWCAGluma());
+
+
+color1.rgb(123, 124, 21);
+color2.rgb(44, 22, 33);
+;
+console.log("color1.diff_DE1976_Than(color2):" + color1.diff_DE1976_Than(color2));
+console.log("color2.diff_DE1976_Than(color1):" + color2.diff_DE1976_Than(color1));
+
+console.log("color1.diff_DE1994_GraphicArts_Than(color2):" + color1.diff_DE1994_GraphicArts_Than(color2));
+console.log("color2.diff_DE1994_GraphicArts_Than(color1):" + color2.diff_DE1994_GraphicArts_Than(color1));
+
+console.log("color1.diff_DE1994_Textiles_Than(color2):" + color1.diff_DE1994_Textiles_Than(color2));
+console.log("color2.diff_DE1994_Textiles_Than(color1):" + color2.diff_DE1994_Textiles_Than(color1));
+
+console.log("color1.diff_DE2000_Than(color2):" + color1.diff_DE2000_Than(color2));
+console.log("color2.diff_DE2000_Than(color1):" + color2.diff_DE2000_Than(color1));
+
+console.log("color1.diff_ECMC11_Than(color2):" + color1.diff_ECMC11_Than(color2));
+console.log("color2.diff_ECMC11_Than(color1):" + color2.diff_ECMC11_Than(color1));
+
+console.log("color1.diff_ECMC11_Than(color2):" + color1.diff_ECMC11_Than(color2));
+console.log("color2.diff_ECMC11_Than(color1):" + color2.diff_ECMC11_Than(color1));
+
+console.log("color1.diff_ECMC21_Than(color2):" + color1.diff_ECMC21_Than(color2));
+console.log("color2.diff_ECMC21_Than(color1):" + color2.diff_ECMC21_Than(color1));
+
+console.log("color1.getWCAGcontrastThan(color2):" + color1.getWCAGcontrastThan(color2));
+console.log("color2.getWCAGcontrastThan(color1):" + color2.getWCAGcontrastThan(color1));
+
+
 
 //color1.rgb(10, 20, 17);
 //
