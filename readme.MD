@@ -2,65 +2,66 @@
 Color & colorspace converter with Javascript; 
 
 
-����һ�� Javascript ��ɫ�ʡ�ɫ�ʿռ�ת�������⡣
-������������и���ɫ��ֵ�Ĳ�����
+![](https://github.com/nullice/ColorRNA/raw/master/logo/ColorRNA_LOGO_PNG_Word_512.png)
+
+这是一个 Javascript 的色彩、色彩空间转换与计算库。
+你可以用它进行各种色彩值的操作。
 
 
-**�����ڻ�δ��ɡ�**
-
-##����
-###ת�� RGB ɫ�ʿռ�
-֧������ RGB ɫ�ʿռ�֮����ɫֵ�Ļ��� ��Adobe RGB, Apple RGB, Best RGB, Beta RGB, BruceRGB, CIERGB, ColorMatchRGB, ECIRGBv2, DonRGB4, EktaSpacePS5, NTSC RGB, PALSECAM RGB, ProPhotoRGB, SMPTEC RGB, WideGamut RGB��
-
-����֧�ְ׵�У����ָ��٤��������֧�����°׵�ο����գ�A, B, C, D50, D55, D65, D75, E, F2, F7, F11��
 
 
-###ת������ RGB ��ɫ��ģ��
-֧������ɫ��ģ�͵�ת����HSL,HSL240(Windows ʰɫ��), HSL255(MS Officeʰɫ��), HSV��HSB��, HWB, CMY, CMYK, YPbPr, JpegYCbCr, YCbCr, YIQ, YUV ��
+##1. 功能
+####各种色彩空间转换
+支持以色彩空间之间颜色值的互换 ：`Adobe RGB`, `Apple RGB`, `Best RGB`, `Beta RGB`, `BruceRGB`, `CIERGB`, `ColorMatchRGB`, `ECIRGBv2`, `DonRGB4`, `EktaSpacePS5`, `NTSC RGB`, `PALSECAM RG`B, `ProPhotoRGB`, `SMPTEC RGB`, `WideGamut RGB`, ` CIE Lab`, `CIE Luv`, `CIE XYZ`, `CIE xyY`, `CIE LCHab`。
+内部色彩使用 CIE XYZ 存储。
 
-###ת���ο�ɫ�ʿռ�
-֧�����²ο�ɫ�ʿռ��ת����CIE Lab, CIE Luv, CIE XYZ, CIE xyY ,CIE LCHab;
-�ڲ�ɫ��ʹ�� CIE XYZ �洢��
+并且支持白点校正与指定伽马参数。支持以下白点参考光照：`A`, `B`, `C`, `D50`, `D55`, `D65`, `D75`, `E`, `F2`, `F7`, `F11`。
 
-###ɫ����Զȼ���
-֧������ɫ����㷽����DeltaE 1994, DeltaE 2000, DeltaE CMC;
-֧�����»Զȼ��㷽����CCIR 601, Rec 709, HSP, WCAGluma;
-֧�� WCAG contrast �Աȶȼ���;
-
-###����
-������ɫ�Ĺ�����������
+####基于 RGB 的色彩模型之间颜色值的互换 ：
+支持以下色彩模型的转换：`HSL`, `HSL240` (Windows 拾色器), `HSL255` (MS Office拾色器), `HSV`（HSB）, `HWB`, `CMY`, `CMYK`, `YPbPr`, `JpegYCbCr`, `YCbCr`, `YIQ`, `YUV` 。
 
 
-##ʹ��
+
+
+####色差与辉度计算
+支持以下色差计算方法：`DeltaE 1976`, `DeltaE 1994`, `DeltaE 2000`, `DeltaE CMC`;
+支持以下辉度计算方法：`CCIR 601`, `Rec 709`, `HSP`, `WCAGluma`;
+支持 `WCAG contrast` 对比度计算;
+
+####其他
+计算颜色的光谱主波长。
+
+
+##2. 使用
 
 
 ```js
 var color1 = new ColorRNA();
 ````
 
-ÿһ�� ColorRNA ����ʵ������һ����ɫ��ColorRNA �ڲ�ʹ�� CIE XYZ �洢��ɫֵ��
+每一个 ColorRNA 对象实例代表一个颜色，ColorRNA 内部使用 CIE XYZ 存储颜色值。
 
 
-###ָ����ɫ
+###指定颜色
 
 
 ```js
-var color1 = new ColorRNA("#FF0101");  // 16 ���� RGB ɫ��ֵ��00~FF���ַ���
-var color2 = new ColorRNA(255,1,1);  // RGB ɫ��ֵ��0~255������
-var color3 = new ColorRNA([255,1,1]);  // RGB ɫ��ֵ��0~255������
+var color1 = new ColorRNA("#FF0101");  // 16 进制 RGB 色彩值（00~FF）字符串
+var color2 = new ColorRNA(255,1,1);  // RGB 色彩值（0~255）参数
+var color3 = new ColorRNA([255,1,1]);  // RGB 色彩值（0~255）数组
 
 color1.rgb([10, 20, 107]);
 color1.rgb("#2F4101");
 color1.rgb(44,21,211);
 ```
 
-�� ColorRNA ����ʵ������ʱ���ô��ݲ�������ָ����ɫ���ɴ��� RGB ��Ĭ��Ϊ sRGB ɫ�ʿռ䣩ֵ��Ҳ���Դ��� RGB ֵ��������� 16 ���ƴ����ַ�����
+在 ColorRNA 对象实例创建时可用传递参数给它指定颜色，可传递 RGB （默认为 sRGB 色彩空间）值，也可以传递 RGB 值的数组或者 16 进制代码字符串。
 
-������ʹ�ÿ��� `ColorRNA.rgb(r,g,b)` ����ָ����ɫ���÷��ʹ���ʱһ����
+创建后使用可用 `ColorRNA.rgb(r,g,b)` 重新指定颜色，用法和创建时一样。
 
-#### ָ��ɫ�ʿռ�
+#### 指定色彩空间
 ```js
-//֧�ֵ� RGB ɫ�ʿռ䣺
+//支持的 RGB 色彩空间：
 color1.sRGB ([10, 20, 107]);
 color1.AdobeRGB (44, 21, 211);
 color1.AppleRGB (44, 21, 211);
@@ -79,10 +80,10 @@ color1.SMPTECRGB (44, 21, 211);
 color1.WideGamutRGB (44, 21, 211);
 ```
 
-��ʹ�� `ColorRNA.rgb(r,g,b)` һ������������ 16 ��ָ��ɫ�ʿռ���ɫֵ�ķ������÷��� `ColorRNA.rgb(r,g,b)`  ��ȫһ�������� `ColorRNA.rgb (r,g,b)`  ��  `ColorRNA.sRGB (r,g,b)` Ч����һ���ģ�`ColorRNA.rgb (r,g,b)` ʹ�� sRGB ɫ�ʿռ䡣
+和使用 `ColorRNA.rgb(r,g,b)` 一样，还有以上 16 个指定色彩空间颜色值的方法，用法和 `ColorRNA.rgb(r,g,b)`  完全一样。另外 `ColorRNA.rgb (r,g,b)`  与  `ColorRNA.sRGB (r,g,b)` 效果是一样的，`ColorRNA.rgb (r,g,b)` 使用 sRGB 色彩空间。
 
 
-###����ɫ��
+###返回色彩
 
 ```js
 var color1 = new ColorRNA(10,235,245);
@@ -102,29 +103,29 @@ color1.getHex () // #9ADAEF
 
 ```
 
-������������ָ��������ʹ�� `ColorRNA.rgb()` ������ɫ�ʿռ䷽�����᷵�� ColorRNA �洢����ɫ����Ӧɫ�ʿռ��ʾ��ɫ��ֵ��������  `ColorRNA.getHex ()`  �᷵�����һ�μ���� RGB ֵ�� 16 ���ƴ��룬���û�м������ʹ�� sRGB ɫ�ʿռ�� RGB ֵ��
+像上面这样不指定参数的使用 `ColorRNA.rgb()` 和其他色彩空间方法，会返回 ColorRNA 存储的颜色用相应色彩空间表示的色彩值；另外用  `ColorRNA.getHex ()`  会返回最后一次计算的 RGB 值的 16 进制代码，如果没有计算过则使用 sRGB 色彩空间的 RGB 值。
 
 
-### ɫ�ʿռ�ת��
+### 色彩空间转换
 ```js
 var color1 = new ColorRNA();
 
-// ת��ɫ�ʿռ� sRGB -> AdobeRGB��
+// 转换色彩空间 sRGB -> AdobeRGB：
 color1.sRGB (10, 235, 245);
 color1.AdobeRGB (); // [133, 234, 244]
 
-// ת��ɫ�ʿռ� ProPhotoRGB -> AdobeRGB
+// 转换色彩空间 ProPhotoRGB -> AdobeRGB
 color1.ProPhotoRGB (154, 218, 239);
 color1.AdobeRGB (); // [133,235,244]
 
-// ת��ɫ�ʿռ� AppleRGB -> ProPhotoRGB
+// 转换色彩空间 AppleRGB -> ProPhotoRGB
 color1.AppleRGB(52, 233, 243).ProPhotoRGB (); //[154,218,239]
 
 ```
-ͨ���� ColorRNA ����ʵ��ָ����ɫ���ٷ�����ɫ�Ϳ��Խ�����ɫֵɫ�ʿռ��ת����Ϊ�˼��Ҳ����ʹ�� `color1.AppleRGB(52, 233, 243).ProPhotoRGB ()` ��������ʽ��䡣
+通过给 ColorRNA 对象实例指导颜色，再返回颜色就可以进行颜色值色彩空间的转换。为了简洁也可以使用 `color1.AppleRGB(52, 233, 243).ProPhotoRGB ()` 这样的链式语句。
 
 
-### �ο�ɫ�ʿռ�
+### 参考色彩空间
 
 ```js
 
@@ -138,11 +139,11 @@ color1.rgb(52, 233, 243).XYZ(); // [0.4672539339338757,0.6547307056620336,0.9495
 color1.xyY(0.2256,0.3161,0.6547).rgb(); //[52,233,243]
 ```
 
-ColorRNA ����֧�ָ��� RGB ɫ�ʿռ�֮��Ļ���ת������֧�� `XYZ`��`xyY`��`XYZ`��`Luv`��`LCHab`��ɫ�ʿռ��ת����ʹ�÷����� RGB ɫ�ʿռ�ķ���һ����Ҳ�����벻ͬ�� RGB ɫ�ʿռ以��ת����
+ColorRNA 除了支持各种 RGB 色彩空间之间的互相转换，还支持 `XYZ`、`xyY`、`XYZ`、`Luv`、`LCHab`、色彩空间的转换，使用方法和 RGB 色彩空间的方法一样，也可以与不同的 RGB 色彩空间互相转换。
 
-ֵ��ע����� Lab ɫ�ʿռ䣬PhotoShop �е� Lab ������ʷԭ��ʹ�õ��� D50 �ο��׵������ͨ���� D65 ��������õ�  PhotoShop ��� Lab ֵӦ��ʹ�� `ColorRNA.LabPS()` ����������ļ���Ľ���� PhotoShop һ�¡� 
+值得注意的是 Lab 色彩空间，PhotoShop 中的 Lab 出于历史原因使用的是 D50 参考白点而不是通常的 D65 ，所以想得到  PhotoShop 里的 Lab 值应该使用 `ColorRNA.LabPS()` ，这个方法的计算的结果和 PhotoShop 一致。 
 
-### ���� RGB ��ɫ��ģ��
+### 基于 RGB 的色彩模型
 
 ```js
  color1.rgb (52, 233, 243);
@@ -174,25 +175,25 @@ ColorRNA ����֧�ָ��� RGB ɫ�ʿռ�֮��Ļ���ת������֧�� `XYZ`��`xyY`��`XYZ`��`L
  color1.JpegYCbCr(0.7059647058823528,0.6393771749019608,0.14190933333333333).rgb ();  // [52,233,243]
  color1.YPbPr(0.7059647058823528,0.13937717490196078,-0.35809066666666667).rgb ();  // [52,233,243]
 ```
-����ǰ��ɫ�ʿռ�֮���ת���� ColorRNA  ��֧�ָ��ֻ��� RGB ֵ��ɫ��ģ��֮���ת����ǰ��ĸ���ɫ�ʿռ���� CIE XYZ ����ת������
+除了前面色彩空间之间的转换， ColorRNA  还支持各种基于 RGB 值的色彩模型之间的转换（前面的各种色彩空间基于 CIE XYZ 进行转换）。
 
-Ĭ���ǻ��� sRGB ɫ�ʿռ������㣬����ʹ�� `color1.HSB(183,79,95)`  ����Ϊ����һ������ sRGB �� HSB ֵ��������һ�� sRGB ɫ�ʿռ�� RGB ֵ��`[51,233,242]`; ������ɫ��ģ�ͷ������һ����������ָ����ɫ�ʿռ��� ��`color1.HSB(183,79,95,"AdobeRGB")`;
+默认是基于 sRGB 色彩空间来计算，比如使用 `color1.HSB(183,79,95)`  将认为这是一个基于 sRGB 的 HSB 值，并返回一个 sRGB 色彩空间的 RGB 值：`[51,233,242]`; 可以在色彩模型方法最后一个参数传递指定的色彩空间如 ：`color1.HSB(183,79,95,"AdobeRGB")`;
 
-����   
-`HSL240` �� Windows ϵͳʰɫ��ʹ�õ�ģ�ͣ������ڡ���ͼ���͸���ʹ��ϵͳ API �ĳ����У�����ͨ�� HSL ������ Photoshop �� ��ҳ��׼��ȡֵ��Χ��`0~360, 0~100, 0~100`��ͬ��HSL240 ��ȡֵ��Χ�ǣ� `0~239, 0~240 ,0~240`��
+另外   
+`HSL240` 是 Windows 系统拾色器使用的模型，出现在“画图”和各种使用系统 API 的程序中，它与通常 HSL （比如 Photoshop 和 网页标准）取值范围：`0~360, 0~100, 0~100`不同，HSL240 的取值范围是： `0~239, 0~240 ,0~240`。
 
-`HSL255` ��΢�� Office ��ʰɫ��ʹ�õ�ģ�ͣ�HSL255 ��ȡֵ��Χ�ǣ� `0~255, 0~255 ,0~255`��
+`HSL255` 是微软 Office 中拾色器使用的模型，HSL255 的取值范围是： `0~255, 0~255 ,0~255`。
 
-����� `CMY`  �� `CMYK` �ǵ������� RGB ɫ��ֵ�ò�ɫԭ�������ɫ��ģ�ͣ��� PhotoShop �л��� XYZ �ĸ��� CMYK ɫ�ʿռ䲢����ͬ ��
+这里的 `CMY`  和 `CMYK` 是单纯基于 RGB 色彩值用补色原理计算的色彩模型，与 PhotoShop 中基于 XYZ 的各种 CMYK 色彩空间并不相同 。
 
-### ����ɫ����Ϣ����
+### 其他色彩信息计算
 
-#### ������
+#### 主波长
 ```js
 color1.rgb(255, 255, 0).getWavelength() //  570.4668 (nm)
 ```
 
-#### �Զ�
+#### 辉度
 ```js
 color1.rgb(112, 255, 0);
 color1.getLuma(); // 0.8085772549019608
@@ -202,11 +203,11 @@ color1.getLuma("HSP"); // 0.8587732011397251
 color1.getWCAGluma(); // 0.7496474452608749
 
 ```
-`ColorRNA.getLuma()` �����ܵõ���ɫ�ĻԶȣ�Ҳ�����Ӿ����ȣ����� CCIR 601, Rec 709, HSP, ���ּ��㷽����������ڲ�����ָ�����㷽����Ĭ��ʹ�� "Rec 709" ����;��
+`ColorRNA.getLuma()` 方法能得到颜色的辉度，也就是视觉亮度，可用 CCIR 601, Rec 709, HSP, 三种计算方法，如果不在参数中指定计算方法，默认使用 "Rec 709" 计算;。
 
-`ColorRNA.getWCAGluma()`  �ǻ��������ϰ���׼�е��Ӿ����ȼ��㷽����
+`ColorRNA.getWCAGluma()`  是互联网无障碍标准中的视觉亮度计算方法。
 
-#### ɫ����Աȶȼ���
+#### 色差与对比度计算
 
 ```js
 color1.rgb(123, 124, 21);
@@ -230,15 +231,15 @@ color2.rgb(44, 22, 33);
  color2.getWCAGcontrastThan(color1); // 3.8076911332106675
 
 ```
-����ʹ��
-`ColorRNA.diff_DE1976_Than()`��`ColorRNA.diff_DE1994_GraphicArts_Than()`��`ColorRNA.diff_DE1994_Textiles_Than()`��`ColorRNA.diff_DE2000_Than()`��`ColorRNA.diff_ECMC11_Than()`��`ColorRNA.diff_ECMC21_Than()` ��Щ���㷽���õ�һ����ɫ�������һ����ɫ��ɫ�� ��ע����ɫ��ǰ������֮�֣�˳��ͬ������ܻ᲻һ����
+可用使用
+`ColorRNA.diff_DE1976_Than()`、`ColorRNA.diff_DE1994_GraphicArts_Than()`、`ColorRNA.diff_DE1994_Textiles_Than()`、`ColorRNA.diff_DE2000_Than()`、`ColorRNA.diff_ECMC11_Than()`、`ColorRNA.diff_ECMC21_Than()` 这些计算方法得到一个颜色相对于另一个颜色的色差 ，注意颜色有前景背景之分，顺序不同结果可能会不一样。
 
-`ColorRNA.getWCAGcontrastThan()` ���õõ����������ϰ���׼��һ����ɫ�������һ����ɫ�ĵĶԱȶȣ�����ȡֵ��Χ�� `0~21`�� 
+`ColorRNA.getWCAGcontrastThan()` 可用得到互联网无障碍标准中一个颜色相对于另一个颜色的的对比度，其结果取值范围： `0~21`。 
 
 
-##�߼�����
+##高级功能
 
-###ָ���ο��׵�
+###指定参考白点
 
 ```js
 color1.setRefWhite("A");
@@ -255,6 +256,6 @@ color1.setRefWhite("F11");
 
 ```
 
-`ColorRNA.setRefWhite()` , ` ColorRNA.getRefWhite()` ���÷ֱ��������úͷ��صĲο��׵����������ɫ�ʿռ�ת����Ӱ�졣
+`ColorRNA.setRefWhite()` , ` ColorRNA.getRefWhite()` 可用分别用来设置和返回的参考白点参数，这会对色彩空间转换有影响。
 
 
