@@ -12,7 +12,7 @@ Color & colorspace converter with Javascript;
 
 ##1. 功能
 ####各种色彩空间转换
-支持以下色彩空间之间颜色值的互换 ：`Adobe RGB`, `Apple RGB`, `Best RGB`, `Beta RGB`, `BruceRGB`, `CIERGB`, `ColorMatchRGB`, `ECIRGBv2`, `DonRGB4`, `EktaSpacePS5`, `NTSC RGB`, `PALSECAM RGB`, `ProPhotoRGB`, `SMPTEC RGB`, `WideGamut RGB`, ` CIE Lab`, `CIE Luv`, `CIE XYZ`, `CIE xyY`, `CIE LCHab`。  
+支持以下色彩空间之间颜色值的互换 ：`sRGB`, `Adobe RGB`, `Apple RGB`, `Best RGB`, `Beta RGB`, `BruceRGB`, `CIERGB`, `ColorMatchRGB`, `ECIRGBv2`, `DonRGB4`, `EktaSpacePS5`, `NTSC RGB`, `PALSECAM RGB`, `ProPhotoRGB`, `SMPTEC RGB`, `WideGamut RGB`, ` CIE Lab`, `CIE Luv`, `CIE XYZ`, `CIE xyY`, `CIE LCHab`。  
 内部色彩使用 `CIE XYZ` 存储。
 
 并且支持白点校正与指定伽马参数。支持以下白点参考光照：`A`, `B`, `C`, `D50`, `D55`, `D65`, `D75`, `E`, `F2`, `F7`, `F11`。
