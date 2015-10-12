@@ -12,7 +12,7 @@ Color & colorspace converter with Javascript;
 
 ##1. 功能
 ####各种色彩空间转换
-支持以色彩空间之间颜色值的互换 ：`Adobe RGB`, `Apple RGB`, `Best RGB`, `Beta RGB`, `BruceRGB`, `CIERGB`, `ColorMatchRGB`, `ECIRGBv2`, `DonRGB4`, `EktaSpacePS5`, `NTSC RGB`, `PALSECAM RGB`, `ProPhotoRGB`, `SMPTEC RGB`, `WideGamut RGB`, ` CIE Lab`, `CIE Luv`, `CIE XYZ`, `CIE xyY`, `CIE LCHab`。  
+支持以下色彩空间之间颜色值的互换 ：`Adobe RGB`, `Apple RGB`, `Best RGB`, `Beta RGB`, `BruceRGB`, `CIERGB`, `ColorMatchRGB`, `ECIRGBv2`, `DonRGB4`, `EktaSpacePS5`, `NTSC RGB`, `PALSECAM RGB`, `ProPhotoRGB`, `SMPTEC RGB`, `WideGamut RGB`, ` CIE Lab`, `CIE Luv`, `CIE XYZ`, `CIE xyY`, `CIE LCHab`。  
 内部色彩使用 `CIE XYZ` 存储。
 
 并且支持白点校正与指定伽马参数。支持以下白点参考光照：`A`, `B`, `C`, `D50`, `D55`, `D65`, `D75`, `E`, `F2`, `F7`, `F11`。
@@ -59,7 +59,7 @@ color1.rgb(44,21,211);
 
 创建后使用可用 `ColorRNA.rgb(r,g,b)` 重新指定颜色，用法和创建时一样。
 
-#### 指定色彩空间
+#### 指定色彩空间中的颜色
 ```js
 //支持的 RGB 色彩空间：
 color1.sRGB ([10, 20, 107]);
@@ -80,7 +80,7 @@ color1.SMPTECRGB (44, 21, 211);
 color1.WideGamutRGB (44, 21, 211);
 ```
 
-和使用 `ColorRNA.rgb(r,g,b)` 一样，还有以上 16 个指定色彩空间颜色值的方法，用法和 `ColorRNA.rgb(r,g,b)`  完全一样。另外 `ColorRNA.rgb (r,g,b)`  与  `ColorRNA.sRGB (r,g,b)` 效果是一样的，`ColorRNA.rgb (r,g,b)` 使用 sRGB 色彩空间。
+和使用 `ColorRNA.rgb(r,g,b)` 一样，还有以上 16 个指定色彩空间颜色值的方法，用法和 `ColorRNA.rgb(r,g,b)`  完全一样。另外 `ColorRNA.rgb (r,g,b)`  与  `ColorRNA.sRGB (r,g,b)` 效果是一样的，`ColorRNA.rgb (r,g,b)` 使用 `sRGB` 色彩空间。
 
 
 ###返回色彩
@@ -141,12 +141,13 @@ color1.xyY(0.2256,0.3161,0.6547).rgb(); //[52,233,243]
 
 ColorRNA 除了支持各种 RGB 色彩空间之间的互相转换，还支持 `XYZ`、`xyY`、`XYZ`、`Luv`、`LCHab`、色彩空间的转换，使用方法和 RGB 色彩空间的方法一样，也可以与不同的 RGB 色彩空间互相转换。
 
-值得注意的是 Lab 色彩空间，PhotoShop 中的 Lab 出于历史原因使用的是 D50 参考白点而不是通常的 D65 ，所以想得到  PhotoShop 里的 Lab 值应该使用 `ColorRNA.LabPS()` ，这个方法的计算的结果和 PhotoShop 一致。 
+值得注意的是 Lab 色彩空间，PhotoShop 中的 Lab 出于历史原因使用的是 `D50` 参考白点而不是通常的 `D65` ，所以想得到  PhotoShop 里的 Lab 值应该使用 `ColorRNA.LabPS()` ，这个方法的计算的结果和 PhotoShop 一致。 
 
 ### 基于 RGB 的色彩模型
 
 ```js
  color1.rgb (52, 233, 243);
+ 
  color1.HSB ();  // [183, 79, 95]
  color1.HSL ();  // [183, 89, 58]
  color1.HSL240 ();  // [122, 213, 139]
@@ -175,16 +176,16 @@ ColorRNA 除了支持各种 RGB 色彩空间之间的互相转换，还支持 `X
  color1.JpegYCbCr(0.7059647058823528,0.6393771749019608,0.14190933333333333).rgb ();  // [52,233,243]
  color1.YPbPr(0.7059647058823528,0.13937717490196078,-0.35809066666666667).rgb ();  // [52,233,243]
 ```
-除了前面色彩空间之间的转换， ColorRNA  还支持各种基于 RGB 值的色彩模型之间的转换（前面的各种色彩空间基于 CIE XYZ 进行转换）。
+除了前面色彩空间之间的转换， ColorRNA  还支持各种基于 RGB 值的色彩模型之间的转换（前面的各种色彩空间基于 `CIE XYZ` 进行转换）。
 
-默认是基于 sRGB 色彩空间来计算，比如使用 `color1.HSB(183,79,95)`  将认为这是一个基于 sRGB 的 HSB 值，并返回一个 sRGB 色彩空间的 RGB 值：`[51,233,242]`; 可以在色彩模型方法最后一个参数传递指定的色彩空间如 ：`color1.HSB(183,79,95,"AdobeRGB")`;
+默认是基于 `sRGB` 色彩空间来计算，比如使用 `color1.HSB(183,79,95)`  将认为这是一个基于 `sRGB` 的 `HSB` 值，并返回一个 `sRGB` 色彩空间的 RGB 值：`[51,233,242]`; 可以在色彩模型方法最后一个参数传递指定的色彩空间如 ：`color1.HSB(183,79,95,"AdobeRGB")`;
 
 另外   
-`HSL240` 是 Windows 系统拾色器使用的模型，出现在“画图”和各种使用系统 API 的程序中，它与通常 HSL （比如 Photoshop 和 网页标准）取值范围：`0~360, 0~100, 0~100`不同，HSL240 的取值范围是： `0~239, 0~240 ,0~240`。
+`HSL240` 是 Windows 系统拾色器使用的模型，出现在“画图”和各种使用系统 API 的程序中，它与通常 `HSL` （比如 Photoshop 和 网页标准）取值范围：`0~360, 0~100, 0~100`不同，`HSL240` 的取值范围是： `0~239, 0~240 ,0~240`。
 
-`HSL255` 是微软 Office 中拾色器使用的模型，HSL255 的取值范围是： `0~255, 0~255 ,0~255`。
+`HSL255` 是微软 Office 中拾色器使用的模型，`HSL255` 的取值范围是： `0~255, 0~255 ,0~255`。
 
-这里的 `CMY`  和 `CMYK` 是单纯基于 RGB 色彩值用补色原理计算的色彩模型，与 PhotoShop 中基于 XYZ 的各种 CMYK 色彩空间并不相同 。
+这里的 `CMY`  和 `CMYK` 是单纯基于 RGB 色彩值用补色原理计算的色彩模型，与 PhotoShop 中基于 `CIE XYZ` 的各种 CMYK 色彩空间并不相同 。
 
 ### 其他色彩信息计算
 
@@ -203,7 +204,7 @@ color1.getLuma("HSP"); // 0.8587732011397251
 color1.getWCAGluma(); // 0.7496474452608749
 
 ```
-`ColorRNA.getLuma()` 方法能得到颜色的辉度，也就是视觉亮度，可用 CCIR 601, Rec 709, HSP, 三种计算方法，如果不在参数中指定计算方法，默认使用 "Rec 709" 计算;。
+`ColorRNA.getLuma()` 方法能得到颜色的辉度，也就是视觉亮度，可用 `CCIR 601`, `Rec 709`, `HSP`, 三种计算方法，如果不在参数中指定计算方法，默认使用 `Rec 709` 计算;。
 
 `ColorRNA.getWCAGluma()`  是互联网无障碍标准中的视觉亮度计算方法。
 
