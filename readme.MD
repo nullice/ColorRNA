@@ -7,7 +7,7 @@ Color & colorspace converter with Javascript;
 这是一个 Javascript 的色彩、色彩空间转换与计算库。
 你可以用它进行各种色彩值的操作。
 
-
+可以参考使用了 ColorRNA.js 的 [ichiColor-extension](https://github.com/nullice/ichiColor) 
 
 
 ##1. 功能
