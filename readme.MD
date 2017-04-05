@@ -17,6 +17,8 @@ Color & colorspace converter with Javascript;
 
 ## 0.安装
 
+你可以用使用包管理工具 npm 或者 yarn 来为你的项目安装 ColorRNA.js ，或者可以手动复制文件到你的项目里：
+
 ### 用 npm 安装
 ```
 npm i color-rna --save
@@ -35,6 +37,8 @@ yarn add color-rna
 <script type="text/javascript" src="ColorRNA.min.js"></script>
 ```
 
+安装后就可以在你的代码里使用 ColorRNA.js 了：
+
 ### 在浏览器端
 
 ```js
@@ -50,7 +54,7 @@ var ColorRNA = require('color-rna');
 ```js
 import ColorRNA from 'color-rna';
 ```
-
+使用包管理工具时，你可以简单的用 import。 如果你是直接复制文件，你需要复制 `scr` 目录下的 `ColorRNA.js`，它是 ES6 module 格式的。
 
 
 ## 1. 功能
