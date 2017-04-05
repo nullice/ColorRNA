@@ -1,8 +1,9 @@
 {
   "name": "color-rna",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "color calculate and  color spaces convert with JavaScript.",
   "main": "./bin/ColorRNA.js",
+  "module": "./src/ColorRNA.js",
   "directories": {
     "test": "test"
   },
