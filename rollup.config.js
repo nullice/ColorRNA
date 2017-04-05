@@ -6,5 +6,5 @@ export default {
     entry: 'src/ColorRNA.js',
     format: 'umd',
     moduleName:"ColorRNA",
-    dest: 'bin/ColorRNA.js' // equivalent to --output
+    dest: 'bin/ColorRNA.js', // equivalent to --output,
 };
