@@ -1,11 +1,8 @@
 /**
- * Created by Óï±ù on 2015/10/12.
+ * Created by ï¿½ï¿½ï¿½ on 2015/10/12.
  */
 
-
-
-var ColorRNA = require('./src/ColorRNA.js');
-
+var ColorRNA = require('./../');
 
 //==============================================================================================
 console.log("---------TEST---------");
@@ -24,15 +21,15 @@ console.log("ProPhotoRGB:" + color1.ProPhotoRGB());
 console.log(color1.getHex());
 
 
-// ×ª»»É«²Ê¿Õ¼ä sRGB -> AdobeRGB£º
+// ×ªï¿½ï¿½É«ï¿½Ê¿Õ¼ï¿½ sRGB -> AdobeRGBï¿½ï¿½
 color1.sRGB(10, 235, 245);
 color1.AdobeRGB(); // [133, 234, 244]
 
-// ×ª»»É«²Ê¿Õ¼ä ProPhotoRGB -> AdobeRGB
+// ×ªï¿½ï¿½É«ï¿½Ê¿Õ¼ï¿½ ProPhotoRGB -> AdobeRGB
 color1.ProPhotoRGB(154, 218, 239);
 console.log("ProPhotoRGB -> sRGB:" + color1.AdobeRGB()); // [10, 235, 245]
 
-// ×ª»»É«²Ê¿Õ¼ä AppleRGB -> ProPhotoRGB
+// ×ªï¿½ï¿½É«ï¿½Ê¿Õ¼ï¿½ AppleRGB -> ProPhotoRGB
 console.log("AppleRGB -> ProPhotoRGB:" + color1.AppleRGB(52, 233, 243).ProPhotoRGB());
 
 console.log("------------------------------------------------------------------------------");
@@ -101,7 +98,7 @@ console.log("getWCAGluma:" + color1.getWCAGluma());
 
 color1.rgb(123, 124, 21);
 color2.rgb(44, 22, 33);
-;
+
 console.log("color1.diff_DE1976_Than(color2):" + color1.diff_DE1976_Than(color2));
 console.log("color2.diff_DE1976_Than(color1):" + color2.diff_DE1976_Than(color1));
 
@@ -131,7 +128,7 @@ console.log("color2.getWCAGcontrastThan(color1):" + color2.getWCAGcontrastThan(c
 //color1.rgb(10, 20, 17);
 //
 //
-//console.time("±éÀú");
+//console.time("ï¿½ï¿½ï¿½ï¿½");
 //
 //var test_color = new ColorRNA(rr, gg, bb);
 //for (var rr = 0; rr < 256; rr++)
@@ -160,5 +157,5 @@ console.log("color2.getWCAGcontrastThan(color1):" + color2.getWCAGcontrastThan(c
 //
 //    }
 //}
-//console.timeEnd("±éÀú");
+//console.timeEnd("ï¿½ï¿½ï¿½ï¿½");
 //console.log(count);

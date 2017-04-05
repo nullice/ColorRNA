@@ -1,3 +1,9 @@
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.ColorRNA = factory());
+}(this, (function () { 'use strict';
+
 /**
  * Created by 语冰 on 2015/9/22.
  */
@@ -38,7 +44,7 @@ function ColorRNA()
             ProPhotoRGB: "ProPhotoRGB",
             SMPTECRGB: "SMPTECRGB",
             WideGamutRGB: "WideGamutRGB"
-        }
+        };
     this._REFWHITES =
         {
             A: "A",
@@ -52,7 +58,7 @@ function ColorRNA()
             F2: "F2",
             F7: "F7",
             F11: "F11"
-        }
+        };
 
 
     this._adt_refWhite = {X: 0, Y: 0, Z: 0};// 参考白
@@ -62,7 +68,7 @@ function ColorRNA()
 
 
 //---in RGB-----------------------
-    this._rgbX(arguments, this._COLORSPACES.sRGB)
+    this._rgbX(arguments, this._COLORSPACES.sRGB);
 
 }
 
@@ -73,7 +79,7 @@ function ColorRNA()
 ColorRNA.prototype._RGBstring = function ()
 {
     return "#" + this.r.toString(16) + this.g.toString(16) + this.b.toString(16)
-}
+};
 
 ColorRNA.prototype._arrayProduct = function (inArray, inArray2)
 {
@@ -84,7 +90,7 @@ ColorRNA.prototype._arrayProduct = function (inArray, inArray2)
     }
 
     return sum;
-}
+};
 
 
 //把一个数 inNumber 归一化；inMax,inMin 为原最大最小区间，newMax 为新最大值；如果只有一个参数将按[0,255] 归一化到 [0,1]
@@ -103,7 +109,7 @@ ColorRNA.prototype._normaliz = function (inNumber, inMin, inMax, newMax)
     }
 
     return newNumber;
-}
+};
 
 ColorRNA.prototype._normalizArray = function (inArray, inMin, inMax, newMax)
 {
@@ -112,7 +118,7 @@ ColorRNA.prototype._normalizArray = function (inArray, inMin, inMax, newMax)
         inArray[i] = this._normaliz(inArray[i], inMin, inMax, newMax);
     }
     return inArray;
-}
+};
 
 
 ColorRNA.prototype._arrayFixed = function (inArray, Number)
@@ -121,7 +127,7 @@ ColorRNA.prototype._arrayFixed = function (inArray, Number)
     {
         inArray[z] = +inArray[z].toFixed(Number);
     }
-}
+};
 
 ColorRNA.prototype._arrayRound = function (inArray)
 {
@@ -130,7 +136,7 @@ ColorRNA.prototype._arrayRound = function (inArray)
 
         inArray[z] = Math.round(inArray[z]);
     }
-}
+};
 
 
 //对已经归一化的 RGB 值进行  Gamma 2.2 的变换，
@@ -155,7 +161,7 @@ ColorRNA.prototype._enGamma = function (rgb)
         }
         else
         {
-            newRGB = sign * 1.055 * Math.pow(rgb, 0.416666666666666667) - 0.055 //0.416666666666666667 = 1/2.4;
+            newRGB = sign * 1.055 * Math.pow(rgb, 0.416666666666666667) - 0.055; //0.416666666666666667 = 1/2.4;
         }
     }
     if (this._gamma == 0)//-----L*-----------
@@ -179,7 +185,7 @@ ColorRNA.prototype._enGamma = function (rgb)
 
     return newRGB;
 
-}
+};
 
 
 ColorRNA.prototype._adt_adaptation = function (lightName, algName)
@@ -211,7 +217,7 @@ ColorRNA.prototype._adt_adaptation = function (lightName, algName)
     var Z2 = X * this._adt_mtxAdaptMaI[0][2] + Y * this._adt_mtxAdaptMaI[1][2] + Z * this._adt_mtxAdaptMaI[2][2];
 
     return [X2, Y2, Z2];
-}
+};
 
 ColorRNA.prototype._adt_invAdaptation = function (xyz, lightName, algName)
 {
@@ -241,14 +247,14 @@ ColorRNA.prototype._adt_invAdaptation = function (xyz, lightName, algName)
     var Z2 = X1 * this._adt_mtxAdaptMaI[0][2] + Y1 * this._adt_mtxAdaptMaI[1][2] + Z1 * this._adt_mtxAdaptMaI[2][2];
 
     return [X2, Y2, Z2];
-}
+};
 
 
 ColorRNA.prototype._adt_setRefWhite = function (lightname)
 {
     if (this._refWhiteNameUSER.length > 0)//强制使用用户指定参考白
     {
-        lightname = this._refWhiteNameUSER
+        lightname = this._refWhiteNameUSER;
     }
 
 
@@ -322,7 +328,7 @@ ColorRNA.prototype._adt_setRefWhite = function (lightname)
             break;
         }
     }
-}
+};
 
 ColorRNA.prototype._adt_setAdaptMa = function (aglName)
 {
@@ -364,7 +370,7 @@ ColorRNA.prototype._adt_setAdaptMa = function (aglName)
     }
 
 
-}
+};
 
 
 //让经过 Gamma  的变换 RGB 归一化值还原
@@ -411,7 +417,7 @@ ColorRNA.prototype._deGamma = function (rgb)
     }
 
     return newRGB;
-}
+};
 
 
 ColorRNA.prototype._getRGBnucleotids = function (rabColorSpaceName, XYZtoRGB)
@@ -1053,7 +1059,7 @@ ColorRNA.prototype._getRGBnucleotids = function (rabColorSpaceName, XYZtoRGB)
             break;
         }
     }
-}
+};
 
 
 ColorRNA.prototype._RGB_to_YPbPr = function (rgb)
@@ -1067,7 +1073,7 @@ ColorRNA.prototype._RGB_to_YPbPr = function (rgb)
         Pr = 0.5 * rgb[0] - 0.418688 * rgb[1] - 0.081312 * rgb[2];
 
     return [Y, Pb, Pr];
-}
+};
 
 ColorRNA.prototype._YPbPr_to_RGB_ = function (YPbPr)
 {
@@ -1078,7 +1084,7 @@ ColorRNA.prototype._YPbPr_to_RGB_ = function (YPbPr)
 
 
     return this._normalizArray([r, g, b], 0, 1, 255);
-}
+};
 
 
 ColorRNA.prototype._RGB_to_YCbCr = function (rgb)
@@ -1091,13 +1097,13 @@ ColorRNA.prototype._RGB_to_YCbCr = function (rgb)
         Cr = 112.0 * rgb[0] - 93.786 * rgb[1] - 18.214 * rgb[2] + 128;
 
     return [Y, Cb, Cr];
-}
+};
 
 ColorRNA.prototype._YCbCr_to_RGB = function (YCbCr)
 {
-    YCbCr[0] -= 16.0
-    YCbCr[1] -= 128.0
-    YCbCr[2] -= 128.0
+    YCbCr[0] -= 16.0;
+    YCbCr[1] -= 128.0;
+    YCbCr[2] -= 128.0;
 
     var
         r = 0.00456621004566210107 * YCbCr[0] + 1.1808799897946415e-09 * YCbCr[1] + 0.00625892896994393634 * YCbCr[2],
@@ -1106,7 +1112,7 @@ ColorRNA.prototype._YCbCr_to_RGB = function (YCbCr)
 
 
     return this._normalizArray([r, g, b], 0, 1, 255);
-}
+};
 
 
 ColorRNA.prototype._RGB_to_JpegYCbCr = function (rgb)
@@ -1119,13 +1125,13 @@ ColorRNA.prototype._RGB_to_JpegYCbCr = function (rgb)
         Cr = YPbPr[2] + 0.5;
 
     return [Y, Cb, Cr];
-}
+};
 
 ColorRNA.prototype._JpegYCbCr_to_RGB = function (YCbCr)
 {
     var rgb = this._YPbPr_to_RGB_([YCbCr[0], YCbCr[1] - 0.5, YCbCr[2] - 0.5]);
     return rgb;
-}
+};
 
 
 ColorRNA.prototype._RGB_to_YIQ = function (rgb)
@@ -1137,7 +1143,7 @@ ColorRNA.prototype._RGB_to_YIQ = function (rgb)
         I = 0.595716 * rgb[0] - 0.274453 * rgb[1] - 0.321263 * rgb[2],
         Q = 0.211456 * rgb[0] - 0.522591 * rgb[1] + 0.311135 * rgb[2];
     return [Y, I, Q];
-}
+};
 
 ColorRNA.prototype._YIQ_to_RGB = function (YIQ)
 {
@@ -1147,7 +1153,7 @@ ColorRNA.prototype._YIQ_to_RGB = function (YIQ)
         b = YIQ[0] - 1.1069890167364901945 * YIQ[1] + 1.7046149983646481374 * YIQ[2];
 
     return this._normalizArray([r, g, b], 0, 1, 255);
-}
+};
 
 ColorRNA.prototype._RGB_to_YUV = function (rgb)
 {
@@ -1159,7 +1165,7 @@ ColorRNA.prototype._RGB_to_YUV = function (rgb)
         V = 0.615 * rgb[0] - 0.515 * rgb[1] - 0.100 * rgb[2];
 
     return [Y, U, V];
-}
+};
 
 
 ColorRNA.prototype._YUV_to_RGB = function (YUV)
@@ -1172,7 +1178,7 @@ ColorRNA.prototype._YUV_to_RGB = function (YUV)
 
 
     return this._normalizArray([r, g, b], 0, 1, 255);
-}
+};
 
 
 ColorRNA.prototype._RGB_to_HSL = function (rgb, outFloat)
@@ -1227,7 +1233,7 @@ ColorRNA.prototype._RGB_to_HSL = function (rgb, outFloat)
     }
 
     return [h, s, l];
-}
+};
 
 
 ColorRNA.prototype._HSL_to_RGB = function (HSL)
@@ -1299,7 +1305,7 @@ ColorRNA.prototype._HSL_to_RGB = function (HSL)
     b += CC;
 
     return this._normaOutRGB(this._normalizArray([r, g, b], 0, 1, 255));
-}
+};
 
 ColorRNA.prototype._RGB_to_HSL_255 = function (rgb)
 {
@@ -1309,7 +1315,7 @@ ColorRNA.prototype._RGB_to_HSL_255 = function (rgb)
     hsl[2] = Math.round(this._normaliz(hsl[2], 0, 100, 255));
 
     return hsl;
-}
+};
 
 ColorRNA.prototype._HSL_to_RGB_255 = function (inHSL)
 {
@@ -1321,7 +1327,7 @@ ColorRNA.prototype._HSL_to_RGB_255 = function (inHSL)
     var rgb = this._HSL_to_RGB(hsl);
 
     return rgb;
-}
+};
 
 
 ColorRNA.prototype._RGB_to_HSL_win239 = function (rgb)
@@ -1332,7 +1338,7 @@ ColorRNA.prototype._RGB_to_HSL_win239 = function (rgb)
     hsl[2] = Math.round(this._normaliz(hsl[2], 0, 100, 240));
 
     return hsl;
-}
+};
 
 ColorRNA.prototype._HSL_to_RGB_win240 = function (inHSL)
 {
@@ -1344,7 +1350,7 @@ ColorRNA.prototype._HSL_to_RGB_win240 = function (inHSL)
     var rgb = this._HSL_to_RGB(hsl);
 
     return rgb;
-}
+};
 
 
 ColorRNA.prototype._RGB_to_HSV = function (rgb)
@@ -1387,7 +1393,7 @@ ColorRNA.prototype._RGB_to_HSV = function (rgb)
     v = Math.round(v * 100);
 
     return [h, s, v];
-}
+};
 
 ColorRNA.prototype._HSV_to_RGB = function (HSV)
 {
@@ -1458,7 +1464,7 @@ ColorRNA.prototype._HSV_to_RGB = function (HSV)
 
 
     return this._normaOutRGB(this._normalizArray([r, g, b], 0, 1, 255));
-}
+};
 
 ColorRNA.prototype._RGB_to_HWB = function (rgb)
 {
@@ -1471,7 +1477,7 @@ ColorRNA.prototype._RGB_to_HWB = function (rgb)
     B = Math.round(100 - HSV[2]);
 
     return [H, W, B];
-}
+};
 
 ColorRNA.prototype._HWB_to_RGB = function (HWB)
 {
@@ -1487,7 +1493,7 @@ ColorRNA.prototype._HWB_to_RGB = function (HWB)
 
 
     return rgb;
-}
+};
 
 
 ColorRNA.prototype._RGB_to_CMY = function (rgb)
@@ -1503,7 +1509,7 @@ ColorRNA.prototype._RGB_to_CMY = function (rgb)
 
     return [C, M, Y];
 
-}
+};
 
 ColorRNA.prototype._CMY_to_RGB = function (CMY)
 {
@@ -1517,7 +1523,7 @@ ColorRNA.prototype._CMY_to_RGB = function (CMY)
         G = Math.round(Math.max(0, (1 - M) * 255)),
         B = Math.round(Math.max(0, (1 - Y) * 255));
     return [R, G, B];
-}
+};
 
 ColorRNA.prototype._CMY_to_CMYK = function (CMY)
 {
@@ -1530,7 +1536,7 @@ ColorRNA.prototype._CMY_to_CMYK = function (CMY)
     Y = Math.round((Y - K) / (1 - K) * 100);
     K = Math.round(K * 100);
     return [C, M, Y, K];
-}
+};
 
 ColorRNA.prototype._CMYK_to_CMY = function (CMYK)
 {
@@ -1542,19 +1548,19 @@ ColorRNA.prototype._CMYK_to_CMY = function (CMYK)
 
 
     return [Math.round(C * 100), Math.round(M * 100), Math.round(Y * 100)];
-}
+};
 
 
 ColorRNA.prototype._RGB_to_CMYK = function (rgb)
 {
     return this._CMY_to_CMYK(this._RGB_to_CMY(rgb));
-}
+};
 
 ColorRNA.prototype._CMYK_to_RGB = function (CMYK)
 {
     return this._CMY_to_RGB(this._CMYK_to_CMY(CMYK));
 
-}
+};
 
 ColorRNA.prototype._RGB_to_XYZ = function ()
 {
@@ -1588,7 +1594,7 @@ ColorRNA.prototype._RGB_to_XYZ = function ()
     }
 
     return [this._xyz.X, this._xyz.Y, this._xyz.Z]
-}
+};
 
 ColorRNA.prototype._XYZ_to_RGB = function ()
 {
@@ -1617,15 +1623,15 @@ ColorRNA.prototype._XYZ_to_RGB = function ()
 
     this._arrayRound(rgbs);
     return rgbs;
-}
+};
 
 
 ColorRNA.prototype._XYZ_to_Lab = function (psMod)
 {
     var xyz = [this._xyz.X, this._xyz.Y, this._xyz.Z];
 
-    var kE = 0.008856451679 //216.0 / 24389.0;
-    var kK = 903.2962962963 //24389.0 / 27.0;
+    var kE = 0.008856451679; //216.0 / 24389.0;
+    var kK = 903.2962962963; //24389.0 / 27.0;
 
 
     this._adt_setRefWhite("D65");
@@ -1648,7 +1654,7 @@ ColorRNA.prototype._XYZ_to_Lab = function (psMod)
     var Lab = [116.0 * fy - 16.0, 500.0 * (fx - fy), 200.0 * (fy - fz)];
 
     return Lab;
-}
+};
 
 
 ColorRNA.prototype._LCHab_to_XYZ = function (LCH)
@@ -1660,7 +1666,7 @@ ColorRNA.prototype._LCHab_to_XYZ = function (LCH)
     Lab[2] = LCH[1] * Math.sin(LCH[2] * Math.PI / 180.0);
 
     return this._Lab_to_XYZ(Lab, false);
-}
+};
 
 
 ColorRNA.prototype._XYZ_to_LCHab = function ()
@@ -1678,7 +1684,7 @@ ColorRNA.prototype._XYZ_to_LCHab = function ()
 
 
     return LCH;
-}
+};
 
 
 ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
@@ -1686,8 +1692,8 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
 
     var xyz = [0, 0, 0];
 
-    var kE = 0.008856451679 //216.0 / 24389.0;
-    var kK = 903.2962962963 //24389.0 / 27.0;
+    var kE = 0.008856451679; //216.0 / 24389.0;
+    var kK = 903.2962962963; //24389.0 / 27.0;
     var kKE = 8.0;
 
 
@@ -1696,7 +1702,7 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
             L: Labs[0],
             a: Labs[1],
             b: Labs[2],
-        }
+        };
 
     var fy = (Lab.L + 16.0) / 116.0;
     var fx = 0.002 * Lab.a + fy;
@@ -1736,7 +1742,7 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
 
     if (psMod === true)
     {
-        this._getRGBnucleotids("sRGB")
+        this._getRGBnucleotids("sRGB");
         // xyz = this._adt_adaptation("D65", this._adtAlg);
         xyz = this._adt_invAdaptation(xyz, "D50", this._adtAlg);
     }
@@ -1747,7 +1753,7 @@ ColorRNA.prototype._Lab_to_XYZ = function (Labs, psMod)
 
 
     return [this._xyz.X, this._xyz.Y, this._xyz.Z];
-}
+};
 
 
 ColorRNA.prototype._XYZ_to_xyY = function ()
@@ -1769,7 +1775,7 @@ ColorRNA.prototype._XYZ_to_xyY = function ()
     xyY[2] = this._xyz.Y;
 
     return xyY;
-}
+};
 
 
 ColorRNA.prototype._xyY_to_XYZ = function (xyY)
@@ -1791,7 +1797,7 @@ ColorRNA.prototype._xyY_to_XYZ = function (xyY)
     this._xyz.Y = XYZ[1];
     this._xyz.Z = XYZ[2];
     return XYZ;
-}
+};
 
 ColorRNA.prototype._xyY_to_Wavelength = function (xyY)
 {
@@ -1894,13 +1900,13 @@ ColorRNA.prototype._xyY_to_Wavelength = function (xyY)
     return (dominantWavelength);
 
 
-}
+};
 
 
 ColorRNA.prototype._XYZ_to_Luv = function ()
 {
 
-    var Luv = [0, 0, 0]
+    var Luv = [0, 0, 0];
     var kE = 216.0 / 24389.0;
     var kK = 24389.0 / 27.0;
     var kKE = 8.0;
@@ -1922,7 +1928,7 @@ ColorRNA.prototype._XYZ_to_Luv = function ()
 
     return Luv;
 
-}
+};
 
 
 ColorRNA.prototype._Luv_to_XYZ = function (Luv)
@@ -1949,7 +1955,7 @@ ColorRNA.prototype._Luv_to_XYZ = function (Luv)
     this._xyz.X = XYZ.X;
     this._xyz.Y = XYZ.Y;
     this._xyz.Z = XYZ.Z;
-}
+};
 
 
 ColorRNA.prototype._hex_to_rgb = function (hex)
@@ -1969,7 +1975,7 @@ ColorRNA.prototype._hex_to_rgb = function (hex)
     }
 
     return [r, g, b];
-}
+};
 
 
 ColorRNA.prototype._rgb_to_hex = function (rgb)
@@ -1987,14 +1993,14 @@ ColorRNA.prototype._rgb_to_hex = function (rgb)
     return hex.toString(16).toUpperCase();
 
 
-}
+};
 
 
 // 检查输入的 RGB 值，如果是 0~1 的小数形式将转化为 0~255 的形式
 ColorRNA.prototype._normaInputRGB = function (inArray)
 {
     var modeFloat = false;
-    var z = 0
+    var z = 0;
     var flTest = "";
 
     if (inArray.length == 3)
@@ -2022,14 +2028,14 @@ ColorRNA.prototype._normaInputRGB = function (inArray)
     }
 
     return inArray;
-}
+};
 
 
 // 检查输出的 RGB 值，将小于 0 和 -0 的值转换为 0；
 ColorRNA.prototype._normaOutRGB = function (inArray)
 {
 
-    var z = 0
+    var z = 0;
     for (z = 0; z < inArray.length; z++)
     {
         inArray[z] = Math.round(inArray[z]);
@@ -2039,12 +2045,12 @@ ColorRNA.prototype._normaOutRGB = function (inArray)
         }
     }
     return inArray;
-}
+};
 
 // 检查输出的 Lab 值，四舍五入舍到 1 位小数，PS(PhotoShop)模式完全舍去小数位；
 ColorRNA.prototype._normaOutLab = function (inArray, PSMod)
 {
-    var z = 0
+    var z = 0;
     for (z = 0; z < inArray.length; z++)
     {
         if (PSMod)
@@ -2058,26 +2064,26 @@ ColorRNA.prototype._normaOutLab = function (inArray, PSMod)
 
     }
     return inArray;
-}
+};
 
 // 检查输出的值数组，四舍五入舍到 X 位小数；
 ColorRNA.prototype._normaOutX = function (inArray, X)
 {
-    var z = 0
+    var z = 0;
     for (z = 0; z < inArray.length; z++)
     {
         inArray[z] = +inArray[z].toFixed(X);
 
     }
     return inArray;
-}
+};
 
 
 // 检查输入的 XYZ 值，如果有非 0~1 形式的值，将把所有值除以 100
 ColorRNA.prototype._normaInputXYZ = function (inArray)
 {
 
-    var z = 0
+    var z = 0;
 
     if (inArray[0] > 1 || inArray[1] > 1 || inArray[2] > 1)
     {
@@ -2088,7 +2094,7 @@ ColorRNA.prototype._normaInputXYZ = function (inArray)
         }
     }
     return inArray;
-}
+};
 
 
 //  设置指定的参考白色（光照条件）,没有参数将设置为缺省值（RGB 默认 D65）
@@ -2104,7 +2110,7 @@ ColorRNA.prototype.setRefWhite = function (inRefWhiteName)
     }
 
     return this;
-}
+};
 
 //  返回当前参考白色设置（光照条件）
 ColorRNA.prototype.getRefWhite = function ()
@@ -2115,13 +2121,13 @@ ColorRNA.prototype.getRefWhite = function ()
         return this._refWhiteNameUSER;
     }
     return this._refWhiteName;
-}
+};
 
 //默认以 sRGB 设置 RGB 的值，
 ColorRNA.prototype.rgb = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.sRGB));
-}
+};
 
 
 //供各种色彩空间设置取值函数调用的模板----------------------------------
@@ -2165,7 +2171,7 @@ ColorRNA.prototype._rgbX = function (argus, colorSpace)
     this._RGB_to_XYZ();
 
     return this;
-}
+};
 
 ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
 {
@@ -2197,7 +2203,7 @@ ColorRNA.prototype._LabX = function (argus, PhotoShopMod)
 
     this._Lab_to_XYZ(Lab, PhotoShopMod);
     return this;
-}
+};
 
 ColorRNA.prototype._xyYX = function (argus)
 {
@@ -2229,7 +2235,7 @@ ColorRNA.prototype._xyYX = function (argus)
 
     this._xyY_to_XYZ(xyY);
     return this;
-}
+};
 
 
 ColorRNA.prototype._LCHabX = function (argus)
@@ -2260,9 +2266,9 @@ ColorRNA.prototype._LCHabX = function (argus)
         LCH[1] = argus[1];
         LCH[2] = argus[2];
     }
-    this._LCHab_to_XYZ(LCH)
+    this._LCHab_to_XYZ(LCH);
     return this;
-}
+};
 
 
 ColorRNA.prototype._LuvX = function (argus)
@@ -2293,9 +2299,9 @@ ColorRNA.prototype._LuvX = function (argus)
         Luv[1] = argus[1];
         Luv[2] = argus[2];
     }
-    this._Luv_to_XYZ(Luv)
+    this._Luv_to_XYZ(Luv);
     return this;
-}
+};
 
 
 ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
@@ -2447,7 +2453,7 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
     this._RGB_to_XYZ();
 
     return this;
-}
+};
 
 
 //-----------------------------------
@@ -2455,180 +2461,180 @@ ColorRNA.prototype._baseRGB_XXXx = function (argus, mode)
 ColorRNA.prototype.Luv = function ()
 {
     return (this._LuvX(arguments));
-}
+};
 
 
 ColorRNA.prototype.xyY = function ()
 {
     return (this._xyYX(arguments));
-}
+};
 
 
 ColorRNA.prototype.LabPS = function ()
 {
     return (this._LabX(arguments, true));
-}
+};
 
 ColorRNA.prototype.Lab = function ()
 {
     return (this._LabX(arguments, false));
-}
+};
 
 
 ColorRNA.prototype.LCHab = function ()
 {
     return (this._LCHabX(arguments, false));
-}
+};
 
 ColorRNA.prototype.HSL = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HSL"));
-}
+};
 
 ColorRNA.prototype.HSL255 = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HSL255"));
-}
+};
 
 ColorRNA.prototype.HSL240 = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HSLwin"));
-}
+};
 
 
 ColorRNA.prototype.HSV = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HSV"));
-}
+};
 
 ColorRNA.prototype.HSB = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HSV"));
-}
+};
 
 ColorRNA.prototype.HWB = function ()
 {
     return (this._baseRGB_XXXx(arguments, "HWB"));
-}
+};
 
 ColorRNA.prototype.YPbPr = function ()
 {
     return (this._baseRGB_XXXx(arguments, "YPbPr"));
-}
+};
 
 ColorRNA.prototype.YIQ = function ()
 {
     return (this._baseRGB_XXXx(arguments, "YIQ"));
-}
+};
 
 ColorRNA.prototype.JpegYCbCr = function ()
 {
     return (this._baseRGB_XXXx(arguments, "JpegYCbCr"));
-}
+};
 
 ColorRNA.prototype.YCbCr = function ()
 {
     return (this._baseRGB_XXXx(arguments, "YCbCr"));
-}
+};
 
 ColorRNA.prototype.YUV = function ()
 {
     return (this._baseRGB_XXXx(arguments, "YUV"));
-}
+};
 
 
 ColorRNA.prototype.CMYK = function ()
 {
     return (this._baseRGB_XXXx(arguments, "CMYK"));
-}
+};
 
 ColorRNA.prototype.CMY = function ()
 {
     return (this._baseRGB_XXXx(arguments, "CMY"));
-}
+};
 
 // 颜色设置、取值器，带参数调用设置颜色，不带参数调用取颜色
 // 各种 RGB 色彩空间 ---------------------------------------------------------------
 ColorRNA.prototype.sRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.sRGB));
-}
+};
 
 
 ColorRNA.prototype.AdobeRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.AdobeRGB));
-}
+};
 
 ColorRNA.prototype.AppleRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.AppleRGB));
-}
+};
 
 ColorRNA.prototype.BestRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.BestRGB));
-}
+};
 
 ColorRNA.prototype.BetaRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.BetaRGB));
-}
+};
 
 ColorRNA.prototype.BruceRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.BruceRGB));
-}
+};
 
 ColorRNA.prototype.CIERGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.CIERGB));
-}
+};
 
 ColorRNA.prototype.ColorMatchRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.ColorMatchRGB));
-}
+};
 
 ColorRNA.prototype.DonRGB4 = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.DonRGB4));
-}
+};
 
 ColorRNA.prototype.ECIRGBv2 = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.ECIRGBv2));
-}
+};
 
 ColorRNA.prototype.EktaSpacePS5 = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.EktaSpacePS5));
-}
+};
 
 ColorRNA.prototype.NTSCRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.NTSCRGB));
-}
+};
 
 ColorRNA.prototype.PALSECAMRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.PALSECAMRGB));
-}
+};
 
 ColorRNA.prototype.ProPhotoRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.ProPhotoRGB));
-}
+};
 
 ColorRNA.prototype.SMPTECRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.SMPTECRGB));
-}
+};
 
 ColorRNA.prototype.WideGamutRGB = function ()
 {
     return (this._rgbX(arguments, this._COLORSPACES.WideGamutRGB));
-}
+};
 
 // ---------------------------------------------------------------
 
@@ -2636,7 +2642,7 @@ ColorRNA.prototype.getWavelength = function (alg)
 {
     return +this._xyY_to_Wavelength(this.xyY()).toFixed(4);
 
-}
+};
 
 ColorRNA.prototype.getLuma = function (alg)
 {
@@ -2661,7 +2667,7 @@ ColorRNA.prototype.getLuma = function (alg)
 
     return luma;
     //0~1
-}
+};
 
 ColorRNA.prototype.getWCAGluma = function ()
 {// http://www.w3.org/TR/WCAG20/#relativeluminancedef
@@ -2671,10 +2677,10 @@ ColorRNA.prototype.getWCAGluma = function ()
     for (var i = 0; i < rgb.length; i++)
     {
         var chan = rgb[i] / 255;
-        luma[i] = (chan <= 0.03928) ? chan / 12.92 : Math.pow(((chan + 0.055) / 1.055), 2.4)
+        luma[i] = (chan <= 0.03928) ? chan / 12.92 : Math.pow(((chan + 0.055) / 1.055), 2.4);
     }
     return 0.2126 * luma[0] + 0.7152 * luma[1] + 0.0722 * luma[2];
-}
+};
 
 
 ColorRNA.prototype.getWCAGcontrastThan = function (inColor)
@@ -2687,10 +2693,10 @@ ColorRNA.prototype.getWCAGcontrastThan = function (inColor)
     {
         return (luma1 + 0.05) / (luma2 + 0.05)
     }
-    ;
+    
     return (luma2 + 0.05) / (luma1 + 0.05);
 
-}
+};
 
 ColorRNA.prototype.getHex = function ()
 {//get RGB Hex
@@ -2699,7 +2705,7 @@ ColorRNA.prototype.getHex = function ()
         this._XYZ_to_RGB();
     var hex = this._rgb_to_hex([rgb[0], rgb[1], rgb[2]]);
     return "#" + hex;
-}
+};
 
 // XYZ 色彩空间---------------------------------------------------------------
 
@@ -2736,7 +2742,7 @@ ColorRNA.prototype.XYZ = function ()
     this._xyz.Y = xyz[1];
     this._xyz.Z = xyz[2];
     return this;
-}
+};
 
 //--------------------------------------------
 ColorRNA.prototype.colorDiff = function (color1, color2, alg)
@@ -2896,58 +2902,39 @@ ColorRNA.prototype.colorDiff = function (color1, color2, alg)
     }
 
     return +deltaE.toFixed(2);
-}
+};
 
 
 ColorRNA.prototype.diff_ECMC11_Than = function (color2)
 {
     return this.colorDiff(this, color2, "DeltaECMC_11");
-}
+};
 
 ColorRNA.prototype.diff_ECMC21_Than = function (color2)
 {
     return this.colorDiff(this, color2, "DeltaECMC_21");
-}
+};
 
 ColorRNA.prototype.diff_DE2000_Than = function (color2)
 {
     return this.colorDiff(this, color2, "DeltaE2000");
-}
+};
 
 ColorRNA.prototype.diff_DE1976_Than = function (color2)
 {
     return this.colorDiff(this, color2, "DeltaE1976");
-}
+};
 
 ColorRNA.prototype.diff_DE1994_GraphicArts_Than = function (color2)
 {
     return this.colorDiff(this, color2, "DeltaE1994_G");
-}
+};
 
 ColorRNA.prototype.diff_DE1994_Textiles_Than = function (color2)
 {
     return this.colorDiff(this, color2, "DeltaE1994_T");
-}
+};
 
+return ColorRNA;
 
-export default ColorRNA;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+})));
