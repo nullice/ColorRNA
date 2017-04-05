@@ -1,4 +1,5 @@
-#ColorRNA.js
+# ColorRNA.js
+
 Color & colorspace converter with Javascript; 
 
 
@@ -7,32 +8,32 @@ Color & colorspace converter with Javascript;
 这是一个 Javascript 的色彩、色彩空间转换与计算库。
 你可以用它进行各种色彩值的操作。
 
+可以参考使用了 ColorRNA.js 的 [ichiColor-extension](https://github.com/nullice/ichiColor) 
 
 
-
-##1. 功能
-####各种色彩空间转换
+## 1. 功能
+#### 各种色彩空间转换
 支持以下色彩空间之间颜色值的互换 ：`sRGB`, `Adobe RGB`, `Apple RGB`, `Best RGB`, `Beta RGB`, `BruceRGB`, `CIERGB`, `ColorMatchRGB`, `ECIRGBv2`, `DonRGB4`, `EktaSpacePS5`, `NTSC RGB`, `PALSECAM RGB`, `ProPhotoRGB`, `SMPTEC RGB`, `WideGamut RGB`, ` CIE Lab`, `CIE Luv`, `CIE XYZ`, `CIE xyY`, `CIE LCHab`。  
 内部色彩使用 `CIE XYZ` 存储。
 
 并且支持白点校正与指定伽马参数。支持以下白点参考光照：`A`, `B`, `C`, `D50`, `D55`, `D65`, `D75`, `E`, `F2`, `F7`, `F11`。
 
-####基于 RGB 的色彩模型之间颜色值的互换 ：
+#### 基于 RGB 的色彩模型之间颜色值的互换 ：
 支持以下色彩模型的转换：`HSL`, `HSL240` (Windows 拾色器), `HSL255` (MS Office拾色器), `HSV`（HSB）, `HWB`, `CMY`, `CMYK`, `YPbPr`, `JpegYCbCr`, `YCbCr`, `YIQ`, `YUV` 。
 
 
 
 
-####色差与辉度计算
+#### 色差与辉度计算
 支持以下色差计算方法：`DeltaE 1976`, `DeltaE 1994`, `DeltaE 2000`, `DeltaE CMC`;  
 支持以下辉度计算方法：`CCIR 601`, `Rec 709`, `HSP`, `WCAGluma`;  
 支持 `WCAG contrast` 对比度计算;  
 
-####其他
+#### 其他
 计算颜色的光谱主波长。
 
 
-##2. 使用
+## 2. 使用
 
 
 ```js
@@ -83,7 +84,7 @@ color1.WideGamutRGB (44, 21, 211);
 和使用 `ColorRNA.rgb(r,g,b)` 一样，还有以上 16 个指定色彩空间颜色值的方法，用法和 `ColorRNA.rgb(r,g,b)`  完全一样。另外 `ColorRNA.rgb (r,g,b)`  与  `ColorRNA.sRGB (r,g,b)` 效果是一样的，`ColorRNA.rgb (r,g,b)` 使用 `sRGB` 色彩空间。
 
 
-###返回色彩
+### 返回色彩
 
 ```js
 var color1 = new ColorRNA(10,235,245);
@@ -238,9 +239,9 @@ color2.rgb(44, 22, 33);
 `ColorRNA.getWCAGcontrastThan()` 可用得到互联网无障碍标准中一个颜色相对于另一个颜色的的对比度，其结果取值范围： `0~21`。 
 
 
-##高级功能
+## 高级功能
 
-###指定参考白点
+### 指定参考白点
 
 ```js
 color1.setRefWhite("A");
