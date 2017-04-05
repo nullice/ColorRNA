@@ -2,7 +2,7 @@
 
 Color & colorspace converter with Javascript; 
 
-[![npm](https://img.shields.io/npm/v/color-rna.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/v/color-rna.svg?style=flat-square)](https://www.npmjs.com/package/color-rna)
 
 <p align="center">
   <img  src ="https://github.com/nullice/ColorRNA/raw/master/logo/ColorRNA_LOGO_PNG_Word_512.png" />
@@ -10,9 +10,46 @@ Color & colorspace converter with Javascript;
 
 
 这是一个 Javascript 的色彩、色彩空间转换与计算库。
-你可以用它进行各种色彩值的操作。
+你可以用它进行各种色彩值的操作。同时支持浏览器端与 Node.js 端
 
 可以参考使用了 ColorRNA.js 的 [ichiColor-extension](https://github.com/nullice/ichiColor) 
+
+## 0.安装
+
+### 用 npm 安装
+```
+npm i color-rna --save
+```
+
+### 用 yarn 安装
+```
+yarn add color-rna 
+```
+
+### 手动引入
+
+复制本项目 [`./bin/ColorRNA.js`](https://raw.githubusercontent.com/nullice/ColorRNA/master/bin/ColorRNA.js)(压缩版本) 或 [`./bin/ColorRNA.min.js`](https://raw.githubusercontent.com/nullice/ColorRNA/master/bin/ColorRNA.min.js) 文件
+
+```html
+<script type="text/javascript" src="ColorRNA.min.js"></script>
+```
+
+### 在浏览器端
+
+```js
+ ColorRNA(); //ColorRNA.js 载入后可以直接使用
+```
+
+### 在 Node.js 端
+```js
+var ColorRNA = require('color-rna');
+```
+
+###  ES6 module
+```js
+import ColorRNA from 'color-rna';
+```
+
 
 
 ## 1. 功能
