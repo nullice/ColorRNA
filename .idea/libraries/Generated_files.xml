@@ -2,7 +2,6 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/src/ColorRNA.min.js" />
         <item url="file://$PROJECT_DIR$/test_1.min.js" />
         <item url="file://$PROJECT_DIR$/test.min.js" />
       </sourceFilesUrls>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    <TaskOptions isEnabled="true">
+    <TaskOptions isEnabled="false">
       <option name="arguments" value="$FileName$ -o $FileNameWithoutExtension$.min.js" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Compresses .js files" />
@@ -14,7 +14,6 @@
         <array />
       </option>
       <option name="outputFromStdout" value="false" />
-      <option name="passParentEnvs" value="true" />
       <option name="program" value="$USER_HOME$/node_modules/yuicompressor/build/yuicompressor-2.4.8.jar" />
       <option name="scopeName" value="项目文件" />
       <option name="trackOnlyRoot" value="true" />
