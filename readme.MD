@@ -2,8 +2,12 @@
 
 Color & colorspace converter with Javascript; 
 
+[![npm](https://img.shields.io/npm/v/color-rna.svg?style=flat-square)]()
 
-![](https://github.com/nullice/ColorRNA/raw/master/logo/ColorRNA_LOGO_PNG_Word_512.png)
+<p align="center">
+  <img  src ="https://github.com/nullice/ColorRNA/raw/master/logo/ColorRNA_LOGO_PNG_Word_512.png" />
+</p>
+
 
 这是一个 Javascript 的色彩、色彩空间转换与计算库。
 你可以用它进行各种色彩值的操作。
