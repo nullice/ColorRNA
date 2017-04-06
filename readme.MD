@@ -31,7 +31,7 @@ yarn add color-rna
 
 ### 手动引入
 
-复制本项目 [`./bin/ColorRNA.js`](https://raw.githubusercontent.com/nullice/ColorRNA/master/bin/ColorRNA.js)(压缩版本) 或 [`./bin/ColorRNA.min.js`](https://raw.githubusercontent.com/nullice/ColorRNA/master/bin/ColorRNA.min.js) 文件
+复制本项目 [`./bin/ColorRNA.js`](https://raw.githubusercontent.com/nullice/ColorRNA/master/bin/ColorRNA.js) 或 [`./bin/ColorRNA.min.js`](https://raw.githubusercontent.com/nullice/ColorRNA/master/bin/ColorRNA.min.js) (压缩版本) 文件
 
 ```html
 <script type="text/javascript" src="ColorRNA.min.js"></script>
